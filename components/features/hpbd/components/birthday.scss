@@ -1836,119 +1836,60 @@ $text: #53383c;
 
     overflow: hidden;
 
-    padding: 100px 20px;
+    padding: 90px 20px;
 
     background:
         radial-gradient(circle at 50% 35%,
-            rgba(164, 90, 119, 0.18),
-            transparent 32%),
-        radial-gradient(circle at 50% 70%,
-            rgba(110, 70, 105, 0.13),
+            rgba(197, 103, 132, 0.16),
             transparent 35%),
         linear-gradient(180deg,
-            #202638 0%,
-            #171c2c 48%,
-            #0f1422 100%);
+            #22283a 0%,
+            #171c2c 50%,
+            #101522 100%);
 
-    color: #fff;
-
+    color: white;
     text-align: center;
-
-    /* vignette */
-    &::after {
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-
-        background: radial-gradient(circle,
-                transparent 30%,
-                rgba(5, 8, 17, 0.3) 100%);
-
-        content: "";
-
-        pointer-events: none;
-    }
-
-    /* =========================================
-     CONTENT
-  ========================================= */
 
     &__content {
         position: relative;
         z-index: 5;
 
-        width: min(680px, 100%);
+        width: min(650px, 100%);
     }
 
-    /* =========================================
-     BACKGROUND GLOW
-  ========================================= */
-
+    /*
+   * Không animate glow.
+   * Radial gradient rẻ hơn blur lớn.
+   */
     &__glow {
         position: absolute;
 
+        top: 20%;
+        left: 50%;
+
+        width: 500px;
+        height: 500px;
+
         border-radius: 50%;
 
-        filter: blur(90px);
+        background: radial-gradient(circle,
+                rgba(230, 119, 148, 0.12),
+                transparent 65%);
+
+        transform: translateX(-50%);
 
         pointer-events: none;
-
-        &--1 {
-            top: 10%;
-            left: 10%;
-
-            width: 300px;
-            height: 300px;
-
-            background: rgba(231, 126, 155, 0.13);
-        }
-
-        &--2 {
-            right: 5%;
-            bottom: 10%;
-
-            width: 350px;
-            height: 350px;
-
-            background: rgba(155, 105, 180, 0.1);
-        }
     }
 
-    /* =========================================
-     STARS
-  ========================================= */
-
-    &__stars {
-        position: absolute;
-        inset: 0;
-
-        z-index: 2;
-
-        pointer-events: none;
-
-        span {
-            position: absolute;
-
-            width: 3px;
-            height: 3px;
-
-            border-radius: 50%;
-
-            background: #ffdce4;
-
-            box-shadow: 0 0 8px rgba(255, 198, 211, 0.8);
-        }
-    }
-
-    /* =========================================
+    /* =========================
      FLOATING HEARTS
-  ========================================= */
+  ========================= */
 
     &__floating-hearts {
         position: absolute;
         inset: 0;
 
-        z-index: 3;
+        z-index: 2;
 
         overflow: hidden;
 
@@ -1956,75 +1897,73 @@ $text: #53383c;
 
         span {
             position: absolute;
-            bottom: -50px;
+            bottom: -40px;
 
-            color: rgba(238, 139, 159, 0.4);
+            color: rgba(235, 137, 157, 0.3);
 
             font-family: serif;
+            font-size: 20px;
+
+            /*
+       * Cho browser biết element này sẽ transform.
+       */
+            will-change: transform, opacity;
         }
     }
 
-    /* =========================================
-     SMALL TITLE
-  ========================================= */
+    /* =========================
+     TITLE
+  ========================= */
 
     &__eyebrow {
         display: block;
 
         margin-bottom: 25px;
 
-        color: #f0a2b2;
-
-        font-family: "Montserrat", sans-serif;
+        color: #efa0b1;
 
         font-size: 10px;
         font-weight: 500;
 
+        letter-spacing: 5px;
+
         text-transform: uppercase;
     }
 
-    /* =========================================
-     TITLE
-  ========================================= */
-
     h2 {
-        position: relative;
-
         margin: 0;
 
         color: #ffd0d9;
 
         font-family: "Cormorant Garamond", serif;
 
-        font-size: clamp(54px, 9vw, 88px);
+        font-size: clamp(52px, 9vw, 86px);
+
         font-style: italic;
         font-weight: 500;
 
-        line-height: 0.96;
-
-        text-shadow:
-            0 0 30px rgba(255, 148, 169, 0.1);
+        line-height: 0.97;
     }
 
-    /* =========================================
+    /* =========================
      DIVIDER
-  ========================================= */
+  ========================= */
 
     &__divider {
-        position: relative;
-
         display: flex;
 
-        height: 30px;
+        width: 80px;
 
         align-items: center;
         justify-content: center;
 
-        margin: 28px auto 15px;
+        margin: 30px auto 18px;
+
+        transform-origin: center;
 
         &::before,
         &::after {
-            width: 28px;
+            width: 27px;
             height: 1px;
 
             background: rgba(239, 154, 171, 0.4);
@@ -2037,13 +1976,12 @@ $text: #53383c;
 
             color: #ee91a5;
 
-            font-family: serif;
             font-size: 17px;
         }
     }
 
     p {
-        margin: 0 auto;
+        margin: auto;
 
         color: rgba(255, 255, 255, 0.55);
 
@@ -2052,38 +1990,27 @@ $text: #53383c;
         line-height: 1.8;
     }
 
-    /* =========================================
-     LOVE BUTTON
-  ========================================= */
+    /* =========================
+     BUTTON
+  ========================= */
 
     &__love {
         display: inline-flex;
 
-        min-width: 210px;
-        height: 58px;
+        min-width: 205px;
+        height: 56px;
 
         align-items: center;
         justify-content: center;
 
-        margin-top: 32px;
+        margin-top: 30px;
         padding: 0 30px;
 
-        border: 1px solid rgba(255, 255, 255, 0.6);
         border-radius: 100px;
 
-        background:
-            linear-gradient(135deg,
-                #ffe8ec,
-                #ffd2da);
+        background: #ffe0e6;
 
-        box-shadow:
-            0 15px 40px rgba(230, 107, 134, 0.2),
-            0 0 40px rgba(255, 176, 193, 0.1),
-            inset 0 1px 1px rgba(255, 255, 255, 0.9);
-
-        color: #ae5c6c;
-
-        cursor: default;
+        color: #aa5868;
 
         gap: 10px;
 
@@ -2095,11 +2022,14 @@ $text: #53383c;
         }
 
         strong {
-            color: #c96d7f;
+            display: inline-block;
 
-            font-family: serif;
+            color: #c76a7c;
+
             font-size: 22px;
             font-weight: 400;
+
+            will-change: transform;
         }
     }
 
@@ -2108,7 +2038,7 @@ $text: #53383c;
 
         margin-top: 25px;
 
-        color: rgba(255, 255, 255, 0.22);
+        color: rgba(255, 255, 255, 0.25);
 
         font-size: 8px;
 
@@ -2125,107 +2055,86 @@ $text: #53383c;
 .ending-heart {
     position: relative;
 
-    width: 210px;
-    height: 190px;
-
-    margin: 0 auto 30px;
-
     display: flex;
+
+    width: 180px;
+    height: 160px;
 
     align-items: center;
     justify-content: center;
 
-    /* Glow */
+    margin: 0 auto 30px;
 
+    /*
+   * Gradient glow thay vì blur.
+   */
     &__glow {
         position: absolute;
 
-        width: 130px;
-        height: 130px;
+        width: 160px;
+        height: 160px;
 
         border-radius: 50%;
 
-        background: rgba(238, 120, 148, 0.28);
-
-        filter: blur(45px);
+        background: radial-gradient(circle,
+                rgba(236, 127, 151, 0.25) 0%,
+                rgba(236, 127, 151, 0.08) 40%,
+                transparent 70%);
     }
 
-    /* Pulse ring */
-
-    &__ring {
-        position: absolute;
-
-        width: 120px;
-        height: 120px;
-
-        border: 1px solid rgba(242, 153, 171, 0.35);
-        border-radius: 50%;
-    }
-
-    /* Main heart */
-
-    &__main {
+    >span {
         position: relative;
-        z-index: 3;
+        z-index: 2;
 
-        color: #f4a2b3;
+        display: block;
+
+        color: #f2a0b1;
 
         font-family: "Cormorant Garamond", serif;
 
-        font-size: 150px;
+        font-size: 140px;
 
         line-height: 1;
 
-        filter:
-            drop-shadow(0 0 12px rgba(238, 128, 151, 0.4)) drop-shadow(0 0 35px rgba(238, 128, 151, 0.2));
+        will-change: transform;
     }
+}
 
-    /* =========================================
-     ORBIT
-  ========================================= */
+@media (max-width: 600px) {
+    .ending {
+        padding: 70px 20px;
 
-    &__orbit {
-        position: absolute;
+        &__floating-hearts {
 
-        z-index: 4;
-
-        width: 185px;
-        height: 185px;
-
-        border: 1px dashed rgba(238, 148, 167, 0.13);
-
-        border-radius: 50%;
-    }
-
-    &__mini {
-        position: absolute;
-
-        color: #ef91a6;
-
-        font-family: serif;
-
-        filter:
-            drop-shadow(0 0 6px rgba(239, 130, 153, 0.4));
-
-        &--1 {
-            top: 8px;
-            left: 50%;
-
-            font-size: 12px;
+            /*
+       * Có thể tắt hoàn toàn nếu máy yếu.
+       */
+            span:nth-child(n + 4) {
+                display: none;
+            }
         }
 
-        &--2 {
-            top: 50%;
-            right: -5px;
-
-            font-size: 17px;
+        &__glow {
+            width: 320px;
+            height: 320px;
         }
 
-        &--3 {
-            bottom: 15px;
-            left: 25px;
+        h2 {
+            font-size: clamp(47px, 14vw, 65px);
+        }
+    }
 
-            font-size: 10px;
+    .ending-heart {
+        width: 150px;
+        height: 135px;
+
+        &__glow {
+            width: 140px;
+            height: 140px;
+        }
+
+        >span {
+            font-size: 115px;
         }
     }
 }
