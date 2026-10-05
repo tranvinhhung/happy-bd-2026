@@ -791,89 +791,33 @@ function BirthdayWish() {
   );
 }
 
-const floatingHearts = [
-  { left: "8%", delay: 0, duration: 7, size: 18 },
-  { left: "18%", delay: 2, duration: 8, size: 25 },
-  { left: "30%", delay: 1, duration: 9, size: 15 },
-  { left: "42%", delay: 3, duration: 7, size: 22 },
-  { left: "55%", delay: 0.5, duration: 8, size: 16 },
-  { left: "68%", delay: 2.5, duration: 9, size: 26 },
-  { left: "78%", delay: 1.5, duration: 7, size: 18 },
-  { left: "90%", delay: 4, duration: 9, size: 22 },
+const hearts = [
+  { left: "12%", delay: 0, duration: 8 },
+  { left: "28%", delay: 2, duration: 9 },
+  { left: "52%", delay: 1, duration: 8 },
+  { left: "72%", delay: 3, duration: 10 },
+  { left: "88%", delay: 1.5, duration: 9 },
 ];
 
 function Ending() {
   return (
     <section className="ending">
-      {/* background glow */}
-      <motion.div
-        className="ending__glow ending__glow--1"
-        animate={{
-          x: [-30, 40, -30],
-          y: [-20, 30, -20],
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 9,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
+      {/* Chỉ dùng 1 glow */}
+      <div className="ending__glow" />
 
-      <motion.div
-        className="ending__glow ending__glow--2"
-        animate={{
-          x: [30, -40, 30],
-          y: [30, -20, 30],
-          scale: [1.2, 0.9, 1.2],
-        }}
-        transition={{
-          duration: 11,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-
-      {/* stars */}
-      <div className="ending__stars">
-        {Array.from({ length: 18 }).map((_, index) => (
-          <motion.span
-            key={index}
-            style={{
-              left: `${(index * 37) % 100}%`,
-              top: `${(index * 53) % 100}%`,
-            }}
-            animate={{
-              opacity: [0.1, 0.7, 0.1],
-              scale: [0.7, 1.3, 0.7],
-            }}
-            transition={{
-              duration: 2 + (index % 4),
-              delay: index * 0.15,
-              repeat: Infinity,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* floating hearts */}
+      {/* Floating hearts - chỉ còn 5 */}
       <div className="ending__floating-hearts">
-        {floatingHearts.map((heart, index) => (
+        {hearts.map((heart, index) => (
           <motion.span
             key={index}
-            style={{
-              left: heart.left,
-              fontSize: heart.size,
-            }}
+            style={{ left: heart.left }}
             initial={{
-              y: 100,
+              y: 50,
               opacity: 0,
             }}
             animate={{
-              y: "-110vh",
-              opacity: [0, 0.35, 0.5, 0],
-              rotate: [0, 15, -15, 10],
-              x: [0, 15, -10, 5],
+              y: -800,
+              opacity: [0, 0.35, 0.35, 0],
             }}
             transition={{
               duration: heart.duration,
@@ -888,12 +832,12 @@ function Ending() {
       </div>
 
       <div className="ending__content">
-        {/* HEART ART */}
+        {/* MAIN HEART */}
         <motion.div
           className="ending-heart"
           initial={{
             opacity: 0,
-            scale: 0.4,
+            scale: 0.6,
           }}
           whileInView={{
             opacity: 1,
@@ -901,161 +845,67 @@ function Ending() {
           }}
           viewport={{ once: true }}
           transition={{
-            duration: 1.4,
-            ease: [0.22, 1, 0.36, 1],
+            duration: 0.8,
           }}
         >
-          {/* glow behind heart */}
-          <motion.div
-            className="ending-heart__glow"
-            animate={{
-              opacity: [0.2, 0.55, 0.2],
-              scale: [0.8, 1.25, 0.8],
-            }}
-            transition={{
-              duration: 2.4,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
+          <div className="ending-heart__glow" />
 
-          {/* pulse rings */}
-          <motion.div
-            className="ending-heart__ring"
+          <motion.span
             animate={{
-              scale: [0.7, 1.5],
-              opacity: [0.45, 0],
+              scale: [1, 1.08, 1, 1.12, 1],
             }}
             transition={{
-              duration: 2.5,
-              repeat: Infinity,
-              ease: "easeOut",
-            }}
-          />
-
-          <motion.div
-            className="ending-heart__ring"
-            animate={{
-              scale: [0.7, 1.7],
-              opacity: [0.3, 0],
-            }}
-            transition={{
-              duration: 2.5,
-              delay: 1.2,
-              repeat: Infinity,
-              ease: "easeOut",
-            }}
-          />
-
-          {/* main heart */}
-          <motion.div
-            className="ending-heart__main"
-            animate={{
-              scale: [
-                1,
-                1.05,
-                1,
-                1.09,
-                1,
-              ],
-            }}
-            transition={{
-              duration: 1.8,
+              duration: 2,
               repeat: Infinity,
               ease: "easeInOut",
             }}
           >
             ♡
-          </motion.div>
-
-          {/* orbit hearts */}
-          <motion.div
-            className="ending-heart__orbit"
-            animate={{
-              rotate: 360,
-            }}
-            transition={{
-              duration: 12,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-          >
-            <span className="ending-heart__mini ending-heart__mini--1">
-              ♥
-            </span>
-
-            <span className="ending-heart__mini ending-heart__mini--2">
-              ♡
-            </span>
-
-            <span className="ending-heart__mini ending-heart__mini--3">
-              ♥
-            </span>
-          </motion.div>
+          </motion.span>
         </motion.div>
 
-        {/* small title */}
-        <motion.span
-          className="ending__eyebrow"
+        <motion.div
           initial={{
             opacity: 0,
-            y: 20,
-            letterSpacing: "12px",
+            y: 25,
           }}
           whileInView={{
             opacity: 1,
             y: 0,
-            letterSpacing: "5px",
           }}
           viewport={{ once: true }}
           transition={{
-            duration: 1.2,
-            delay: 0.3,
+            duration: 0.8,
+            delay: 0.15,
           }}
         >
-          AND FINALLY...
-        </motion.span>
+          <span className="ending__eyebrow">
+            AND FINALLY...
+          </span>
 
-        {/* title */}
-        <motion.h2
-          initial={{
-            opacity: 0,
-            y: 40,
-            filter: "blur(3px)",
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-            filter: "blur(0px)",
-          }}
-          viewport={{ once: true }}
-          transition={{
-            duration: 1.2,
-            delay: 0.5,
-          }}
-        >
-          Cảm ơn em
-          <br />
-          vì đã xuất hiện
-          <br />
-          trong cuộc đời anh
-        </motion.h2>
+          <h2>
+            Cảm ơn em
+            <br />
+            vì đã xuất hiện
+            <br />
+            trong cuộc đời anh
+          </h2>
+        </motion.div>
 
-        {/* divider */}
         <motion.div
           className="ending__divider"
           initial={{
-            width: 0,
             opacity: 0,
+            scaleX: 0,
           }}
           whileInView={{
-            width: 70,
             opacity: 1,
+            scaleX: 1,
           }}
           viewport={{ once: true }}
           transition={{
-            duration: 1,
-            delay: 1,
+            duration: 0.7,
+            delay: 0.35,
           }}
         >
           <span>♡</span>
@@ -1064,7 +914,7 @@ function Ending() {
         <motion.p
           initial={{
             opacity: 0,
-            y: 20,
+            y: 15,
           }}
           whileInView={{
             opacity: 1,
@@ -1072,44 +922,37 @@ function Ending() {
           }}
           viewport={{ once: true }}
           transition={{
-            duration: 1,
-            delay: 1.1,
+            duration: 0.7,
+            delay: 0.45,
           }}
         >
           Hy vọng món quà nhỏ này sẽ khiến em mỉm cười.
         </motion.p>
 
-        {/* LOVE BUTTON */}
         <motion.div
           className="ending__love"
           initial={{
             opacity: 0,
-            y: 25,
-            scale: 0.9,
+            y: 15,
           }}
           whileInView={{
             opacity: 1,
             y: 0,
-            scale: 1,
           }}
           viewport={{ once: true }}
-          whileHover={{
-            scale: 1.06,
-            y: -3,
-          }}
           transition={{
-            duration: 0.8,
-            delay: 1.3,
+            duration: 0.7,
+            delay: 0.6,
           }}
         >
           <span>Yêu em nhiều</span>
 
           <motion.strong
             animate={{
-              scale: [1, 1.25, 1],
+              scale: [1, 1.2, 1],
             }}
             transition={{
-              duration: 1.2,
+              duration: 1.8,
               repeat: Infinity,
             }}
           >
@@ -1119,16 +962,12 @@ function Ending() {
 
         <motion.span
           className="ending__forever"
-          initial={{
-            opacity: 0,
-          }}
-          whileInView={{
-            opacity: 1,
-          }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{
-            delay: 1.8,
-            duration: 1.5,
+            duration: 1,
+            delay: 0.8,
           }}
         >
           today · tomorrow · always
