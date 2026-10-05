@@ -39,7 +39,7 @@ export const birthdayData = {
         },
         {
             image: "/images/timelines/timeline-02.jpg",
-            title: "Lần hẹn hò thứ hai (tổ chức sinh nhật lần đầu cho em)",
+            title: "Tổ chức sinh nhật lần đầu cho em",
             description: "Thật vui vì dh đã quyết định ra chơi với em lần 2 và có thể tổ chức sinh nhật lần đầu cho em.",
         },
         {
