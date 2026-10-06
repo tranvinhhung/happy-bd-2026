@@ -59,18 +59,18 @@ export const birthdayData = {
 
         "Cảm ơn em vì luôn ở bên anh, vì đã luôn hiểu, yêu thương và cùng anh trải qua những ngày tháng thật đặc biệt.",
 
-        "Anh mong em sẽ luôn cười thật nhiều, luôn hạnh phúc , đừng khóc nhè, và hãy luôn là chính mình. Anh sẽ luôn ở bên em, cùng em đi qua mọi thử thách và tạo thêm thật nhiều kỷ niệm đẹp.",
+        "Anh mong em sẽ luôn cười thật nhiều, luôn hạnh phúc , đừng khóc nhè, và hãy luôn là chính em. Anh sẽ luôn ở bên em, cùng em đi qua mọi thử thách và tạo thêm thật nhiều kỷ niệm đẹp.",
 
-        "Ở tuổi mới, anh chỉ mong em luôn mạnh khỏe, may mắn, thành công và vẫn mãi ở bên anh nhé ♡",
+        "Ở tuổi mới, anh chỉ mong em luôn mạnh khỏe, may mắn, thành công và vẫn mãi ở bên dinhhung em nhé ♡",
     ],
 
     thingsILove: [
         "Nụ cười thật xinh ♡",
         "Sự nhường nhịn ♡",
-        "Luôn quan tâm đến dinhhung ♡",
-        "Hay chiều chuộng anh ♡",
-        "Luôn lắng nghe ,yêu thương anh ♡",
-        "Và còn rất nhiều điều khác...",
+        "Là một cô bé hiền lành ♡",
+        "Hay chiều chuộng dinhhung ♡",
+        "Luôn lắng nghe ,yêu thương dinhhung thật sự ♡",
+        "Và còn rất nhiều điều khác nữa...",
     ],
 
     promises: [
@@ -85,7 +85,7 @@ export const birthdayData = {
         "Luôn xinh đẹp ♡",
         "Luôn hạnh phúc ♡",
         "Luôn thành công ♡",
-        "Luôn là cô gái tuyệt vời nhất ♡",
-        "Và mãi mãi ở bên anh nhé ♡",
+        "Luôn là em bé Tờ Hiên có tình cảm với dinhhung thật sự ♡",
+        "Và mãi mãi ở bên dinhhung em nhé ♡",
     ],
 };
