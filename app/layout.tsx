@@ -12,14 +12,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL = "https://happy-bd-2026.vercel.app";
 
-export const metadata = {
-  metadataBase: new URL("https://happy-bd-2026.vercel.app"),
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
 
-  title: "A Little Birthday Gift For You ♡",
+  title: "Happy Birthday ♡",
 
   description:
-    "Có một món quà nhỏ anh đã chuẩn bị dành riêng cho em... ♡",
+    "Một món quà nhỏ dành cho người đặc biệt nhất của anh.",
 
   openGraph: {
     title: "Happy Birthday, My Love ♡",
@@ -27,21 +28,23 @@ export const metadata = {
     description:
       "Một món quà nhỏ dành cho người đặc biệt nhất của anh.",
 
-    url: "https://happy-bd-2026.vercel.app",
+    url: SITE_URL,
 
     siteName: "Happy Birthday ♡",
 
-    images: [
-      {
-        url: "/images/birthday-preview.png",
-        width: 1200,
-        height: 630,
-        alt: "Happy Birthday ♡",
-      },
-    ],
+    type: "website",
 
     locale: "vi_VN",
-    type: "website",
+
+    images: [
+      {
+        url: `${SITE_URL}/images/birthday-preview.png`,
+        width: 1200,
+        height: 630,
+        alt: "Happy Birthday, My Love ♡",
+        type: "image/png",
+      },
+    ],
   },
 
   twitter: {
@@ -52,11 +55,9 @@ export const metadata = {
     description:
       "Một món quà nhỏ dành cho người đặc biệt nhất của anh.",
 
-    images: ["/images/birthday-preview.png"],
-  },
-
-  icons: {
-    icon: "/favicon.ico",
+    images: [
+      `${SITE_URL}/images/birthday-preview.png`,
+    ],
   },
 };
 
