@@ -1612,8 +1612,13 @@ $text: #53383c;
 
         &__content {
             h1 {
-                font-size: 64px;
+                font-size: 65px;
             }
+        }
+
+        &__title {
+            flex-direction: column;
+            gap: 10px;
         }
     }
 
@@ -2227,5 +2232,35 @@ $text: #53383c;
 
             font-size: 10px;
         }
+    }
+}
+
+.intro {
+    &__title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__title-text {
+        display: flex;
+        flex-direction: column; // 👈 Happy / Birthday
+        align-items: center;
+        line-height: 0.9;
+    }
+
+    &__title-line {
+        display: flex;
+        white-space: nowrap; // 👈 TUYỆT ĐỐI không bẻ giữa chữ
+    }
+
+    &__letter-wrap,
+    &__letter {
+        display: inline-block;
+    }
+
+    &__title-heart {
+        display: inline-block;
+        margin-left: 20px;
     }
 }

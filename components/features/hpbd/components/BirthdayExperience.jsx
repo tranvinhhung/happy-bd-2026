@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { birthdayData as data } from "@/components/features/hpbd/utils/data/birthday";
+import IntroTitle from "./IntroTitle..jsx";
 import "./birthday.scss";
 
 const Heart = ({ index }) => (
@@ -105,16 +106,42 @@ export default function BirthdayExperience() {
             >
               <span className="eyebrow">A little surprise for you</span>
 
-              <h1>
-                {data.intro.title}
-                <span>♡</span>
-              </h1>
+              <IntroTitle />
 
               <h2>{data.intro.subtitle}</h2>
 
               <p>{data.intro.description}</p>
 
-              <div className={`gift ${giftOpened ? "gift--opened" : ""}`}>
+              <motion.div
+                className={`gift ${giftOpened ? "gift--opened" : ""}`}
+                animate={
+                  giftOpened
+                    ? {
+                      x: 0,
+                      y: 0,
+                      rotate: 0,
+                      scale: 1,
+                    }
+                    : {
+                      x: [0, 0, -3, 3, -3, 3, -2, 2, 0, 0],
+                      y: [0, 0, -2, 0, -2, 0, 0, 0, 0, 0],
+                      rotate: [0, 0, -2, 2, -2, 2, -1, 1, 0, 0],
+                      scale: [1, 1, 1.02, 1.02, 1.02, 1.02, 1, 1, 1, 1],
+                    }
+                }
+                transition={
+                  giftOpened
+                    ? {
+                      duration: 0.3,
+                    }
+                    : {
+                      duration: 3.8,
+                      repeat: Infinity,
+                      repeatDelay: 2.5,
+                      ease: "easeInOut",
+                    }
+                }
+              >
                 <motion.div
                   className="gift__lid"
                   animate={
@@ -132,10 +159,27 @@ export default function BirthdayExperience() {
                   }}
                 >
                   <div className="gift__ribbon-vertical" />
-                  <div className="gift__bow">
+
+                  <motion.div
+                    className="gift__bow"
+                    animate={
+                      giftOpened
+                        ? {}
+                        : {
+                          scale: [1, 1, 1.08, 0.97, 1.06, 1],
+                          rotate: [0, 0, -3, 3, -2, 0],
+                        }
+                    }
+                    transition={{
+                      duration: 3.8,
+                      repeat: Infinity,
+                      repeatDelay: 2.5,
+                      ease: "easeInOut",
+                    }}
+                  >
                     <span />
                     <span />
-                  </div>
+                  </motion.div>
                 </motion.div>
 
                 <div className="gift__box">
@@ -172,7 +216,7 @@ export default function BirthdayExperience() {
                     )}
                   </AnimatePresence>
                 </div>
-              </div>
+              </motion.div>
 
               <motion.button
                 className="love-button"
