@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 
     images: [
       {
-        url: `${SITE_URL}/images/birthday-preview.png`,
+        url: `${SITE_URL}/images/birthday-preview.jpg`,
         width: 1200,
         height: 630,
         alt: "Happy Birthday, My Love ♡",
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
       "Một món quà nhỏ dành cho người đặc biệt nhất của anh.",
 
     images: [
-      `${SITE_URL}/images/birthday-preview.png`,
+      `${SITE_URL}/images/birthday-preview.jpg`,
     ],
   },
 };
