@@ -12,9 +12,52 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Happy Birthday em bé Tờ Hiên ♡",
-  description: "A little birthday gift for my special person",
+
+export const metadata = {
+  metadataBase: new URL("https://happy-bd-2026.vercel.app"),
+
+  title: "A Little Birthday Gift For You ♡",
+
+  description:
+    "Có một món quà nhỏ anh đã chuẩn bị dành riêng cho em... ♡",
+
+  openGraph: {
+    title: "Happy Birthday, My Love ♡",
+
+    description:
+      "Một món quà nhỏ dành cho người đặc biệt nhất của anh.",
+
+    url: "https://happy-bd-2026.vercel.app",
+
+    siteName: "Happy Birthday ♡",
+
+    images: [
+      {
+        url: "/images/birthday-preview.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Happy Birthday ♡",
+      },
+    ],
+
+    locale: "vi_VN",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+
+    title: "Happy Birthday, My Love ♡",
+
+    description:
+      "Một món quà nhỏ dành cho người đặc biệt nhất của anh.",
+
+    images: ["/images/birthday-preview.jpg"],
+  },
+
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
