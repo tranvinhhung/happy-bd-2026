@@ -1196,21 +1196,21 @@ $text: #53383c;
     }
 }
 
+
 /* =========================================
-   ENDING
+   ENDING - PERFORMANCE OPTIMIZED
 ========================================= */
 
 .ending {
     position: relative;
+    isolation: isolate;
 
     display: flex;
     min-height: 100svh;
-
     align-items: center;
     justify-content: center;
 
     overflow: hidden;
-
     padding: 100px 20px;
 
     background:
@@ -1226,10 +1226,8 @@ $text: #53383c;
             #0f1422 100%);
 
     color: #fff;
-
     text-align: center;
 
-    /* vignette */
     &::after {
         position: absolute;
         inset: 0;
@@ -1240,65 +1238,61 @@ $text: #53383c;
                 rgba(5, 8, 17, 0.3) 100%);
 
         content: "";
-
         pointer-events: none;
     }
 
-    /* =========================================
-     CONTENT
-  ========================================= */
+    /* CONTENT */
 
     &__content {
         position: relative;
         z-index: 5;
-
         width: min(680px, 100%);
     }
 
-    /* =========================================
-     BACKGROUND GLOW
-  ========================================= */
+    /* BACKGROUND GLOW */
 
     &__glow {
         position: absolute;
-
         border-radius: 50%;
-
-        filter: blur(90px);
-
         pointer-events: none;
+
+        // Không sử dụng blur động
+        filter: none;
+        will-change: transform;
 
         &--1 {
             top: 10%;
             left: 10%;
 
-            width: 300px;
-            height: 300px;
+            width: 420px;
+            height: 420px;
 
-            background: rgba(231, 126, 155, 0.13);
+            background: radial-gradient(circle,
+                    rgba(231, 126, 155, 0.16) 0%,
+                    rgba(231, 126, 155, 0.08) 35%,
+                    transparent 70%);
         }
 
         &--2 {
             right: 5%;
             bottom: 10%;
 
-            width: 350px;
-            height: 350px;
+            width: 450px;
+            height: 450px;
 
-            background: rgba(155, 105, 180, 0.1);
+            background: radial-gradient(circle,
+                    rgba(155, 105, 180, 0.13) 0%,
+                    rgba(155, 105, 180, 0.06) 35%,
+                    transparent 70%);
         }
     }
 
-    /* =========================================
-     STARS
-  ========================================= */
+    /* STARS */
 
     &__stars {
         position: absolute;
         inset: 0;
-
         z-index: 2;
-
         pointer-events: none;
 
         span {
@@ -1308,94 +1302,83 @@ $text: #53383c;
             height: 3px;
 
             border-radius: 50%;
-
             background: #ffdce4;
 
-            box-shadow: 0 0 8px rgba(255, 198, 211, 0.8);
+            box-shadow: 0 0 5px rgba(255, 198, 211, 0.65);
+
+            will-change: transform, opacity;
         }
     }
 
-    /* =========================================
-     FLOATING HEARTS
-  ========================================= */
+    /* FLOATING HEARTS */
 
     &__floating-hearts {
         position: absolute;
         inset: 0;
-
         z-index: 3;
 
         overflow: hidden;
-
         pointer-events: none;
 
         span {
             position: absolute;
             bottom: -50px;
 
-            color: rgba(238, 139, 159, 0.4);
+            display: inline-block;
 
+            color: rgba(238, 139, 159, 0.4);
             font-family: serif;
+
+            will-change: transform, opacity;
         }
     }
 
-    /* =========================================
-     SMALL TITLE
-  ========================================= */
+    /* SMALL TITLE */
 
     &__eyebrow {
         display: block;
-
         margin-bottom: 25px;
 
         color: #f0a2b2;
-
         font-family: "Montserrat", sans-serif;
-
         font-size: 10px;
         font-weight: 500;
 
+        letter-spacing: 5px;
         text-transform: uppercase;
     }
 
-    /* =========================================
-     TITLE
-  ========================================= */
+    /* TITLE */
 
     h2 {
         position: relative;
-
         margin: 0;
 
         color: #ffd0d9;
-
         font-family: "Cormorant Garamond", serif;
 
         font-size: clamp(54px, 9vw, 88px);
         font-style: italic;
         font-weight: 500;
-
         line-height: 0.96;
 
-        text-shadow:
-            0 0 30px rgba(255, 148, 169, 0.1);
+        text-shadow: 0 0 25px rgba(255, 148, 169, 0.1);
     }
 
-    /* =========================================
-     DIVIDER
-  ========================================= */
+    /* DIVIDER */
 
     &__divider {
         position: relative;
 
         display: flex;
-
+        width: 70px;
         height: 30px;
 
         align-items: center;
         justify-content: center;
 
         margin: 28px auto 15px;
+        transform-origin: center;
 
         &::before,
         &::after {
@@ -1403,7 +1386,6 @@ $text: #53383c;
             height: 1px;
 
             background: rgba(239, 154, 171, 0.4);
-
             content: "";
         }
 
@@ -1411,25 +1393,22 @@ $text: #53383c;
             margin: 0 8px;
 
             color: #ee91a5;
-
             font-family: serif;
             font-size: 17px;
         }
     }
 
+    /* DESCRIPTION */
+
     p {
         margin: 0 auto;
 
         color: rgba(255, 255, 255, 0.55);
-
         font-size: 12px;
-
         line-height: 1.8;
     }
 
-    /* =========================================
-     LOVE BUTTON
-  ========================================= */
+    /* LOVE BUTTON */
 
     &__love {
         display: inline-flex;
@@ -1446,8 +1425,7 @@ $text: #53383c;
         border: 1px solid rgba(255, 255, 255, 0.6);
         border-radius: 100px;
 
-        background:
-            linear-gradient(135deg,
+        background: linear-gradient(135deg,
                 #ffe8ec,
                 #ffd2da);
 
@@ -1457,36 +1435,35 @@ $text: #53383c;
             inset 0 1px 1px rgba(255, 255, 255, 0.9);
 
         color: #ae5c6c;
-
         cursor: default;
-
         gap: 10px;
 
         span {
             font-family: "Cormorant Garamond", serif;
-
             font-size: 24px;
             font-style: italic;
         }
 
         strong {
-            color: #c96d7f;
+            display: inline-block;
 
+            color: #c96d7f;
             font-family: serif;
             font-size: 22px;
             font-weight: 400;
+
+            will-change: transform;
         }
     }
 
+    /* FOOTER */
+
     &__forever {
         display: block;
-
         margin-top: 25px;
 
         color: rgba(255, 255, 255, 0.22);
-
         font-size: 8px;
-
         letter-spacing: 3px;
 
         text-transform: uppercase;
@@ -1500,32 +1477,35 @@ $text: #53383c;
 .ending-heart {
     position: relative;
 
+    display: flex;
     width: 210px;
     height: 190px;
-
-    margin: 0 auto 30px;
-
-    display: flex;
 
     align-items: center;
     justify-content: center;
 
-    /* Glow */
+    margin: 0 auto 30px;
+
+    /* GLOW */
 
     &__glow {
         position: absolute;
 
-        width: 130px;
-        height: 130px;
+        width: 190px;
+        height: 190px;
 
         border-radius: 50%;
 
-        background: rgba(238, 120, 148, 0.28);
+        background: radial-gradient(circle,
+                rgba(238, 120, 148, 0.28) 0%,
+                rgba(238, 120, 148, 0.12) 35%,
+                transparent 70%);
 
-        filter: blur(45px);
+        filter: none;
+        will-change: transform, opacity;
     }
 
-    /* Pulse ring */
+    /* PULSE RINGS */
 
     &__ring {
         position: absolute;
@@ -1535,75 +1515,134 @@ $text: #53383c;
 
         border: 1px solid rgba(242, 153, 171, 0.35);
         border-radius: 50%;
+
+        will-change: transform, opacity;
     }
 
-    /* Main heart */
+    /* MAIN HEART */
 
     &__main {
         position: relative;
         z-index: 3;
 
         color: #f4a2b3;
-
         font-family: "Cormorant Garamond", serif;
 
         font-size: 150px;
-
         line-height: 1;
 
-        filter:
-            drop-shadow(0 0 12px rgba(238, 128, 151, 0.4)) drop-shadow(0 0 35px rgba(238, 128, 151, 0.2));
+        filter: none;
+        text-shadow: 0 0 22px rgba(238, 128, 151, 0.45);
+
+        will-change: transform;
     }
 
-    /* =========================================
-     ORBIT
-  ========================================= */
+    /* ORBIT */
 
     &__orbit {
         position: absolute;
-
         z-index: 4;
 
         width: 185px;
         height: 185px;
 
         border: 1px dashed rgba(238, 148, 167, 0.13);
-
         border-radius: 50%;
+
+        will-change: transform;
     }
 
     &__mini {
         position: absolute;
 
         color: #ef91a6;
-
         font-family: serif;
 
-        filter:
-            drop-shadow(0 0 6px rgba(239, 130, 153, 0.4));
+        text-shadow: 0 0 6px rgba(239, 130, 153, 0.4);
 
         &--1 {
             top: 8px;
             left: 50%;
-
             font-size: 12px;
         }
 
         &--2 {
             top: 50%;
             right: -5px;
-
             font-size: 17px;
         }
 
         &--3 {
             bottom: 15px;
             left: 25px;
-
             font-size: 10px;
         }
     }
 }
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+    .ending {
+        padding: 75px 20px;
+
+        &__glow {
+            &--1 {
+                width: 280px;
+                height: 280px;
+            }
+
+            &--2 {
+                width: 300px;
+                height: 300px;
+            }
+        }
+
+        h2 {
+            font-size: clamp(47px, 13vw, 65px);
+        }
+
+        &__love {
+            min-width: 190px;
+            height: 54px;
+        }
+    }
+
+    .ending-heart {
+        width: 170px;
+        height: 155px;
+
+        &__main {
+            font-size: 125px;
+        }
+
+        &__orbit {
+            width: 155px;
+            height: 155px;
+        }
+
+        &__glow {
+            width: 160px;
+            height: 160px;
+        }
+    }
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .ending *,
+    .ending *::before,
+    .ending *::after {
+        scroll-behavior: auto;
+    }
+}
+
 
 /* MOBILE */
 
