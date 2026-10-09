@@ -18,7 +18,7 @@ $text: #53383c;
     display: block;
     margin-bottom: 15px;
     color: $pink;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 500;
     letter-spacing: 4px;
     text-transform: uppercase;
@@ -289,7 +289,7 @@ $text: #53383c;
 
 .scroll-text {
     color: rgba(255, 255, 255, 0.4);
-    font-size: 10px;
+    font-size: 13px;
     letter-spacing: 2px;
 }
 
@@ -1822,7 +1822,7 @@ $text: #53383c;
             }
 
             p {
-                font-size: 10px;
+                font-size: 13px;
                 line-height: 1.6;
             }
         }
@@ -1850,7 +1850,7 @@ $text: #53383c;
             margin-bottom: 25px;
 
             p {
-                font-size: 19px;
+                font-size: 16px;
                 line-height: 1.9;
             }
         }
@@ -2092,7 +2092,7 @@ $text: #53383c;
 
         color: rgba(255, 255, 255, 0.55);
 
-        font-size: 12px;
+        font-size: 13px;
 
         line-height: 1.8;
     }
@@ -2155,9 +2155,9 @@ $text: #53383c;
 
         color: rgba(255, 255, 255, 0.22);
 
-        font-size: 8px;
+        font-size: 10px;
 
-        letter-spacing: 3px;
+        letter-spacing: 2px;
 
         text-transform: uppercase;
     }
@@ -2304,3 +2304,327 @@ $text: #53383c;
         margin-left: 20px;
     }
 }
+
+
+/* =========================================
+   BIRTHDAY ANGEL
+========================================= */
+
+.birthday-angel {
+  position: relative;
+  width: 180px;
+  height: 180px;
+
+  margin: 0 auto 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+
+  &::before {
+    position: absolute;
+    inset: 15px;
+
+    border-radius: 50%;
+
+    background: radial-gradient(
+      circle,
+      rgba(255, 174, 202, 0.22) 0%,
+      rgba(255, 174, 202, 0.08) 40%,
+      transparent 70%
+    );
+
+    content: "";
+  }
+
+  &__figure {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+  }
+
+  &__float {
+    width: 100%;
+    will-change: transform;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+
+    overflow: visible;
+    filter: drop-shadow(
+      0 8px 15px rgba(244, 143, 178, 0.2)
+    );
+  }
+
+  &__sparkle {
+    position: absolute;
+    z-index: 3;
+
+    color: #ffe7ba;
+    font-size: 13px;
+
+    text-shadow: 0 0 8px rgba(255, 224, 176, 0.7);
+  }
+}
+
+// /* =========================================
+//   START HERO SPACING
+// ========================================= */
+
+// .hero {
+//   &__content {
+//     position: relative;
+//   }
+
+//   .eyebrow {
+//     display: block;
+//     margin-bottom: 22px;
+//   }
+// }
+
+// /* MOBILE */
+
+// @media (max-width: 600px) {
+//   .birthday-angel {
+//     width: 135px;
+//     height: 135px;
+//     margin-bottom: 12px;
+//   }
+
+//   .hero {
+//     padding: 65px 20px;
+
+//     h1 {
+//       font-size: clamp(66px, 13vw, 95px);
+//     }
+//   }
+// }
+
+// /* =========================================
+//   END  HERO SPACING
+// ========================================= */
+
+
+/* =========================================
+   BIRTHDAY ANGEL
+========================================= */
+
+.birthday-angel {
+  position: relative;
+
+  display: flex;
+  width: 220px;
+  height: 220px;
+
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 18px;
+
+  pointer-events: none;
+
+  /* Ánh sáng phía sau */
+
+  &__glow {
+    position: absolute;
+    inset: 5%;
+
+    border-radius: 50%;
+
+    background: radial-gradient(
+      circle,
+      rgba(255, 170, 197, 0.25) 0%,
+      rgba(255, 170, 197, 0.1) 40%,
+      transparent 72%
+    );
+  }
+
+  /* Animation bay lên */
+
+  &__entrance {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Bay lơ lửng */
+
+  &__float {
+    display: flex;
+    width: 100%;
+    height: 100%;
+
+    align-items: center;
+    justify-content: center;
+
+    will-change: transform;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+
+      object-fit: contain;
+
+      user-select: none;
+    }
+  }
+
+  /* Hạt sáng */
+
+  &__sparkles {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+
+    pointer-events: none;
+
+    span {
+      position: absolute;
+
+      color: #ffe9bc;
+      font-size: 13px;
+
+      text-shadow: 0 0 8px rgba(255, 220, 166, 0.6);
+    }
+  }
+
+  /* Trái tim nhỏ */
+
+  &__heart {
+    position: absolute;
+    z-index: 3;
+
+    color: #f7a0b7;
+    font-family: serif;
+    font-size: 23px;
+
+    &--left {
+      top: 35%;
+      left: -12%;
+    }
+
+    &--right {
+      top: 15%;
+      right: -10%;
+    }
+  }
+}
+
+/* =========================================
+   HERO SPACING
+========================================= */
+
+.hero {
+  .eyebrow {
+    display: block;
+    margin-bottom: 20px;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+  .birthday-angel {
+    width: 155px;
+    height: 155px;
+
+    margin-bottom: 12px;
+
+    &__heart {
+      font-size: 18px;
+    }
+  }
+
+  .hero {
+    padding: 60px 20px;
+
+    h1 {
+      font-size: clamp(65px, 13vw, 95px);
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    min-height: 100svh;
+    padding: 45px 16px;
+
+    &__couple {
+      margin: 25px auto;
+    }
+
+    &__heart {
+      margin: 10px 0;
+    }
+  }
+}
+
+//Flying Cupid
+.flying-cupid {
+  position: relative;
+  width: 240px;
+  height: 220px;
+  margin: 0 auto 20px;
+  pointer-events: none;
+
+  &__entrance,
+  &__floating {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__floating {
+    will-change: transform;
+  }
+
+  &__body {
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  &__wing {
+    position: absolute;
+    z-index: 2;
+    width: 48%;
+    height: 65%;
+    object-fit: contain;
+    will-change: transform;
+
+    &--left {
+      top: 7%;
+      left: 1%;
+      transform-origin: 85% 75%;
+    }
+
+    &--right {
+      top: 7%;
+      right: 1%;
+      transform-origin: 15% 75%;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .flying-cupid {
+    width: 175px;
+    height: 165px;
+    margin-bottom: 12px;
+  }
+}
+
+

@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
 import { birthdayData as data } from "@/components/features/hpbd/utils/data/birthday";
 import IntroTitle from "./IntroTitle..jsx";
+import BirthdayAngel from "./BirthdayAngel.jsx";
+import FlyingCupid from "./FlyingCupid.jsx";
 import "./birthday.scss";
 
 const Heart = ({ index }) => (
@@ -71,17 +73,43 @@ const Reveal = ({ children, className = "" }) => (
 export default function BirthdayExperience() {
   const [giftOpened, setGiftOpened] = useState(false);
   const [started, setStarted] = useState(false);
+  const audioRef = useRef(null);
+  const timeoutRef = useRef(null);
 
   const openGift = () => {
     setGiftOpened(true);
 
-    setTimeout(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3;
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch((error) => {
+        console.warn("Không thể phát nhạc:", error);
+      });
+    }
+
+    timeoutRef.current = setTimeout(() => {
       setStarted(true);
     }, 1300);
   };
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(timeoutRef.current);
+      audioRef.current?.pause();
+    };
+  }, []);
+
+
   return (
     <main className="birthday">
+
+      <audio
+        ref={audioRef}
+        src="/audio/beautiful_in_white.mp3"
+        preload="auto"
+        loop
+      />
+
       <FloatingHearts />
 
       <AnimatePresence mode="wait">
@@ -264,6 +292,10 @@ function Hero() {
       <div className="stars" />
 
       <Reveal className="hero__content">
+        {/* ANGEL */}
+        <BirthdayAngel />
+        {/* <FlyingCupid /> */}
+
         <span className="eyebrow">19 · 12 · 2026</span>
 
         <h1>
