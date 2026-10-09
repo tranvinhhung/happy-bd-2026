@@ -63,7 +63,7 @@ export default function BirthdayAngel() {
           }}
         >
           <img
-            src="/images/hero/angel.png"
+            src="/images/hero/angel.webp"
             alt="Thiên thần nhỏ ôm trái tim"
             draggable={false}
           />
