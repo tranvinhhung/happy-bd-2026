@@ -460,7 +460,7 @@ function Timeline() {
                   stiffness: 200,
                 }}
               >
-                ♥
+                <img src="/heart.svg" alt="Heart" />
               </motion.div>
 
               {/* Nội dung */}
