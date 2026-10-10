@@ -85,7 +85,7 @@ export default function BirthdayExperience() {
 );
 
 const birthday =
-  process.env.NODE_ENV === "development"
+  process.env.NODE_ENV !== "production"
     ? testBirthday
     : "2026-12-19T00:00:00+07:00";
 
