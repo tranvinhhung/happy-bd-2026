@@ -342,7 +342,7 @@ export default function ScratchReveal() {
                   ease: "easeInOut",
                 }}
               >
-                ♥
+                <img src="/heart.svg" alt="Heart" />
               </motion.div>
 
               <h3>
@@ -354,7 +354,7 @@ export default function ScratchReveal() {
               <p>
                 Chúc em tuổi mới luôn hạnh phúc,
                 bình an và có thật nhiều
-                khoảnh khắc đáng nhớ. ♡
+                khoảnh khắc đáng nhớ bên dinhhung. ♡
               </p>
             </div>
 
@@ -439,7 +439,7 @@ export default function ScratchReveal() {
                 className="scratch-reveal__skip"
                 onClick={completeReveal}
               >
-                Không cào được? Mở bí mật tại đây ♡
+                Không cào được? Mở luôn bí mật ♡
               </button>
             </>
           ) : (
@@ -448,10 +448,10 @@ export default function ScratchReveal() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <p>Em đã mở được điều bí mật rồi! ♡</p>
+              <p>Em đã mở được điều bí mật rồi á em! ♡</p>
 
               <button type="button" onClick={handleReset}>
-                <span>↻</span> Cào lại một lần nữa
+                <span>↻</span> Cào lại lần nữa
               </button>
             </motion.div>
           )}

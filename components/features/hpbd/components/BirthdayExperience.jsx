@@ -5,8 +5,10 @@ import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-mot
 import { birthdayData as data } from "@/components/features/hpbd/utils/data/birthday";
 import IntroTitle from "./IntroTitle..jsx";
 import BirthdayAngel from "./BirthdayAngel.jsx";
-import FlyingCupid from "./FlyingCupid.jsx";
 import ScratchReveal from "./ScratchReveal.jsx";
+import PolaroidAlbum from "./PolaroidAlbum.jsx";
+import FlyingCupid from "./FlyingCupid.jsx";
+import MakeAWish from "./MakeAWish.jsx";
 import "./birthday.scss";
 
 const Heart = ({ index }) => (
@@ -269,6 +271,8 @@ export default function BirthdayExperience() {
 
             <Memories />
 
+            <PolaroidAlbum />
+
             <Timeline />
 
               <ScratchReveal />
@@ -280,6 +284,7 @@ export default function BirthdayExperience() {
             <Promises />
 
             <BirthdayWish />
+            <MakeAWish />
 
             <Ending />
           </motion.div>
