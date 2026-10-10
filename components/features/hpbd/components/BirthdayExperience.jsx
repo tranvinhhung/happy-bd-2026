@@ -81,7 +81,7 @@ export default function BirthdayExperience() {
   const timeoutRef = useRef(null);
 
   const [testBirthday] = useState(() =>
-  new Date(Date.now() + 1 * 60 * 1000).toISOString()
+  new Date(Date.now() + 1.1 * 60 * 1000).toISOString()
 );
 
 const birthday =
