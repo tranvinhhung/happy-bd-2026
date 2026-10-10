@@ -2628,3 +2628,271 @@ $text: #53383c;
 }
 
 
+// ================== SCRATCH REVEAL ======================= //
+
+.scratch-reveal {
+  position: relative;
+  display: flex;
+  min-height: 90svh;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 110px 20px;
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(255, 176, 200, 0.1),
+      transparent 55%
+    ),
+    #171d2e;
+
+  color: #fff;
+  text-align: center;
+
+  &__inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+  }
+
+  &__eyebrow {
+    color: #f1a9bf;
+    font-size: 11px;
+    letter-spacing: 4px;
+  }
+
+  &__heading {
+    margin-bottom: 40px;
+
+    h2 {
+      margin: 20px 0;
+      color: #ffe0e8;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(48px, 9vw, 78px);
+      font-weight: 500;
+      line-height: 1;
+
+      em {
+        color: #ff9eb8;
+        font-weight: 400;
+      }
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+  }
+
+  &__frame {
+    width: min(100%, 480px);
+    margin: 0 auto;
+    padding: 9px;
+
+    border: 1px solid rgba(255, 194, 213, 0.25);
+    border-radius: 26px;
+
+    background: rgba(255, 255, 255, 0.035);
+    box-shadow: 0 24px 65px rgba(0, 0, 0, 0.22);
+  }
+
+  &__surface {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1.55;
+    overflow: hidden;
+    border-radius: 18px;
+
+    background:
+      radial-gradient(
+        circle at 50% 30%,
+        rgba(255, 214, 228, 0.16),
+        transparent 70%
+      ),
+      linear-gradient(145deg, #30374e, #22283b);
+  }
+
+  &__secret {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 25px;
+  }
+
+  &__secret-label {
+    color: #f4b7ca;
+    font-size: 9px;
+    letter-spacing: 2.5px;
+  }
+
+  &__secret-heart {
+    margin: 10px 0;
+    color: #ff9bb6;
+    font-size: 40px;
+    line-height: 1;
+  }
+
+  &__secret h3 {
+    margin: 0;
+    color: #ffe4eb;
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(29px, 6vw, 43px);
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.05;
+  }
+
+  &__secret p {
+    max-width: 320px;
+    margin: 12px 0 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 11px;
+    line-height: 1.7;
+  }
+
+  &__canvas {
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+    touch-action: none;
+    user-select: none;
+  }
+
+  &__celebration {
+    position: absolute;
+    z-index: 4;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &__particle {
+    position: absolute;
+    color: #ffb8cb;
+    font-size: 17px;
+    text-shadow: 0 0 10px rgba(255, 174, 198, 0.4);
+  }
+
+  &__bottom {
+    display: flex;
+    min-height: 95px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  &__progress {
+    width: min(250px, 80%);
+    height: 5px;
+    overflow: hidden;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &__progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #f8abc2, #ffe0e8);
+  }
+
+  &__progress-text {
+    margin-top: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 11px;
+  }
+
+  &__skip {
+    margin-top: 14px;
+    padding: 5px;
+    border: 0;
+    background: transparent;
+    color: #e6a8bd;
+    font-size: 11px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  &__finished {
+    p {
+      margin: 0 0 14px;
+      color: #ffc4d5;
+      font-size: 13px;
+    }
+
+    button {
+      padding: 11px 22px;
+      border: 1px solid rgba(255, 190, 210, 0.4);
+      border-radius: 100px;
+      background: rgba(255, 190, 210, 0.08);
+      color: #ffd0dd;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.25s;
+
+      &:hover {
+        background: rgba(255, 190, 210, 0.16);
+      }
+
+      span {
+        margin-right: 6px;
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .scratch-reveal {
+    min-height: auto;
+    padding: 85px 16px;
+
+    &__heading {
+      margin-bottom: 30px;
+
+      h2 {
+        font-size: clamp(46px, 12vw, 64px);
+      }
+
+      p {
+        font-size: 12px;
+      }
+    }
+
+    &__frame {
+      padding: 6px;
+      border-radius: 20px;
+    }
+
+    &__surface {
+      aspect-ratio: 1.15;
+      border-radius: 15px;
+    }
+
+    &__secret {
+      padding: 15px;
+    }
+
+    &__secret h3 {
+      font-size: clamp(29px, 8vw, 40px);
+    }
+
+    &__secret p {
+      font-size: 11px;
+    }
+  }
+}
+
+
+

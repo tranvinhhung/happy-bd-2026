@@ -6,6 +6,7 @@ import { birthdayData as data } from "@/components/features/hpbd/utils/data/birt
 import IntroTitle from "./IntroTitle..jsx";
 import BirthdayAngel from "./BirthdayAngel.jsx";
 import FlyingCupid from "./FlyingCupid.jsx";
+import ScratchReveal from "./ScratchReveal.jsx";
 import "./birthday.scss";
 
 const Heart = ({ index }) => (
@@ -269,6 +270,8 @@ export default function BirthdayExperience() {
             <Memories />
 
             <Timeline />
+
+              <ScratchReveal />
 
             <LoveLetter />
 
