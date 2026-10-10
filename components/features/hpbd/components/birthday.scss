@@ -4088,3 +4088,318 @@ $text: #53383c;
 }
 
 
+
+.birthday-countdown {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 115px 20px 100px;
+  background: #141a2b;
+  color: #fff;
+  text-align: center;
+
+  &__ambient {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+
+    background:
+      radial-gradient(
+        ellipse at 50% 48%,
+        rgba(222, 132, 172, 0.13),
+        transparent 58%
+      ),
+      radial-gradient(
+        ellipse at 50% 95%,
+        rgba(130, 114, 187, 0.12),
+        transparent 60%
+      );
+  }
+
+  &__container {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  &__eyebrow {
+    display: block;
+    color: #edb1c5;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 4px;
+  }
+
+  &__heading {
+    h2 {
+      margin: 22px 0;
+      color: #ffe0e8;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(46px, 8vw, 85px);
+      font-weight: 500;
+      line-height: 1.05;
+
+      em {
+        color: #f5aac4;
+        font-weight: 400;
+      }
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.58);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+  }
+
+  &__content {
+    margin-top: 52px;
+  }
+
+  &__timer {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 13px;
+  }
+
+  &__unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  &__number-box {
+    display: flex;
+    width: 135px;
+    height: 145px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    border: 1px solid rgba(255, 183, 208, 0.22);
+    border-radius: 24px;
+
+    background:
+      linear-gradient(
+        145deg,
+        rgba(255, 191, 213, 0.11),
+        rgba(255, 255, 255, 0.025)
+      );
+
+    box-shadow:
+      0 15px 45px rgba(0, 0, 0, 0.12),
+      inset 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  &__number {
+    color: #ffe1e9;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 78px;
+    font-weight: 500;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__unit-label {
+    color: #e6b7c9;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  &__separator {
+    padding-top: 44px;
+    color: #e5a5bb;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 45px;
+    line-height: 1;
+  }
+
+  &__bottom-text {
+    margin-top: 42px;
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 13px;
+    line-height: 2;
+  }
+
+  &__date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 17px;
+    margin-top: 48px;
+    color: #e9a9c1;
+    font-size: 12px;
+    letter-spacing: 3px;
+  }
+
+  &__loading {
+    padding: 90px 0 40px;
+    color: #f2c1d2;
+    font-size: 13px;
+  }
+
+  &__celebration {
+    width: min(650px, 100%);
+    margin: 55px auto 0;
+    padding: 55px 35px;
+    border: 1px solid rgba(255, 193, 213, 0.24);
+    border-radius: 28px;
+
+    background: linear-gradient(
+      145deg,
+      rgba(255, 184, 209, 0.1),
+      rgba(255, 255, 255, 0.025)
+    );
+
+    h3 {
+      margin: 15px 0;
+      color: #ffe0e8;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(35px, 6vw, 58px);
+      font-weight: 500;
+    }
+
+    p {
+      max-width: 450px;
+      margin: 0 auto 25px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 13px;
+      line-height: 2;
+    }
+
+    > span {
+      color: #e7a9c0;
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+  }
+
+  &__celebration-icon {
+    display: inline-block;
+    color: #ffb6cf;
+    font-size: 70px;
+    line-height: 1;
+  }
+
+  &__stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &__star {
+    position: absolute;
+    color: #ffdbab;
+    font-size: 13px;
+    opacity: 0.4;
+    animation: countdown-twinkle 8s ease-in-out infinite;
+    animation-play-state: paused;
+  }
+
+  &.is-visible &__star {
+    animation-play-state: running;
+  }
+}
+
+@keyframes countdown-twinkle {
+  0%, 65%, 100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+
+  75% {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+
+  85% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .birthday-countdown {
+    padding: 90px 16px 75px;
+
+    &__timer {
+      gap: 7px;
+    }
+
+    &__number-box {
+      width: 88px;
+      height: 100px;
+      border-radius: 16px;
+    }
+
+    &__number {
+      font-size: 56px;
+    }
+
+    &__separator {
+      padding-top: 30px;
+      font-size: 32px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .birthday-countdown {
+    &__heading {
+      h2 {
+        font-size: clamp(42px, 11vw, 56px);
+      }
+
+      p {
+        font-size: 12px;
+      }
+    }
+
+    &__content {
+      margin-top: 38px;
+    }
+
+    &__timer {
+      gap: 5px;
+    }
+
+    &__number-box {
+      width: clamp(60px, 17vw, 76px);
+      height: 85px;
+      border-radius: 13px;
+    }
+
+    &__number {
+      font-size: clamp(36px, 10vw, 48px);
+    }
+
+    &__separator {
+      padding-top: 26px;
+      font-size: 24px;
+    }
+
+    &__unit-label {
+      font-size: 10px;
+    }
+
+    &__celebration {
+      padding: 40px 22px;
+    }
+
+    &__date {
+      font-size: 10px;
+      letter-spacing: 2px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .birthday-countdown__star {
+    animation: none !important;
+  }
+}
