@@ -13,7 +13,7 @@ export const polaroidMemories = [
   },
   {
     id: 2,
-    image: "/images/polaroid/memory-02.jpg",
+    image: "/images/polaroid/memory-03.jpg",
     title: "Một ngày thật vui",
     date: "Sweet memories",
     message:
@@ -24,7 +24,7 @@ export const polaroidMemories = [
   },
   {
     id: 3,
-    image: "/images/polaroid/memory-03.jpg",
+    image: "/images/polaroid/memory-02.jpg",
     title: "Nụ cười của em",
     date: "My favorite smile",
     message:
