@@ -283,6 +283,9 @@ export default function PolaroidAlbum() {
             setIsMobile(media.matches);
         };
 
+        // Cập nhật ngay khi component mount
+        update();
+
         media.addEventListener("change", update);
 
         return () => {
