@@ -13,6 +13,7 @@ import {
     motion,
     useReducedMotion,
 } from "framer-motion";
+import HeartSvg from "@/components/common/svg/heart";
 
 const GAME_DURATION = 26;
 const TARGET_SCORE = 3000;
@@ -517,11 +518,11 @@ export default function CatchHeartGame() {
                                         catchHeart(heart)
                                     }
                                     aria-label={`Bắt tim ${heart.type === "gold"
-                                            ? "vàng, 3 điểm"
-                                            : "hồng, 1 điểm"
+                                        ? "vàng, 300 điểm"
+                                        : "hồng, 100 điểm"
                                         }`}
                                 >
-                                    ♥
+                                    <HeartSvg color={heart.color} width={heart.size} height={heart.size} />
                                 </motion.button>
                             ))}
                     </AnimatePresence>
@@ -532,8 +533,8 @@ export default function CatchHeartGame() {
                             <motion.span
                                 key={effect.id}
                                 className={`catch-heart-game__effect ${effect.type === "gold"
-                                        ? "is-gold"
-                                        : ""
+                                    ? "is-gold"
+                                    : ""
                                     }`}
                                 style={{
                                     left: `${effect.x}%`,
