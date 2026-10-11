@@ -8,7 +8,8 @@ import BirthdayAngel from "./BirthdayAngel.jsx";
 import ScratchReveal from "./ScratchReveal.jsx";
 import PolaroidAlbum from "./PolaroidAlbum.jsx";
 import MakeAWish from "./MakeAWish.jsx";
-import  BirthdayCountdown from "./BirthdayCountdown.jsx";
+import BirthdayCountdown from "./BirthdayCountdown.jsx";
+import CatchHeartGame from "./CatchHeartGame.jsx";
 // import FlyingCupid from "./FlyingCupid.jsx";
 import "./birthday.scss";
 
@@ -81,13 +82,13 @@ export default function BirthdayExperience() {
   const timeoutRef = useRef(null);
 
   const [testBirthday] = useState(() =>
-  new Date(Date.now() + 1 * 60 * 1000).toISOString()
-);
+    new Date(Date.now() + 1 * 60 * 1000).toISOString()
+  );
 
-const birthday =
-  process.env.NODE_ENV === "development"
-    ? testBirthday
-    : "2026-12-19T00:00:00+07:00";
+  const birthday =
+    process.env.NODE_ENV === "development"
+      ? testBirthday
+      : "2026-12-19T00:00:00+07:00";
 
   const openGift = () => {
     setGiftOpened(true);
@@ -278,7 +279,7 @@ const birthday =
             transition={{ duration: 1 }}
           >
             <Hero />
-             <BirthdayCountdown birthday={birthday} />
+            <BirthdayCountdown birthday={birthday} />
 
             <Memories />
 
@@ -286,7 +287,7 @@ const birthday =
 
             <Timeline />
 
-              <ScratchReveal />
+            <ScratchReveal />
 
             <LoveLetter />
 
@@ -295,6 +296,7 @@ const birthday =
             <Promises />
 
             <BirthdayWish />
+            <CatchHeartGame />
             <MakeAWish />
 
             <Ending />
