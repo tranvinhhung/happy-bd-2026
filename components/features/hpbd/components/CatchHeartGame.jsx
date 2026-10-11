@@ -15,7 +15,7 @@ import {
 } from "framer-motion";
 
 const GAME_DURATION = 26;
-const TARGET_SCORE = 26;
+const TARGET_SCORE = 3000;
 const MAX_HEARTS = 4;
 
 const SPAWN_INTERVAL = 850;
@@ -26,12 +26,12 @@ const GOLD_CHANCE = 0.18;
 
 const HEART_TYPES = {
     pink: {
-        points: 1,
+        points: 100,
         color: "#F5A9C4",
         className: "is-pink",
     },
     gold: {
-        points: 3,
+        points: 300,
         color: "#FFD36E",
         className: "is-gold",
     },
@@ -425,11 +425,11 @@ export default function CatchHeartGame() {
                 <div className="catch-heart-game__combo-bar">
                     <div className="catch-heart-game__legend">
                         <span className="catch-heart-game__legend-pink">
-                            ♥ Hồng +1
+                            ♥ Hồng +{HEART_TYPES.pink.points}
                         </span>
 
                         <span className="catch-heart-game__legend-gold">
-                            ♥ Vàng +3
+                            ♥ Vàng +{HEART_TYPES.gold.points}
                         </span>
                     </div>
 
@@ -617,8 +617,8 @@ export default function CatchHeartGame() {
                                 <h3>Sẵn sàng chưa em?</h3>
 
                                 <p>
-                                    Tim hồng +1, tim vàng +3.
-                                    Bắt đủ 10 điểm trong 30 giây nhé!
+                                    Tim hồng +{HEART_TYPES.pink.points}, tim vàng +{HEART_TYPES.gold.points}.
+                                    Bắt đủ {TARGET_SCORE} điểm trong {GAME_DURATION} giây nhé!
                                 </p>
 
                                 <button
@@ -682,11 +682,12 @@ export default function CatchHeartGame() {
                                     ♡
                                 </span>
 
-                                <h3>Suýt nữa rồi!</h3>
+                                <h3>Suýt tí nữa thôi!</h3>
 
                                 <p>
-                                    Em đã bắt được {score} điểm.
+                                    Em bắt được {score} điểm.
                                     Thử lại để mở khóa lời nhắn nhé!
+                                    Cố lên em !!!
                                 </p>
 
                                 <button
