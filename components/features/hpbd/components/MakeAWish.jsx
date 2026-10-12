@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -6,7 +5,7 @@ import {
     AnimatePresence,
     motion,
     useReducedMotion,
-    useInView
+    useInView,
 } from "framer-motion";
 
 const MAX_WISH_LENGTH = 200;
@@ -51,6 +50,9 @@ const formatDate = (timestamp) =>
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
     }).format(new Date(timestamp));
 
 export default function MakeAWish() {
@@ -95,18 +97,14 @@ export default function MakeAWish() {
 
                 if (!response.ok) {
                     const result = await response.json();
-                    throw new Error(
-                        result.message || "Không thể tải điều ước."
-                    );
+                    throw new Error(result.message || "Không thể tải điều ước.");
                 }
 
                 const result = await response.json();
 
                 if (controller.signal.aborted) return;
 
-                setWishes(
-                    Array.isArray(result.wishes) ? result.wishes : []
-                );
+                setWishes(Array.isArray(result.wishes) ? result.wishes : []);
                 setError("");
             } catch (err) {
                 if (controller.signal.aborted) return;
@@ -131,7 +129,6 @@ export default function MakeAWish() {
             }
         };
     }, [reloadKey]);
-
 
     const completeWish = useCallback((wish) => {
         if (!mountedRef.current) return;
@@ -180,9 +177,7 @@ export default function MakeAWish() {
             const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(
-                    result.message || "Không thể gửi điều ước."
-                );
+                throw new Error(result.message || "Không thể gửi điều ước.");
             }
 
             if (!mountedRef.current) return;
@@ -196,8 +191,7 @@ export default function MakeAWish() {
 
             setFlyingWish({
                 ...wish,
-                positionIndex:
-                    Math.min(wishes.length, MAX_VISIBLE_WISHES - 1),
+                positionIndex: Math.min(wishes.length, MAX_VISIBLE_WISHES - 1),
             });
 
             timerRef.current = setTimeout(() => {
@@ -218,12 +212,11 @@ export default function MakeAWish() {
         setReloadKey((current) => current + 1);
     };
 
-
     const handleDeleteWish = async () => {
         if (!selectedWish || deleting) return;
 
         const confirmed = window.confirm(
-            "Bạn có chắc chắn muốn xóa điều ước này không?"
+            "Bạn có chắc chắn muốn xóa điều ước này không?",
         );
 
         if (!confirmed) return;
@@ -239,19 +232,17 @@ export default function MakeAWish() {
                     headers: {
                         "x-admin-secret": adminSecret,
                     },
-                }
+                },
             );
 
             const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(
-                    result.message || "Không thể xóa điều ước."
-                );
+                throw new Error(result.message || "Không thể xóa điều ước.");
             }
 
             setWishes((current) =>
-                current.filter((wish) => wish.id !== selectedWish.id)
+                current.filter((wish) => wish.id !== selectedWish.id),
             );
 
             setSelectedWish(null);
@@ -262,7 +253,6 @@ export default function MakeAWish() {
             setDeleting(false);
         }
     };
-
 
     const targetPosition = flyingWish
         ? STAR_POSITIONS[flyingWish.positionIndex]
@@ -275,16 +265,12 @@ export default function MakeAWish() {
             <div className="make-wish__container">
                 <motion.div
                     className="make-wish__heading"
-                    initial={
-                        reduceMotion ? false : { opacity: 0, y: 24 }
-                    }
+                    initial={reduceMotion ? false : { opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.65 }}
                 >
-                    <span className="make-wish__eyebrow">
-                        MAKE A LITTLE WISH
-                    </span>
+                    <span className="make-wish__eyebrow">MAKE A LITTLE WISH</span>
 
                     <h2>
                         Gửi một điều ước
@@ -300,8 +286,7 @@ export default function MakeAWish() {
                 </motion.div>
 
                 <div
-                    className={`make-wish__sky ${isSkyVisible ? "is-visible" : ""
-                        }`}
+                    className={`make-wish__sky ${isSkyVisible ? "is-visible" : ""}`}
                     ref={skyRef}
                     aria-label="Bầu trời những ngôi sao điều ước"
                 >
@@ -326,8 +311,7 @@ export default function MakeAWish() {
                     ))}
 
                     {wishes.map((wish, index) => {
-                        const position =
-                            STAR_POSITIONS[index % STAR_POSITIONS.length];
+                        const position = STAR_POSITIONS[index % STAR_POSITIONS.length];
 
                         return (
                             <motion.button
@@ -338,17 +322,11 @@ export default function MakeAWish() {
                                     left: `${position.x}%`,
                                     top: `${position.y}%`,
                                 }}
-                                initial={
-                                    reduceMotion
-                                        ? false
-                                        : { opacity: 0, scale: 0.3 }
-                                }
+                                initial={reduceMotion ? false : { opacity: 0, scale: 0.3 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 0.5 }}
                                 onClick={() => setSelectedWish(wish)}
-                                aria-label={`Xem điều ước ngày ${formatDate(
-                                    wish.createdAt
-                                )}`}
+                                aria-label={`Xem điều ước ngày ${formatDate(wish.createdAt)}`}
                             >
                                 <span
                                     className="make-wish__star-glow"
@@ -395,16 +373,12 @@ export default function MakeAWish() {
                         )}
                     </AnimatePresence>
 
-                    {!loading &&
-                        wishes.length === 0 &&
-                        !flyingWish && (
-                            <div className="make-wish__empty">
-                                <span>✧</span>
-                                <p>
-                                    Ngôi sao đầu tiên đang chờ điều ước của em...
-                                </p>
-                            </div>
-                        )}
+                    {!loading && wishes.length === 0 && !flyingWish && (
+                        <div className="make-wish__empty">
+                            <span>✧</span>
+                            <p>Ngôi sao đầu tiên đang chờ điều ước của em...</p>
+                        </div>
+                    )}
 
                     {loading && (
                         <div className="make-wish__empty" role="status">
@@ -419,9 +393,7 @@ export default function MakeAWish() {
                                 key={selectedWish.id}
                                 className="make-wish__wish-detail"
                                 initial={
-                                    reduceMotion
-                                        ? false
-                                        : { opacity: 0, y: 15, scale: 0.96 }
+                                    reduceMotion ? false : { opacity: 0, y: 15, scale: 0.96 }
                                 }
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, y: 8 }}
@@ -438,14 +410,14 @@ export default function MakeAWish() {
                                 </button>
 
                                 <span className="make-wish__detail-icon">
-                                    ✦
+                                    ✦ Điều thứ{" "}
+                                    {wishes.findIndex((wish) => wish.id === selectedWish.id) + 1}{" "}
+                                    em ước là ✦
                                 </span>
 
                                 <p>{selectedWish.text}</p>
 
-                                <small>
-                                    {formatDate(selectedWish.createdAt)}
-                                </small>
+                                <small>vào lúc {formatDate(selectedWish.createdAt)}</small>
                                 {isShowDeleteButton && (
                                     <div className="make-wish__delete-area">
                                         <input
@@ -471,7 +443,6 @@ export default function MakeAWish() {
                     </AnimatePresence>
                 </div>
 
-
                 <AnimatePresence mode="wait">
                     {isWishLimitReached ? (
                         <motion.div
@@ -484,11 +455,7 @@ export default function MakeAWish() {
                         >
                             <motion.span
                                 className="make-wish__completed-icon"
-                                animate={
-                                    reduceMotion
-                                        ? {}
-                                        : { rotate: [0, -8, 8, 0] }
-                                }
+                                animate={reduceMotion ? {} : { rotate: [0, -8, 8, 0] }}
                                 transition={{ duration: 1.2 }}
                             >
                                 ♡
@@ -499,7 +466,7 @@ export default function MakeAWish() {
                             <p>
                                 Ước 3 điều thôi em
                                 <br />
-                                đừng tham lam quá nha hihi ♡
+                                đừng tham lam quá nha ♡
                             </p>
 
                             <span className="make-wish__completed-note">
@@ -523,9 +490,7 @@ export default function MakeAWish() {
                                 <textarea
                                     value={input}
                                     onChange={(event) =>
-                                        setInput(
-                                            event.target.value.slice(0, MAX_WISH_LENGTH)
-                                        )
+                                        setInput(event.target.value.slice(0, MAX_WISH_LENGTH))
                                     }
                                     placeholder="Em ước rằng..."
                                     maxLength={MAX_WISH_LENGTH}
@@ -542,15 +507,10 @@ export default function MakeAWish() {
                                     <button
                                         type="submit"
                                         disabled={
-                                            !input.trim() ||
-                                            sending ||
-                                            loading ||
-                                            isWishLimitReached
+                                            !input.trim() || sending || loading || isWishLimitReached
                                         }
                                     >
-                                        {sending
-                                            ? "Đang gửi điều ước..."
-                                            : "Gửi lên bầu trời ✦"}
+                                        {sending ? "Đang gửi điều ước..." : "Gửi lên bầu trời ✦"}
                                     </button>
                                 </div>
                             </form>
@@ -562,15 +522,11 @@ export default function MakeAWish() {
                     )}
                 </AnimatePresence>
 
-
                 {error && (
                     <div className="make-wish__error" role="alert">
                         <p>{error}</p>
                         {wishes.length === 0 && !sending && (
-                            <button
-                                type="button"
-                                onClick={handleRetry}
-                            >
+                            <button type="button" onClick={handleRetry}>
                                 Thử tải lại
                             </button>
                         )}
@@ -578,9 +534,7 @@ export default function MakeAWish() {
                 )}
 
                 <div className="make-wish__footer">
-                    <span>
-                        {wishes.length}/3 điều ước đã được gửi lên bầu trời ✦
-                    </span>
+                    <span>{wishes.length}/3 điều ước đã được gửi lên bầu trời ✦</span>
                 </div>
             </div>
         </section>
