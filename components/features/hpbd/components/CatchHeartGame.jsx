@@ -649,13 +649,13 @@ export default function CatchHeartGame() {
                                     ♥
                                 </span>
 
-                                <h3>Em bắt được trái tim anh rồi! ♡</h3>
+                                <h3>Em bắt được trái tim dh rồi! ♡</h3>
 
                                 <p>
                                     Chúc mừng sinh nhật em!
                                     Mong rằng mỗi ngày của em
-                                    đều có thật nhiều niềm vui,
-                                    bình an và những điều dịu dàng.
+                                    đều có thật nhiều niềm vui và
+                                    bình an giống như lúc này, có dh bên em .
                                 </p>
 
                                 <span className="catch-heart-game__result-combo">

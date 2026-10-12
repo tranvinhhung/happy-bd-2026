@@ -6,7 +6,7 @@ export const polaroidMemories = [
     title: "Ngày đầu tiên ♡",
     date: "Our beginning",
     message:
-      "Có những khoảnh khắc rất bình thường, nhưng khi nhớ lại lại trở thành điều đặc biệt nhất.",
+      "Những khoảnh khắc rất bình thường, nhưng lại chứa đựng những kỷ niệm đáng nhớ.",
     rotation: -12,
     x: -125,
     y: -65,
