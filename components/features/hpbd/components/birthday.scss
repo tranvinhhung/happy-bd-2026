@@ -3635,6 +3635,7 @@ $text: #53383c;
     background: #252a43;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
     translate: 50% 0;
+    max-height: 100%;
 
     p {
       margin: 10px 0;
@@ -3645,6 +3646,39 @@ $text: #53383c;
       line-height: 1.4;
       overflow-wrap: anywhere;
       white-space: pre-wrap;
+      max-height: 200px;
+      overflow-y: auto;
+
+      & {
+
+        /* Firefox */
+        scrollbar-width: thin;
+        scrollbar-color: #d89aaf transparent;
+      }
+
+      /* Chrome, Edge, Safari */
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #d89aaf;
+        border-radius: 999px;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: #f2b6ca;
+      }
+
+      &::-webkit-scrollbar-button {
+        display: none;
+        width: 0;
+        height: 0;
+      }
     }
 
     small {
@@ -4658,7 +4692,7 @@ $text: #53383c;
 
   &__heart {
     &.is-pink {
-        filter: drop-shadow(0 0 8px #fd337a);
+      filter: drop-shadow(0 0 8px #fd337a);
     }
 
     &.is-gold {
