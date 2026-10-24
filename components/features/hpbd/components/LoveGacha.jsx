@@ -349,7 +349,7 @@ export default function LoveGacha() {
           {phase === "idle" ? "Quay Gacha tình yêu ♡" : "Đang mở món quà..."}
         </button>
 
-        {process.env.NODE_ENV !== "production" && (
+        {process.env.NEXT_PUBLIC_VERCEL_ENV !== "production" && (
           <button
             type="button"
             className={styles.manageButton}
