@@ -10,6 +10,7 @@ import PolaroidAlbum from "./PolaroidAlbum.jsx";
 import MakeAWish from "./MakeAWish.jsx";
 import BirthdayCountdown from "./BirthdayCountdown.jsx";
 import CatchHeartGame from "./CatchHeartGame.jsx";
+import LoveGacha from "./LoveGacha.jsx";
 // import FlyingCupid from "./FlyingCupid.jsx";
 import "./birthday.scss";
 
@@ -93,7 +94,7 @@ const birthday =
   const openGift = () => {
     setGiftOpened(true);
 
-    if (audioRef.current) {
+    if (audioRef.current && process.env.NODE_ENV !== "development") {
       audioRef.current.volume = 0.3;
       audioRef.current.currentTime = 0;
       audioRef.current.play().catch((error) => {
@@ -296,7 +297,11 @@ const birthday =
             <Promises />
 
             <BirthdayWish />
+
             <CatchHeartGame />
+
+            <LoveGacha />
+
             <MakeAWish />
 
             <Ending />

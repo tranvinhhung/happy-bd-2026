@@ -14,19 +14,19 @@ export const birthdayData = {
 
     memories: [
         {
-            image: "/images/memories/memo-01.jpg",
+            image: "/api/private-images/memories/memo-01.jpg",
             title: "Ngày đầu hẹn hò",
         },
         {
-            image: "/images/memories/memo-02.jpg",
+            image: "/api/private-images/memories/memo-02.jpg",
             title: "Cùng ngắm hoàng hôn Đà Lạt nè",
         },
         {
-            image: "/images/memories/memo-03.jpg",
+            image: "/api/private-images/memories/memo-03.jpg",
             title: "Những ngày bình thường nhưng thật đặc biệt",
         },
         {
-            image: "/images/memories/memo-04.jpg",
+            image: "/api/private-images/memories/memo-04.jpg",
             title: "Và còn rất nhiều kỷ niệm khác...",
         },
     ],
