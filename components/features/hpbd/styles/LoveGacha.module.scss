@@ -1,0 +1,881 @@
+.section {
+  position: relative;
+  padding: 100px 20px;
+  overflow: hidden;
+  background: transparent;
+  color: #765156;
+  text-align: center;
+}
+
+.container {
+  width: min(800px, 100%);
+  margin: 0 auto;
+}
+
+.heading {
+  margin-bottom: 40px;
+
+  span {
+    color: #b68b90;
+    font-size: 11px;
+    letter-spacing: 4px;
+  }
+
+  h2 {
+    margin: 20px 0;
+    color: #765156;
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(46px, 7vw, 72px);
+    font-weight: 500;
+
+    em {
+      color: #c98998;
+      font-weight: 400;
+    }
+  }
+
+  p {
+    max-width: 500px;
+    margin: 0 auto;
+    color: #96777b;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+}
+
+.emb {
+  color: #c98998;
+  font-weight: 400;
+}
+
+// Máy gacha phong cách giấy vintage
+
+.machine {
+  position: relative;
+  width: 290px;
+  margin: 0 auto 35px;
+  filter: drop-shadow(0 15px 18px rgba(100, 65, 70, 0.12));
+}
+
+.glass {
+  position: relative;
+  height: 225px;
+  overflow: hidden;
+  border: 5px solid #d9aaa9;
+  border-bottom: 0;
+  border-radius: 145px 145px 15px 15px;
+  background:
+    radial-gradient(
+      circle at 45% 20%,
+      rgba(255, 255, 255, 0.8),
+      transparent 60%
+    ),
+    #fff0e7;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 30px;
+    width: 45px;
+    height: 90px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: rotate(-20deg);
+    pointer-events: none;
+  }
+}
+
+.capsule {
+  position: absolute;
+  bottom: 10px;
+  left: 15px;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  color: #a56875;
+  font-size: 22px;
+  box-shadow: 0 5px 10px rgba(100, 65, 70, 0.12);
+
+  &:nth-child(1) { left: 12px; bottom: 12px; }
+  &:nth-child(2) { left: 72px; bottom: 12px; }
+  &:nth-child(3) { left: 132px; bottom: 12px; }
+  &:nth-child(4) { left: 190px; bottom: 12px; }
+  &:nth-child(5) { left: 48px; bottom: 64px; }
+  &:nth-child(6) { left: 145px; bottom: 70px; }
+}
+
+.machineBody {
+  position: relative;
+  height: 185px;
+  padding: 18px;
+  border: 5px solid #d9aaa9;
+  border-radius: 8px;
+  background: #ffe5e7;
+}
+
+.machineLabel {
+  color: #765156;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: 2px;
+
+  small {
+    display: block;
+    margin-top: 5px;
+    color: #a78488;
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+}
+
+.knob {
+  position: absolute;
+  left: 42px;
+  bottom: 25px;
+  display: grid;
+  place-items: center;
+  width: 65px;
+  height: 65px;
+  border: 5px solid #d5a1a5;
+  border-radius: 50%;
+  background: #fff0e7;
+  color: #b87e8b;
+  font-size: 34px;
+  box-shadow: 0 4px 8px rgba(100, 65, 70, 0.12);
+}
+
+.slot {
+  position: absolute;
+  right: 35px;
+  bottom: 34px;
+  display: grid;
+  place-items: center;
+  width: 85px;
+  height: 50px;
+  border: 3px solid #d5a1a5;
+  border-radius: 8px;
+  background: #fff0e7;
+  color: #765156;
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.machineBase {
+  height: 24px;
+  margin: 0 10px;
+  border-radius: 0 0 12px 12px;
+  background: #d9aaa9;
+}
+
+// Nút quay
+
+.rollButton {
+  padding: 14px 32px;
+  border: 1px solid #d7a7a9;
+  border-radius: 4px;
+  background: #fff0e7;
+  color: #765156;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 22px;
+  font-style: italic;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(100, 65, 70, 0.1);
+  transition: transform 0.2s, background 0.2s;
+
+  &:hover:not(:disabled) {
+    background: #ffe5e7;
+    transform: translateY(-3px) rotate(-1deg);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #b87e8b;
+    outline-offset: 4px;
+  }
+}
+
+.progress {
+  margin: 25px 0 18px;
+  color: #96777b;
+  font-size: 13px;
+}
+
+.collection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.collectionItem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  background: #fff0e7;
+  color: #765156;
+  font-size: 27px;
+  box-shadow: 0 8px 16px rgba(100, 65, 70, 0.1);
+  transform: rotate(-3deg);
+
+  &:nth-child(even) {
+    background: #ffe5e7;
+    transform: rotate(3deg);
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    width: 32px;
+    height: 12px;
+    background: rgba(210, 174, 159, 0.5);
+    transform: translateX(-50%);
+  }
+}
+
+// Popup phần thưởng như một tờ giấy ghi chú
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(45, 30, 38, 0.65);
+  backdrop-filter: blur(4px);
+}
+
+.prizeCard {
+  position: relative;
+  width: min(100%, 440px);
+  padding: 48px 35px 40px;
+  background: #fff0e7;
+  color: #765156;
+  box-shadow: 0 20px 55px rgba(45, 30, 38, 0.25);
+  text-align: center;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    width: 85px;
+    height: 24px;
+    background: rgba(210, 174, 159, 0.65);
+    transform: translateX(-50%) rotate(-3deg);
+  }
+
+  h3 {
+    margin: 15px 0;
+    color: #765156;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 42px;
+    font-weight: 500;
+  }
+
+  p {
+    color: #8b696e;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 23px;
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  button {
+    margin-top: 25px;
+    padding: 12px 25px;
+    border: 1px solid #d7a7a9;
+    border-radius: 3px;
+    background: #ffe5e7;
+    color: #765156;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 21px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+
+    &:hover {
+      background: #f7d5da;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.prizeEmoji {
+  display: block;
+  font-size: 70px;
+}
+
+.rare {
+  display: block;
+  margin-top: 12px;
+  color: #b68b58;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+// Responsive
+
+@media (max-width: 600px) {
+  .section {
+    padding: 85px 14px 75px;
+  }
+
+  .heading {
+    h2 {
+      font-size: 52px;
+    }
+
+    p {
+      font-size: 12px;
+    }
+  }
+
+  .machine {
+    max-width: 100%;
+  }
+
+  .prizeCard {
+    padding: 38px 22px 30px;
+
+    h3 {
+      font-size: 35px;
+    }
+
+    p {
+      font-size: 21px;
+    }
+  }
+
+  .collection {
+    gap: 12px;
+  }
+
+  .collectionItem {
+    width: 52px;
+    height: 52px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rollButton,
+  .prizeCard button {
+    transition: none;
+  }
+}
+
+
+/* ======================================
+   GACHA CINEMATIC ANIMATIONS
+====================================== */
+
+/* Viên capsule rơi ra từ máy */
+
+.fallingCapsule {
+  position: absolute;
+  z-index: 10;
+  right: 45px;
+  bottom: 25px;
+
+  display: grid;
+  place-items: center;
+
+  width: 64px;
+  height: 64px;
+
+  border: 3px solid #fff5f7;
+  border-radius: 50%;
+
+  background: linear-gradient(
+    180deg,
+    #f2a8bf 50%,
+    #fff0e7 50%
+  );
+
+  color: #a56875;
+  font-size: 25px;
+
+  box-shadow:
+    0 10px 25px rgba(100, 65, 70, 0.2),
+    0 0 20px rgba(245, 169, 196, 0.3);
+
+  pointer-events: none;
+}
+
+/* Overlay mờ với ánh sáng radial */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+
+  padding: 20px;
+
+  background: rgba(30, 20, 33, 0.82);
+  backdrop-filter: blur(9px);
+}
+
+.overlayGlow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 50% 48%,
+      rgba(255, 214, 228, 0.36) 0%,
+      rgba(244, 151, 190, 0.18) 20%,
+      rgba(231, 134, 177, 0.06) 42%,
+      transparent 70%
+    );
+
+  animation: gachaGlowPulse 3s ease-in-out infinite;
+}
+
+@keyframes gachaGlowPulse {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+/* Viên gacha bay lơ lửng */
+
+.capsuleScene {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 38px;
+}
+
+.floatingCapsule {
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  width: 180px;
+  height: 180px;
+  padding: 0;
+
+  border: 5px solid rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at 35% 25%,
+      rgba(255, 255, 255, 0.65),
+      transparent 35%
+    ),
+    linear-gradient(
+      180deg,
+      #f0a3bc 0%,
+      #e78cab 49%,
+      #fff0e7 50%,
+      #ffe0e7 100%
+    );
+
+  color: #a56875;
+  font-size: 70px;
+
+  box-shadow:
+    0 25px 55px rgba(0, 0, 0, 0.22),
+    0 0 40px rgba(255, 190, 217, 0.6),
+    0 0 100px rgba(255, 185, 213, 0.3),
+    inset 0 0 25px rgba(255, 255, 255, 0.4);
+
+  cursor: pointer;
+  transition: filter 0.2s;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 49%;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: rgba(180, 102, 131, 0.4);
+  }
+
+  &:hover {
+    filter: brightness(1.12);
+  }
+
+  &:focus-visible {
+    outline: 3px solid #fff0e7;
+    outline-offset: 8px;
+  }
+
+  span {
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(
+      0 3px 5px rgba(100, 65, 70, 0.2)
+    );
+  }
+}
+
+.openHint {
+  color: #fff0e7;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 25px;
+  font-style: italic;
+  text-align: center;
+  text-shadow: 0 0 20px rgba(255, 200, 222, 0.45);
+
+  animation: gachaHintPulse 2s ease-in-out infinite;
+}
+
+@keyframes gachaHintPulse {
+  0%, 100% {
+    opacity: 0.65;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Hiệu ứng bùng sáng */
+
+.burstScene {
+  position: relative;
+  z-index: 3;
+
+  display: grid;
+  place-items: center;
+
+  width: 240px;
+  height: 240px;
+}
+
+.burstCapsule {
+  position: relative;
+  z-index: 2;
+
+  display: grid;
+  place-items: center;
+
+  width: 170px;
+  height: 170px;
+
+  border: 5px solid white;
+  border-radius: 50%;
+
+  background: linear-gradient(
+    180deg,
+    #f0a3bc 50%,
+    #fff0e7 50%
+  );
+
+  color: #a56875;
+  font-size: 65px;
+
+  box-shadow:
+    0 0 50px rgba(255, 205, 225, 0.9),
+    0 0 110px rgba(255, 180, 210, 0.5);
+}
+
+.flash {
+  position: absolute;
+  z-index: 4;
+
+  width: 220px;
+  height: 220px;
+
+  border-radius: 50%;
+
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 231, 240, 0.85) 30%,
+    rgba(255, 180, 213, 0.3) 60%,
+    transparent 75%
+  );
+
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  z-index: 5;
+
+  color: #ffe4b8;
+  font-size: 25px;
+
+  text-shadow:
+    0 0 15px rgba(255, 235, 190, 0.8);
+
+  pointer-events: none;
+}
+
+/* Lá thư xuất hiện sau vụ nổ */
+
+.letterScene {
+  position: relative;
+  z-index: 5;
+
+  width: min(100%, 500px);
+  max-height: 85dvh;
+  overflow-y: auto;
+
+  padding: 55px 40px 42px;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 35px,
+      rgba(180, 120, 125, 0.035) 36px
+    ),
+    #fff0e7;
+
+  color: #765156;
+  text-align: center;
+
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.3),
+    0 0 65px rgba(255, 204, 224, 0.15);
+
+  h3 {
+    margin: 16px 0;
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(35px, 6vw, 48px);
+    font-weight: 500;
+  }
+
+  p {
+    margin: 15px auto 0;
+    max-width: 370px;
+
+    font-family: "Cormorant Garamond", serif;
+    font-size: 24px;
+    font-style: italic;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
+
+.letterTape {
+  position: absolute;
+  top: -2px;
+  left: 50%;
+
+  width: 95px;
+  height: 25px;
+
+  background: rgba(210, 174, 159, 0.65);
+  transform: translateX(-50%) rotate(-3deg);
+}
+
+.letterIcon {
+  font-size: 65px;
+}
+
+.letterEyebrow {
+  display: block;
+  margin-top: 15px;
+
+  color: #b58a90;
+  font-size: 10px;
+  letter-spacing: 3px;
+}
+
+.letterSignature {
+  margin-top: 25px;
+  color: #bd8792;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 23px;
+  font-style: italic;
+}
+
+.letterClose {
+  margin-top: 30px;
+  padding: 12px 28px;
+
+  border: 1px solid #d7a7a9;
+  border-radius: 4px;
+
+  background: #ffe5e7;
+  color: #765156;
+
+  font-family: "Cormorant Garamond", serif;
+  font-size: 22px;
+  font-style: italic;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s,
+    transform 0.2s;
+
+  &:hover {
+    background: #f7d5da;
+    transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #b87e8b;
+    outline-offset: 4px;
+  }
+}
+
+@media (max-width: 600px) {
+  .floatingCapsule {
+    width: 145px;
+    height: 145px;
+    font-size: 56px;
+  }
+
+  .openHint {
+    max-width: 290px;
+    font-size: 22px;
+  }
+
+  .letterScene {
+    padding: 45px 25px 30px;
+
+    p {
+      font-size: 21px;
+    }
+  }
+
+  .particle {
+    font-size: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlayGlow,
+  .openHint {
+    animation: none;
+  }
+
+  .floatingCapsule,
+  .letterClose {
+    transition: none;
+  }
+}
+
+.manageButton {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 18px;
+  border: 1px dashed #d7a7a9;
+  background: transparent;
+  color: #96777b;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 19px;
+  cursor: pointer;
+
+  &:hover {
+    background: #fff0e7;
+    color: #765156;
+  }
+}
+
+.typeSelector {
+  width: min(680px, 100%);
+  margin: 0 auto 40px;
+  text-align: center;
+
+  > p {
+    margin-bottom: 20px;
+    color: #765156;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 26px;
+    font-style: italic;
+  }
+}
+
+.typeOptions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+
+  button {
+    min-width: 110px;
+    padding: 13px 20px;
+
+    border: 1px solid #dfc0bd;
+    border-radius: 4px;
+
+    background: #fff0e7;
+    color: #765156;
+
+    font-family: "Cormorant Garamond", serif;
+    font-size: 21px;
+    font-style: italic;
+
+    box-shadow: 0 6px 14px rgba(100, 65, 70, 0.08);
+    cursor: pointer;
+
+    transition:
+      background 0.2s,
+      transform 0.2s,
+      box-shadow 0.2s;
+
+    &:hover:not(:disabled) {
+      background: #ffe5e7;
+      transform: translateY(-3px);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .typeActive {
+    background: #ffe5e7;
+    border-color: #c98998;
+    box-shadow: 0 8px 20px rgba(201, 137, 152, 0.2);
+    transform: rotate(-2deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .typeSelector {
+    margin-bottom: 30px;
+
+    > p {
+      font-size: 23px;
+    }
+  }
+
+  .typeOptions {
+    gap: 9px;
+
+    button {
+      min-width: 95px;
+      padding: 11px 15px;
+      font-size: 19px;
+    }
+  }
+}
