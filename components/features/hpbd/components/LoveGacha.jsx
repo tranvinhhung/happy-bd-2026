@@ -369,21 +369,6 @@ export default function LoveGacha() {
           }}
         />
 
-        <div className={styles.progress}>
-          {specialUnlocked ? (
-            <p>
-              ✨ Đã mở khóa quà đặc biệt! Cơ hội trúng món quà hiếm đã xuất hiện
-              ♡
-            </p>
-          ) : (
-            <p>
-              🎁 Đã quay {rollCount}/{MIN_ROLLS_FOR_SPECIAL} lượt. Còn{" "}
-              {Math.max(0, MIN_ROLLS_FOR_SPECIAL - rollCount)} lượt để mở khóa
-              quà đặc biệt.
-            </p>
-          )}
-        </div>
-
         <p className={styles.progress}>
           Đã khám phá {collected.length}/{prizes.length} món quà
           {" · "}
