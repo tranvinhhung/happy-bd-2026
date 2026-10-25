@@ -1,7 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useInView,
+  useReducedMotion,
+} from "framer-motion";
 import { birthdayData as data } from "@/components/features/hpbd/utils/data/birthday";
 import IntroTitle from "./IntroTitle..jsx";
 import BirthdayAngel from "./BirthdayAngel.jsx";
@@ -11,6 +16,8 @@ import MakeAWish from "./MakeAWish.jsx";
 import BirthdayCountdown from "./BirthdayCountdown.jsx";
 import CatchHeartGame from "./CatchHeartGame.jsx";
 import LoveGacha from "./LoveGacha.jsx";
+import WaveText from "./WaveText.jsx";
+import HandwritingLetter from "./HandwritingLetter.jsx";
 // import FlyingCupid from "./FlyingCupid.jsx";
 import "./birthday.scss";
 
@@ -114,10 +121,8 @@ const birthday =
     };
   }, []);
 
-
   return (
     <main className="birthday">
-
       <audio
         ref={audioRef}
         src="/audio/beautiful_in_white.mp3"
@@ -160,29 +165,29 @@ const birthday =
                 animate={
                   giftOpened
                     ? {
-                      x: 0,
-                      y: 0,
-                      rotate: 0,
-                      scale: 1,
-                    }
+                        x: 0,
+                        y: 0,
+                        rotate: 0,
+                        scale: 1,
+                      }
                     : {
-                      x: [0, 0, -3, 3, -3, 3, -2, 2, 0, 0],
-                      y: [0, 0, -2, 0, -2, 0, 0, 0, 0, 0],
-                      rotate: [0, 0, -2, 2, -2, 2, -1, 1, 0, 0],
-                      scale: [1, 1, 1.02, 1.02, 1.02, 1.02, 1, 1, 1, 1],
-                    }
+                        x: [0, 0, -3, 3, -3, 3, -2, 2, 0, 0],
+                        y: [0, 0, -2, 0, -2, 0, 0, 0, 0, 0],
+                        rotate: [0, 0, -2, 2, -2, 2, -1, 1, 0, 0],
+                        scale: [1, 1, 1.02, 1.02, 1.02, 1.02, 1, 1, 1, 1],
+                      }
                 }
                 transition={
                   giftOpened
                     ? {
-                      duration: 0.3,
-                    }
+                        duration: 0.3,
+                      }
                     : {
-                      duration: 3.8,
-                      repeat: Infinity,
-                      repeatDelay: 2.5,
-                      ease: "easeInOut",
-                    }
+                        duration: 3.8,
+                        repeat: Infinity,
+                        repeatDelay: 2.5,
+                        ease: "easeInOut",
+                      }
                 }
               >
                 <motion.div
@@ -190,10 +195,10 @@ const birthday =
                   animate={
                     giftOpened
                       ? {
-                        y: -100,
-                        rotate: -12,
-                        opacity: 0,
-                      }
+                          y: -100,
+                          rotate: -12,
+                          opacity: 0,
+                        }
                       : {}
                   }
                   transition={{
@@ -209,9 +214,9 @@ const birthday =
                       giftOpened
                         ? {}
                         : {
-                          scale: [1, 1, 1.08, 0.97, 1.06, 1],
-                          rotate: [0, 0, -3, 3, -2, 0],
-                        }
+                            scale: [1, 1, 1.08, 0.97, 1.06, 1],
+                            rotate: [0, 0, -3, 3, -2, 0],
+                          }
                     }
                     transition={{
                       duration: 3.8,
@@ -435,15 +440,17 @@ function Timeline() {
         </svg>
 
         {data.timeline.map((item, index) => {
-          const image = item.image || `/images/timelines/timeline-0${(index % 4) + 1}.jpg`;
+          const image =
+            item.image || `/images/timelines/timeline-0${(index % 4) + 1}.jpg`;
 
           return (
             <motion.article
               key={`${item.title}-${index}`}
-              className={`love-timeline__item ${index % 2 === 0
-                ? "love-timeline__item--left"
-                : "love-timeline__item--right"
-                }`}
+              className={`love-timeline__item ${
+                index % 2 === 0
+                  ? "love-timeline__item--left"
+                  : "love-timeline__item--right"
+              }`}
               initial={{
                 opacity: 0,
                 y: 50,
@@ -528,7 +535,7 @@ const paragraphVariants = {
     filter: "blur(3px)",
   },
 
-  visible: index => ({
+  visible: (index) => ({
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
@@ -542,6 +549,7 @@ const paragraphVariants = {
 };
 
 function LoveLetter() {
+  const [isWritingComplete, setIsWritingComplete] = useState(false);
   return (
     <section className="letter-section">
       <motion.div
@@ -567,7 +575,7 @@ function LoveLetter() {
           ease: [0.22, 1, 0.36, 1],
         }}
       >
-        {/* Tape */}
+        {/* Ribbon */}
         <motion.div
           className="letter__ribbon"
           initial={{
@@ -587,8 +595,7 @@ function LoveLetter() {
           }}
         />
 
-        {/* small title */}
-
+        {/* Small title */}
         <motion.span
           className="letter__small"
           initial={{
@@ -608,8 +615,7 @@ function LoveLetter() {
           A letter for you
         </motion.span>
 
-        {/* Gửi em */}
-
+        {/* Heading */}
         <motion.h2
           initial={{
             opacity: 0,
@@ -628,72 +634,50 @@ function LoveLetter() {
           Gửi em,
         </motion.h2>
 
-        {/* Nội dung */}
-
+        {/* Magic handwriting */}
         <div className="letter__content">
-          {data.letter.map((paragraph, index) => (
-            <motion.div
-              className="letter__paragraph"
-              key={index}
-              custom={index}
-              variants={paragraphVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{
-                once: true,
-                amount: 0.6,
-              }}
-            >
-              <p>{paragraph}</p>
-
-              <motion.span
-                className="letter__paragraph-heart"
-                initial={{
-                  opacity: 0,
-                  scale: 0,
-                  rotate: -20,
-                }}
-                whileInView={{
-                  opacity: 0.5,
-                  scale: 1,
-                  rotate: 8,
-                }}
-                viewport={{ once: true }}
-                transition={{
-                  delay: 0.5 + index * 0.15,
-                  type: "spring",
-                }}
-              >
-                ♡
-              </motion.span>
-            </motion.div>
-          ))}
+          <HandwritingLetter
+            paragraphs={data.letter}
+            speed={65}
+            onComplete={() => setIsWritingComplete(true)}
+          />
         </div>
 
         {/* Signature */}
-
         <motion.div
           className="letter__signature"
           initial={{
             opacity: 0,
-            x: -30,
+            y: 25,
+            filter: "blur(5px)",
           }}
-          whileInView={{
-            opacity: 1,
-            x: 0,
-          }}
-          viewport={{ once: true }}
+          animate={
+            isWritingComplete
+              ? {
+                  opacity: 1,
+                  y: 0,
+                  filter: "blur(0px)",
+                }
+              : {
+                  opacity: 0,
+                  y: 25,
+                  filter: "blur(5px)",
+                }
+          }
           transition={{
-            duration: 1,
-            delay: 0.4,
+            duration: 0.9,
+            delay: 0.35,
+            ease: [0.22, 1, 0.36, 1],
           }}
         >
           <motion.span
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, x: -15 }}
+            animate={
+              isWritingComplete ? { opacity: 1, x: 0 } : { opacity: 0, x: -15 }
+            }
             transition={{
-              duration: 1.2,
+              duration: 0.8,
+              delay: 0.65,
             }}
           >
             Yêu em rất nhiều
@@ -701,22 +685,28 @@ function LoveLetter() {
 
           <motion.strong
             initial={{
+              opacity: 0,
               scale: 0,
-              rotate: -20,
+              rotate: -25,
             }}
-            whileInView={{
-              scale: 1,
-              rotate: 0,
-            }}
-            viewport={{ once: true }}
-            animate={{
-              scale: [1, 1.15, 1],
-            }}
+            animate={
+              isWritingComplete
+                ? {
+                    opacity: 1,
+                    scale: 1,
+                    rotate: 0,
+                  }
+                : {
+                    opacity: 0,
+                    scale: 0,
+                    rotate: -25,
+                  }
+            }
             transition={{
-              scale: {
-                duration: 1.5,
-                repeat: Infinity,
-              },
+              type: "spring",
+              stiffness: 170,
+              damping: 12,
+              delay: 1.15,
             }}
           >
             ♡
@@ -724,43 +714,25 @@ function LoveLetter() {
         </motion.div>
 
         {/* Decorative hearts */}
+        <span className="letter__decor-heart letter__decor-heart--1">♡</span>
 
-        <span className="letter__decor-heart letter__decor-heart--1">
-          ♡
-        </span>
+        <span className="letter__decor-heart letter__decor-heart--2">♡</span>
 
-        <span className="letter__decor-heart letter__decor-heart--2">
-          ♡
-        </span>
-
-        <span className="letter__decor-heart letter__decor-heart--3">
-          ♡
-        </span>
+        <span className="letter__decor-heart letter__decor-heart--3">♡</span>
       </motion.div>
     </section>
   );
 }
 
 function ThingsILove() {
-  const noteColors = [
-    "pink",
-    "cream",
-    "lavender",
-    "peach",
-    "mint",
-    "rose",
-  ];
+  const noteColors = ["pink", "cream", "lavender", "peach", "mint", "rose"];
 
   const noteRotations = [-5, 4, -3, 5, -4, 3];
 
   return (
     <section className="things section-paper">
-      <div className="things__decoration things__decoration--one">
-        ✦
-      </div>
-      <div className="things__decoration things__decoration--two">
-        ♡
-      </div>
+      <div className="things__decoration things__decoration--one">✦</div>
+      <div className="things__decoration things__decoration--two">♡</div>
 
       <Reveal>
         <SectionTitle
@@ -777,8 +749,7 @@ function ThingsILove() {
         viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.65, ease: "easeOut" }}
       >
-        Có rất nhiều điều nhỏ ở em
-        khiến anh yêu em nhiều hơn mỗi ngày...
+        Có rất nhiều điều nhỏ ở em khiến anh yêu em nhiều hơn mỗi ngày...
       </motion.p>
 
       <motion.div
@@ -797,11 +768,9 @@ function ThingsILove() {
         }}
       >
         {data.thingsILove.map((item, index) => {
-          const rotation =
-            noteRotations[index % noteRotations.length];
+          const rotation = noteRotations[index % noteRotations.length];
 
-          const color =
-            noteColors[index % noteColors.length];
+          const color = noteColors[index % noteColors.length];
 
           return (
             <motion.div
@@ -847,15 +816,9 @@ function ThingsILove() {
                 scale: 0.97,
               }}
             >
-              <span
-                className="note__tape"
-                aria-hidden="true"
-              />
+              <span className="note__tape" aria-hidden="true" />
 
-              <span
-                className="note__pin"
-                aria-hidden="true"
-              >
+              <span className="note__pin" aria-hidden="true">
                 ♥
               </span>
 
@@ -864,19 +827,14 @@ function ThingsILove() {
               </span>
 
               <span className="note__content">
-                {item}
+                <WaveText text={item} />
               </span>
 
-              <span
-                className="note__heart"
-                aria-hidden="true"
-              >
+              <span className="note__heart" aria-hidden="true">
                 ♡
               </span>
 
-              <span className="note__bottom">
-                a little thing I love
-              </span>
+              <span className="note__bottom">a little thing I love</span>
             </motion.div>
           );
         })}
@@ -890,9 +848,7 @@ function ThingsILove() {
         transition={{ delay: 0.4, duration: 0.7 }}
       >
         <span>♡</span>
-        <p>
-          Và còn hàng nghìn điều khác nữa...
-        </p>
+        <p>Và còn hàng nghìn điều khác nữa...</p>
         <span>♡</span>
       </motion.div>
     </section>
@@ -1050,10 +1006,10 @@ function Ending() {
         animate={
           isPlaying
             ? {
-              x: [-30, 40, -30],
-              y: [-20, 30, -20],
-              scale: [1, 1.2, 1],
-            }
+                x: [-30, 40, -30],
+                y: [-20, 30, -20],
+                scale: [1, 1.2, 1],
+              }
             : { x: 0, y: 0, scale: 1 }
         }
         transition={{
@@ -1068,10 +1024,10 @@ function Ending() {
         animate={
           isPlaying
             ? {
-              x: [30, -40, 30],
-              y: [30, -20, 30],
-              scale: [1.2, 0.9, 1.2],
-            }
+                x: [30, -40, 30],
+                y: [30, -20, 30],
+                scale: [1.2, 0.9, 1.2],
+              }
             : { x: 0, y: 0, scale: 1 }
         }
         transition={{
@@ -1093,13 +1049,13 @@ function Ending() {
             animate={
               isPlaying
                 ? {
-                  opacity: [0.1, 0.7, 0.1],
-                  scale: [0.7, 1.3, 0.7],
-                }
+                    opacity: [0.1, 0.7, 0.1],
+                    scale: [0.7, 1.3, 0.7],
+                  }
                 : {
-                  opacity: 0.2,
-                  scale: 1,
-                }
+                    opacity: 0.2,
+                    scale: 1,
+                  }
             }
             transition={{
               duration: star.duration,
@@ -1127,14 +1083,14 @@ function Ending() {
             animate={
               isPlaying
                 ? {
-                  y: [100, "-110vh"],
-                  opacity: [0, 0.35, 0.5, 0],
-                  rotate: [0, 15, -15, 10],
-                  x: [0, 15, -10, 5],
-                }
+                    y: [100, "-110vh"],
+                    opacity: [0, 0.35, 0.5, 0],
+                    rotate: [0, 15, -15, 10],
+                    x: [0, 15, -10, 5],
+                  }
                 : {
-                  opacity: 0,
-                }
+                    opacity: 0,
+                  }
             }
             transition={{
               duration: heart.duration,
@@ -1171,13 +1127,13 @@ function Ending() {
             animate={
               isPlaying
                 ? {
-                  opacity: [0.2, 0.55, 0.2],
-                  scale: [0.8, 1.25, 0.8],
-                }
+                    opacity: [0.2, 0.55, 0.2],
+                    scale: [0.8, 1.25, 0.8],
+                  }
                 : {
-                  opacity: 0.3,
-                  scale: 1,
-                }
+                    opacity: 0.3,
+                    scale: 1,
+                  }
             }
             transition={{
               duration: 2.4,
@@ -1194,13 +1150,13 @@ function Ending() {
               animate={
                 isPlaying
                   ? {
-                    scale: [0.7, 1.6],
-                    opacity: [0.4, 0],
-                  }
+                      scale: [0.7, 1.6],
+                      opacity: [0.4, 0],
+                    }
                   : {
-                    scale: 1,
-                    opacity: 0,
-                  }
+                      scale: 1,
+                      opacity: 0,
+                    }
               }
               transition={{
                 duration: 2.5,
@@ -1217,11 +1173,11 @@ function Ending() {
             animate={
               isPlaying
                 ? {
-                  scale: [1, 1.05, 1, 1.09, 1],
-                }
+                    scale: [1, 1.05, 1, 1.09, 1],
+                  }
                 : {
-                  scale: 1,
-                }
+                    scale: 1,
+                  }
             }
             transition={{
               duration: 1.8,
@@ -1235,26 +1191,16 @@ function Ending() {
           {/* ORBIT HEARTS */}
           <motion.div
             className="ending-heart__orbit"
-            animate={
-              isPlaying
-                ? { rotate: 360 }
-                : { rotate: 0 }
-            }
+            animate={isPlaying ? { rotate: 360 } : { rotate: 0 }}
             transition={{
               duration: 12,
               repeat: isPlaying ? Infinity : 0,
               ease: "linear",
             }}
           >
-            <span className="ending-heart__mini ending-heart__mini--1">
-              ♥
-            </span>
-            <span className="ending-heart__mini ending-heart__mini--2">
-              ♡
-            </span>
-            <span className="ending-heart__mini ending-heart__mini--3">
-              ♥
-            </span>
+            <span className="ending-heart__mini ending-heart__mini--1">♥</span>
+            <span className="ending-heart__mini ending-heart__mini--2">♡</span>
+            <span className="ending-heart__mini ending-heart__mini--3">♥</span>
           </motion.div>
         </motion.div>
 
@@ -1372,11 +1318,11 @@ function Ending() {
             animate={
               isPlaying
                 ? {
-                  scale: [1, 1.25, 1],
-                }
+                    scale: [1, 1.25, 1],
+                  }
                 : {
-                  scale: 1,
-                }
+                    scale: 1,
+                  }
             }
             transition={{
               duration: 1.5,
@@ -1405,7 +1351,6 @@ function Ending() {
     </section>
   );
 }
-
 
 function SectionTitle({ small, title, subtitle, light = false }) {
   return (

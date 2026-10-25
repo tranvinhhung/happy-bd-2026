@@ -20,6 +20,57 @@ const particleAngles = Array.from(
   (_, i) => (i * Math.PI * 2) / 16,
 );
 
+const scrollReveal = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const machineReveal = {
+  hidden: {
+    opacity: 0,
+    y: 65,
+    scale: 0.88,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 16,
+    },
+  },
+};
+
+const collectionReveal = {
+  hidden: {
+    opacity: 0,
+    y: 18,
+    scale: 0.85,
+  },
+  visible: (index) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      delay: Math.min(index * 0.045, 0.45),
+      duration: 0.4,
+      ease: "easeOut",
+    },
+  }),
+};
+
 export default function LoveGacha() {
   // idle -> rolling -> floating -> bursting -> letter
   const [phase, setPhase] = useState("idle");
@@ -174,7 +225,7 @@ export default function LoveGacha() {
       if (currentPrize?.is_special) {
         return setJackpotPrize(currentPrize);
       }
-      
+
       setPhase("letter");
     }, 850);
   }
@@ -191,9 +242,13 @@ export default function LoveGacha() {
       <div className={styles.container}>
         <motion.div
           className={styles.heading}
-          initial={{ opacity: 0, y: 25 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+          }}
         >
           <span>THE LOVE GACHA</span>
 
@@ -207,7 +262,13 @@ export default function LoveGacha() {
           </p>
         </motion.div>
 
-        <div className={styles.typeSelector}>
+        <motion.div
+          className={styles.typeSelector}
+          variants={scrollReveal}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
           <p>Hôm nay em muốn nhận điều gì? ♡</p>
 
           <div className={styles.typeOptions}>
@@ -241,113 +302,134 @@ export default function LoveGacha() {
                 </button>
               ))}
           </div>
-        </div>
+        </motion.div>
 
         <motion.div
-          className={styles.machine}
-          animate={
-            isRolling
-              ? {
-                  x: [0, -8, 8, -6, 6, -3, 3, 0],
-                  rotate: [0, -4, 4, -3, 3, -2, 2, 0],
-                }
-              : { x: 0, rotate: 0 }
-          }
-          transition={{
-            duration: 0.55,
-            repeat: isRolling ? 2 : 0,
-          }}
+          variants={machineReveal}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
         >
-          <div className={styles.glass}>
-            {capsuleColors.map((color, index) => (
-              <motion.div
-                key={index}
-                className={styles.capsule}
-                style={{
-                  background: `linear-gradient(
+          <motion.div
+            className={styles.machine}
+            animate={
+              isRolling
+                ? {
+                    x: [0, -8, 8, -6, 6, -3, 3, 0],
+                    rotate: [0, -4, 4, -3, 3, -2, 2, 0],
+                  }
+                : { x: 0, rotate: 0 }
+            }
+            transition={{
+              duration: 0.55,
+              repeat: isRolling ? 2 : 0,
+            }}
+          >
+            <div className={styles.glass}>
+              {capsuleColors.map((color, index) => (
+                <motion.div
+                  key={index}
+                  className={styles.capsule}
+                  style={{
+                    background: `linear-gradient(
                     180deg,
                     ${color} 50%,
                     #fff5fa 50%
                   )`,
-                }}
-                animate={
-                  isRolling
-                    ? {
-                        y: [0, -22, 10, 0],
-                        rotate: [0, 25, -20, 0],
-                      }
-                    : { y: 0, rotate: 0 }
-                }
-                transition={{
-                  duration: 0.5,
-                  repeat: isRolling ? 2 : 0,
-                  delay: index * 0.04,
-                }}
-              >
-                ♥
-              </motion.div>
-            ))}
-          </div>
-
-          <div className={styles.machineBody}>
-            <div className={styles.machineLabel}>
-              LOVE GACHA
-              <small>100% LOVE INSIDE</small>
+                  }}
+                  animate={
+                    isRolling
+                      ? {
+                          y: [0, -22, 10, 0],
+                          rotate: [0, 25, -20, 0],
+                        }
+                      : { y: 0, rotate: 0 }
+                  }
+                  transition={{
+                    duration: 0.5,
+                    repeat: isRolling ? 2 : 0,
+                    delay: index * 0.04,
+                  }}
+                >
+                  ♥
+                </motion.div>
+              ))}
             </div>
 
-            <div className={styles.knob}>
-              <motion.div
-                animate={{
-                  rotate: isRolling ? 720 : 0,
-                }}
-                transition={{ duration: 1.5 }}
-              >
-                ♡
-              </motion.div>
+            <div className={styles.machineBody}>
+              <div className={styles.machineLabel}>
+                LOVE GACHA
+                <small>100% LOVE INSIDE</small>
+              </div>
+
+              <div className={styles.knob}>
+                <motion.div
+                  animate={{
+                    rotate: isRolling ? 720 : 0,
+                  }}
+                  transition={{ duration: 1.5 }}
+                >
+                  ♡
+                </motion.div>
+              </div>
+
+              <div className={styles.slot}>{isRolling ? "♡" : "PUSH"}</div>
             </div>
 
-            <div className={styles.slot}>{isRolling ? "♡" : "PUSH"}</div>
-          </div>
+            <div className={styles.machineBase} />
 
-          <div className={styles.machineBase} />
-
-          <AnimatePresence>
-            {isRolling && (
-              <motion.div
-                className={styles.fallingCapsule}
-                initial={{
-                  opacity: 0,
-                  y: -25,
-                  scale: 0.5,
-                  rotate: -30,
-                }}
-                animate={{
-                  opacity: [0, 1, 1],
-                  y: [-25, 20, 75],
-                  scale: [0.5, 0.8, 1],
-                  rotate: [-30, 90, 160],
-                }}
-                exit={{ opacity: 0 }}
-                transition={{
-                  duration: 1.15,
-                  delay: 0.35,
-                  ease: "easeIn",
-                }}
-              >
-                <span>♥</span>
-              </motion.div>
-            )}
-          </AnimatePresence>
+            <AnimatePresence>
+              {isRolling && (
+                <motion.div
+                  className={styles.fallingCapsule}
+                  initial={{
+                    opacity: 0,
+                    y: -25,
+                    scale: 0.5,
+                    rotate: -30,
+                  }}
+                  animate={{
+                    opacity: [0, 1, 1],
+                    y: [-25, 20, 75],
+                    scale: [0.5, 0.8, 1],
+                    rotate: [-30, 90, 160],
+                  }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    duration: 1.15,
+                    delay: 0.35,
+                    ease: "easeIn",
+                  }}
+                >
+                  <span>♥</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
         </motion.div>
 
-        <button
+        <motion.button
           type="button"
           className={styles.rollButton}
           onClick={roll}
           disabled={phase !== "idle" || typesLoading || Boolean(jackpotPrize)}
+          initial={{ opacity: 0, y: 20, scale: 0.94 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{
+            duration: 0.6,
+            ease: "easeOut",
+          }}
+          whileHover={{
+            scale: 1.04,
+            y: -3,
+          }}
+          whileTap={{
+            scale: 0.96,
+          }}
         >
           {phase === "idle" ? "Quay Gacha tình yêu ♡" : "Đang mở món quà..."}
-        </button>
+        </motion.button>
 
         {process.env.NEXT_PUBLIC_VERCEL_ENV !== "production" && (
           <button
@@ -369,29 +451,40 @@ export default function LoveGacha() {
           }}
         />
 
-        <p className={styles.progress}>
+        <motion.p
+          className={styles.progress}
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55 }}
+        >
           Đã khám phá {collected.length}/{prizes.length} món quà
           {" · "}
           {rollCount} lượt quay
-        </p>
+        </motion.p>
 
-        <div className={styles.collection}>
-          {prizes.map((prize) => (
-            <div
-              key={prize.id}
-              className={styles.collectionItem}
-              title={
-                collected.some((item) => item.id === prize.id)
-                  ? prize.title
-                  : "Chưa khám phá"
-              }
-            >
-              {collected.some((item) => item.id === prize.id)
-                ? prize.emoji
-                : "?"}
-            </div>
-          ))}
-        </div>
+        <motion.div
+          className={styles.collection}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+        >
+          {prizes.map((prize, index) => {
+            const isCollected = collected.some((item) => item.id === prize.id);
+
+            return (
+              <motion.div
+                key={prize.id}
+                className={styles.collectionItem}
+                custom={index}
+                variants={collectionReveal}
+                title={isCollected ? prize.title : "Chưa khám phá"}
+              >
+                {isCollected ? prize.emoji : "?"}
+              </motion.div>
+            );
+          })}
+        </motion.div>
       </div>
 
       <AnimatePresence>

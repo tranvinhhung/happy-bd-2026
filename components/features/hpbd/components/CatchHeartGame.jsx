@@ -15,7 +15,7 @@ import {
 } from "framer-motion";
 import HeartSvg from "@/components/common/svg/heart";
 
-const GAME_DURATION = 26;
+const GAME_DURATION = 23; // seconds
 const TARGET_SCORE = 3000;
 const MAX_HEARTS = 4;
 

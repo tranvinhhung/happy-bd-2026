@@ -879,3 +879,13 @@
     }
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .machine,
+  .capsule,
+  .collectionItem,
+  .rollButton {
+    animation: none !important;
+    transition: none !important;
+  }
+}
