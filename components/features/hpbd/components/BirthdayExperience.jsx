@@ -742,8 +742,26 @@ function LoveLetter() {
 }
 
 function ThingsILove() {
+  const noteColors = [
+    "pink",
+    "cream",
+    "lavender",
+    "peach",
+    "mint",
+    "rose",
+  ];
+
+  const noteRotations = [-5, 4, -3, 5, -4, 3];
+
   return (
     <section className="things section-paper">
+      <div className="things__decoration things__decoration--one">
+        ✦
+      </div>
+      <div className="things__decoration things__decoration--two">
+        ♡
+      </div>
+
       <Reveal>
         <SectionTitle
           small="What I Love"
@@ -752,34 +770,131 @@ function ThingsILove() {
         />
       </Reveal>
 
-      <div className="notes">
-        {data.thingsILove.map((item, index) => (
-          <motion.div
-            className="note"
-            key={item}
-            initial={{
-              opacity: 0,
-              scale: 0.8,
-              rotate: index % 2 ? 6 : -6,
-            }}
-            whileInView={{
-              opacity: 1,
-              scale: 1,
-            }}
-            viewport={{ once: true }}
-            transition={{
-              delay: index * 0.1,
-            }}
-            whileHover={{
-              scale: 1.06,
-              rotate: 0,
-            }}
-          >
-            <span className="note__tape" />
-            {item}
-          </motion.div>
-        ))}
-      </div>
+      <motion.p
+        className="things__intro"
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 0.65, ease: "easeOut" }}
+      >
+        Có rất nhiều điều nhỏ ở em
+        khiến anh yêu em nhiều hơn mỗi ngày...
+      </motion.p>
+
+      <motion.div
+        className="notes"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.15 }}
+        variants={{
+          hidden: {},
+          visible: {
+            transition: {
+              staggerChildren: 0.13,
+              delayChildren: 0.15,
+            },
+          },
+        }}
+      >
+        {data.thingsILove.map((item, index) => {
+          const rotation =
+            noteRotations[index % noteRotations.length];
+
+          const color =
+            noteColors[index % noteColors.length];
+
+          return (
+            <motion.div
+              className={`note note--${color}`}
+              key={`${item}-${index}`}
+              style={{
+                "--note-rotation": `${rotation}deg`,
+              }}
+              variants={{
+                hidden: {
+                  opacity: 0,
+                  y: 90,
+                  scale: 0.75,
+                  rotate: rotation * 2,
+                  filter: "blur(8px)",
+                },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                  rotate: rotation,
+                  filter: "blur(0px)",
+                  transition: {
+                    type: "spring",
+                    stiffness: 105,
+                    damping: 13,
+                    mass: 0.9,
+                  },
+                },
+              }}
+              whileHover={{
+                y: -14,
+                scale: 1.07,
+                rotate: 0,
+                zIndex: 10,
+                transition: {
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 18,
+                },
+              }}
+              whileTap={{
+                scale: 0.97,
+              }}
+            >
+              <span
+                className="note__tape"
+                aria-hidden="true"
+              />
+
+              <span
+                className="note__pin"
+                aria-hidden="true"
+              >
+                ♥
+              </span>
+
+              <span className="note__number">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+
+              <span className="note__content">
+                {item}
+              </span>
+
+              <span
+                className="note__heart"
+                aria-hidden="true"
+              >
+                ♡
+              </span>
+
+              <span className="note__bottom">
+                a little thing I love
+              </span>
+            </motion.div>
+          );
+        })}
+      </motion.div>
+
+      <motion.div
+        className="things__footer"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.4, duration: 0.7 }}
+      >
+        <span>♡</span>
+        <p>
+          Và còn hàng nghìn điều khác nữa...
+        </p>
+        <span>♡</span>
+      </motion.div>
     </section>
   );
 }

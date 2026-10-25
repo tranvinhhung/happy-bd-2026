@@ -70,7 +70,7 @@ export const birthdayData = {
         "Là một cô bé hiền lành ♡",
         "Hay chiều chuộng dinhhung ♡",
         "Luôn lắng nghe ,yêu thương dinhhung thật sự ♡",
-        "Và còn rất nhiều điều khác nữa...",
+        "Thấu hiểu và đồng cảm với dinhhung ♡",
     ],
 
     promises: [
