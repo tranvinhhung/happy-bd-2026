@@ -1,0 +1,114 @@
+.waveText {
+  display: inline-block;
+  max-width: 100%;
+
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1.9;
+  text-align: inherit;
+}
+
+.shine {
+  display: inline;
+
+  background: linear-gradient(
+    105deg,
+    #92536e 0%,
+    #92536e 35%,
+    #e17da9 43%,
+    #fff0f7 50%,
+    #e17da9 57%,
+    #92536e 65%,
+    #92536e 100%
+  );
+
+  background-size: 300% 100%;
+  background-position: 100% center;
+
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  animation: pinkShine 3s linear infinite;
+  animation-play-state: paused;
+}
+
+.word {
+  display: inline-block;
+  white-space: nowrap;
+  transform-origin: center bottom;
+
+  animation: gentleWave 5s ease-in-out infinite;
+  animation-delay: calc(var(--word-index) * 0.12s);
+  animation-play-state: paused;
+}
+
+// Chỉ chạy khi đang trong viewport
+.active {
+  .shine,
+  .word {
+    animation-play-state: running;
+  }
+}
+
+@keyframes gentleWave {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  35% {
+    transform: translateY(-4px) rotate(-1deg);
+  }
+
+  65% {
+    transform: translateY(1px);
+  }
+}
+
+@keyframes pinkShine {
+  from {
+    background-position: 100% center;
+  }
+
+  to {
+    background-position: 0% center;
+  }
+}
+
+// Tối ưu mobile
+@media (max-width: 600px) {
+  .word {
+    animation-name: gentleWaveMobile;
+    animation-duration: 5s;
+  }
+
+  @keyframes gentleWaveMobile {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    35% {
+      transform: translateY(-2px);
+    }
+
+    65% {
+      transform: translateY(1px);
+    }
+  }
+}
+
+// Hỗ trợ người dùng giảm chuyển động
+@media (prefers-reduced-motion: reduce) {
+  .shine {
+    animation: none !important;
+    background: none;
+    color: inherit;
+    -webkit-text-fill-color: currentColor;
+  }
+
+  .word {
+    animation: none !important;
+  }
+}

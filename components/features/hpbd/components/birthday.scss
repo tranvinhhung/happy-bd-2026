@@ -997,6 +997,18 @@ $text: #53383c;
   }
 }
 
+.letter {
+  &__content {
+    position: relative;
+    z-index: 2;
+
+    // Không cho style toàn cục ép tách từ.
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: none;
+  }
+}
+
 /* NOTES */
 
 .things {

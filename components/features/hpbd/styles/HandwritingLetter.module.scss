@@ -1,0 +1,210 @@
+
+.letterWriting {
+  position: relative;
+  width: 100%;
+
+  color: #63484c;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 21px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.85;
+  letter-spacing: 0.1px;
+
+  // Không cho tách từ tùy tiện.
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
+}
+
+.paragraph {
+  position: relative;
+  margin: 0 0 28px;
+
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
+
+  &:nth-child(odd) {
+    transform: rotate(-0.25deg);
+  }
+
+  &:nth-child(even) {
+    transform: rotate(0.2deg);
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+// Giữ nguyên cả từ khi xuống dòng.
+.word {
+  display: inline-block;
+  white-space: nowrap;
+  vertical-align: baseline;
+}
+
+// Từng ký tự được viết ra.
+.character {
+  display: inline;
+  opacity: 0;
+  color: inherit;
+
+  transition: opacity 0.16s ease-out;
+
+  &.visible {
+    opacity: 1;
+    animation: handwritingInk 0.24s ease-out both;
+  }
+}
+
+@keyframes handwritingInk {
+  0% {
+    opacity: 0;
+    filter: blur(1px);
+  }
+
+  45% {
+    opacity: 0.65;
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+// Cây bút.
+.pen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
+  font-size: 24px;
+  line-height: 1;
+
+  pointer-events: none;
+
+  transform: translate(-12%, -88%) rotate(-25deg);
+
+  transition:
+    left 0.065s linear,
+    top 0.065s linear;
+
+  filter: drop-shadow(
+    0 3px 3px rgba(135, 75, 95, 0.22)
+  );
+
+  &::after {
+    position: absolute;
+    left: -3px;
+    bottom: -6px;
+
+    content: "✧";
+    color: #e7a2bc;
+    font-size: 12px;
+
+    animation: inkSparkle 0.45s ease-in-out infinite;
+  }
+}
+
+.penFinished {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+@keyframes inkSparkle {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.7);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: scale(1.15);
+  }
+}
+
+// Cánh hoa.
+.petal {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+
+  font-size: 13px;
+  line-height: 1;
+
+  animation: petalFall 1.5s ease-out forwards;
+}
+
+@keyframes petalFall {
+  0% {
+    opacity: 0;
+    transform:
+      translateY(-5px)
+      scale(0.4)
+      rotate(0);
+  }
+
+  20% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0;
+    transform:
+      translate(var(--drift), 65px)
+      scale(0.8)
+      rotate(var(--rotation));
+  }
+}
+
+@media (max-width: 768px) {
+  .letterWriting {
+    font-size: 20px;
+  }
+
+  .pen {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .letterWriting {
+    font-size: 19px;
+    line-height: 1.9;
+  }
+
+  .pen {
+    font-size: 20px;
+  }
+
+  .petal {
+    font-size: 11px;
+  }
+
+  .character.visible {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .character {
+    opacity: 1 !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .pen,
+  .petal {
+    display: none !important;
+  }
+}
