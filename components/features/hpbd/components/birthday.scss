@@ -2010,6 +2010,448 @@ $text: #53383c;
   }
 }
 
+
+.birthday-wish-section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 100vh;
+  padding: 100px 20px 115px;
+  background: #fff3f0;
+  color: #7d4853;
+}
+
+.birthday-wish-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse at 50% 76%,
+      rgba(244, 164, 184, 0.26),
+      transparent 45%
+    ),
+    radial-gradient(
+      ellipse at 18% 35%,
+      rgba(255, 255, 255, 0.65),
+      transparent 40%
+    );
+}
+
+.birthday-wish-inner {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 720px);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.wish-hearts {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+
+  span {
+    position: absolute;
+    color: #eaa0b5;
+  }
+}
+
+.birthday-wish-heading {
+  margin-bottom: 35px;
+
+  h2 {
+    margin: 12px 0 15px;
+    color: #7b4551;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(65px, 10vw, 105px);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 0.92;
+    letter-spacing: -2px;
+  }
+
+  p {
+    color: #ad7885;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 22px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+}
+
+.birthday-wish-eyebrow {
+  color: #e795a8;
+  font-family: "Montserrat", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 4px;
+}
+
+.birthday-wish-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(100%, 540px);
+  margin: 0 auto;
+}
+
+.birthday-wish-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 53px;
+  padding: 14px 20px;
+  border: 1px solid rgba(230, 153, 174, 0.43);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.77);
+  color: #a15f70;
+  font-family: "Montserrat", sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(207, 125, 151, 0.035);
+  transition:
+    background 0.3s,
+    border-color 0.3s,
+    box-shadow 0.3s;
+
+  > span:nth-child(2) {
+    flex: 1;
+  }
+
+  &:hover,
+  &.is-selected {
+    border-color: #e89bb4;
+    background: #ffe3eb;
+    box-shadow: 0 8px 28px rgba(225, 143, 171, 0.16);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #c97394;
+    outline-offset: 4px;
+  }
+}
+
+.birthday-wish-item__heart {
+  color: #df819f;
+  font-family: Georgia, serif;
+  font-size: 21px;
+}
+
+.birthday-wish-item__sparkle {
+  color: #e2a4b6;
+  font-size: 17px;
+  opacity: 0.55;
+
+  .is-selected & {
+    opacity: 1;
+  }
+}
+
+.birthday-wish-instruction {
+  margin: 18px 0 0;
+  color: #bd8c9a;
+  font-size: 11px;
+  letter-spacing: 0.3px;
+}
+
+.birthday-wish-cake-area {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 45px;
+}
+
+.birthday-cake {
+  position: relative;
+  width: 290px;
+  height: 265px;
+  filter: drop-shadow(0 20px 30px rgba(218, 131, 156, 0.16));
+}
+
+.birthday-cake__glow {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 199, 112, 0.38),
+    transparent 70%
+  );
+  transform: translateX(-50%);
+  filter: blur(13px);
+  pointer-events: none;
+}
+
+.birthday-cake__candle {
+  position: absolute;
+  z-index: 3;
+  top: 17px;
+  left: 50%;
+  width: 13px;
+  height: 77px;
+  transform: translateX(-50%);
+  border-radius: 3px;
+  background: repeating-linear-gradient(
+    45deg,
+    #fff,
+    #fff 9px,
+    #f09db2 9px,
+    #f09db2 18px
+  );
+}
+
+.birthday-cake__flame {
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 50%;
+  width: 22px;
+  height: 36px;
+  border-radius: 60% 60% 55% 55%;
+  background: linear-gradient(
+    180deg,
+    #ffe69a 0%,
+    #ffbf5e 60%,
+    #ff9e55 100%
+  );
+  transform: translateX(-50%);
+  transform-origin: center bottom;
+  box-shadow:
+    0 0 18px rgba(255, 174, 72, 0.75),
+    0 0 38px rgba(255, 192, 104, 0.38);
+}
+
+.birthday-cake__smoke {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: -8px;
+  color: #b8a2a5;
+  font-family: Georgia, serif;
+  font-size: 45px;
+  opacity: 0;
+}
+
+.birthday-cake__top {
+  position: absolute;
+  z-index: 2;
+  top: 91px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+  height: 58px;
+  border-radius: 50%;
+  background: #fffdfd;
+  color: #e987a7;
+  font-size: 17px;
+  box-shadow: 0 7px 0 #ffd7e0;
+}
+
+.birthday-cake__body {
+  position: absolute;
+  top: 121px;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 128px;
+  overflow: hidden;
+  border-radius: 0 0 26px 26px;
+  background: linear-gradient(
+    180deg,
+    #ffd7e0 0%,
+    #f3a9bd 100%
+  );
+  color: #a9576d;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 25px;
+  font-style: italic;
+  box-shadow: 0 20px 45px rgba(231, 143, 171, 0.2);
+}
+
+.birthday-cake__cream {
+  position: absolute;
+  top: -25px;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  border-radius: 50%;
+  background: #fffdfd;
+}
+
+.birthday-cake__body > span {
+  position: relative;
+  z-index: 1;
+  margin-top: 20px;
+}
+
+.birthday-cake__shadow {
+  position: absolute;
+  right: 15px;
+  bottom: 0;
+  left: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: rgba(195, 100, 137, 0.16);
+  filter: blur(13px);
+}
+
+.birthday-wish-blow-button {
+  position: relative;
+  z-index: 4;
+  margin-top: 6px;
+  padding: 14px 28px;
+  border: 1px solid #e7a0b5;
+  border-radius: 999px;
+  background: linear-gradient(
+    110deg,
+    #d67b9c,
+    #e7a0b8
+  );
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(211, 113, 150, 0.2);
+}
+
+.birthday-wish-confetti {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+
+  span {
+    position: absolute;
+    top: 30%;
+    width: 8px;
+    height: 12px;
+    border-radius: 2px;
+  }
+}
+
+.birthday-wish-surprise {
+  width: min(100%, 550px);
+  margin: 55px auto 0;
+  padding: 34px 30px;
+  border: 1px solid #f1c6d1;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 18px 60px rgba(220, 139, 164, 0.12);
+
+  > span {
+    color: #d687a0;
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+
+  h3 {
+    margin: 14px 0;
+    color: #96556a;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 37px;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  p {
+    color: #9f7581;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+}
+
+.birthday-wish-surprise__icon {
+  margin-bottom: 10px;
+  color: #df8fac;
+  font-size: 40px;
+}
+
+.birthday-wish-surprise__signature {
+  margin-top: 18px;
+  color: #ca819c;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 25px;
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .birthday-wish-section {
+    padding: 75px 15px 85px;
+  }
+
+  .birthday-wish-heading {
+    h2 {
+      font-size: clamp(59px, 14vw, 80px);
+    }
+
+    p {
+      font-size: 19px;
+    }
+  }
+
+  .birthday-wish-eyebrow {
+    font-size: 10px;
+  }
+
+  .birthday-wish-list {
+    gap: 10px;
+  }
+
+  .birthday-wish-item {
+    min-height: 52px;
+    padding: 13px 12px;
+    font-size: 11px;
+  }
+
+  .birthday-wish-item__heart {
+    font-size: 18px;
+  }
+
+  .birthday-wish-cake-area {
+    margin-top: 35px;
+  }
+
+  .birthday-cake {
+    transform: scale(0.9);
+    margin: -10px 0;
+  }
+
+  .birthday-wish-surprise {
+    padding: 28px 20px;
+
+    h3 {
+      font-size: 31px;
+    }
+
+    p {
+      font-size: 13px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .birthday-wish-section *,
+  .birthday-wish-section *::before,
+  .birthday-wish-section *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
 /* =========================================
    ENDING - PERFORMANCE OPTIMIZED
 ========================================= */

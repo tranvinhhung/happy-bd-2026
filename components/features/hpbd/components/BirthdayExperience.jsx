@@ -20,6 +20,7 @@ import WaveText from "./WaveText.jsx";
 import HandwritingLetter from "./HandwritingLetter.jsx";
 import LoveUniverse from "@/components/features/hpbd/components/LoveUniverse";
 import NewPromises from "./Promises.jsx";
+import NewBirthdayWish from "./BirthdayWish.jsx";
 // import FlyingCupid from "./FlyingCupid.jsx";
 import "./birthday.scss";
 
@@ -306,7 +307,8 @@ export default function BirthdayExperience() {
             {/* <Promises /> */}
             <NewPromises data={data} />
 
-            <BirthdayWish />
+            {/* <BirthdayWish /> */}
+            <NewBirthdayWish data={data} />
 
             <CatchHeartGame />
 

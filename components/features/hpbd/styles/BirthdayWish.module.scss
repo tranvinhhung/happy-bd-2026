@@ -1,0 +1,523 @@
+
+.section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 100vh;
+  padding: 105px 20px 100px;
+  background: #fff4f1;
+  color: #7c4857;
+}
+
+.backgroundGlow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse at 50% 65%,
+      rgba(244, 167, 190, 0.25),
+      transparent 47%
+    ),
+    radial-gradient(
+      ellipse at 12% 30%,
+      rgba(255, 255, 255, 0.9),
+      transparent 40%
+    ),
+    radial-gradient(
+      ellipse at 90% 85%,
+      rgba(250, 195, 209, 0.22),
+      transparent 35%
+    );
+}
+
+.container {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 750px);
+  margin: 0 auto;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 40px;
+
+  h2 {
+    margin: 15px 0 17px;
+    color: #7c4857;
+    font-size: clamp(65px, 10vw, 105px);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 0.91;
+    letter-spacing: -2px;
+  }
+
+  p {
+    color: #b17b8b;
+    font-size: 24px;
+    font-style: italic;
+    line-height: 1.45;
+  }
+}
+
+.eyebrow {
+  color: #e393aa;
+  font-family: "Montserrat", sans-serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+}
+
+.wishList {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  width: min(100%, 550px);
+  margin: 0 auto;
+}
+
+.wishCard {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  min-height: 57px;
+  padding: 16px 21px;
+  border: 1px solid #f0c4d0;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.78);
+  color: #9e6476;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(213, 135, 161, 0.045);
+  backdrop-filter: blur(12px);
+  transition:
+    background 0.3s,
+    border-color 0.3s,
+    box-shadow 0.3s;
+
+  &:hover {
+    background: #fff7f9;
+    border-color: #e7a1b7;
+    box-shadow: 0 10px 30px rgba(218, 143, 170, 0.14);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #d681a1;
+    outline-offset: 4px;
+  }
+}
+
+.wishCardActive {
+  background: linear-gradient(115deg, #ffe5ec, #fffafa);
+  border-color: #df95ae;
+  box-shadow: 0 12px 32px rgba(218, 143, 170, 0.17);
+}
+
+.cardHeart {
+  flex-shrink: 0;
+  color: #d985a2;
+  font-family: Georgia, serif;
+  font-size: 20px;
+}
+
+.cardContent {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cardTitle {
+  font-family: "Montserrat", sans-serif;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.cardMessage {
+  display: block;
+  overflow: hidden;
+  color: #a86e80;
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+.cardDivider {
+  display: block;
+  margin-bottom: 8px;
+  color: #d997ad;
+  font-size: 12px;
+  letter-spacing: 5px;
+}
+
+.cardDecoration {
+  flex-shrink: 0;
+  color: #d994ac;
+  font-size: 19px;
+}
+
+.sparkLayer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+}
+
+.spark {
+  position: absolute;
+  color: #df8ead;
+  font-size: 15px;
+}
+
+.hint {
+  margin: 22px auto 0;
+  color: #c18c9d;
+  font-family: "Montserrat", sans-serif;
+  font-size: 11px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.petals {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.petal {
+  position: absolute;
+  top: 0;
+  border-radius: 80% 10% 75% 15%;
+  background: linear-gradient(135deg, #f7b2c8, #fce1e9);
+  box-shadow: 0 0 9px rgba(237, 145, 179, 0.18);
+  opacity: 0.5;
+}
+
+.cakeScene {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 65px auto 0;
+  height: 330px;
+}
+
+.cakeFloat {
+  position: relative;
+  width: 320px;
+  height: 300px;
+  filter: drop-shadow(0 20px 30px rgba(207, 117, 147, 0.15));
+}
+
+.cakeAura {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 204, 150, 0.4),
+    rgba(255, 185, 207, 0.12) 48%,
+    transparent 72%
+  );
+  filter: blur(16px);
+  transform: translateX(-50%);
+}
+
+.candle {
+  position: absolute;
+  z-index: 6;
+  top: 18px;
+  left: 50%;
+  width: 13px;
+  height: 75px;
+  border-radius: 3px;
+  transform: translateX(-50%);
+  background: repeating-linear-gradient(
+    45deg,
+    #fff,
+    #fff 9px,
+    #f1a0b8 9px,
+    #f1a0b8 18px
+  );
+}
+
+.flame {
+  position: absolute;
+  bottom: calc(100% + 2px);
+  left: -5px;
+  width: 23px;
+  height: 35px;
+  border-radius: 65% 65% 55% 55%;
+  background: linear-gradient(
+    180deg,
+    #ffeaa6,
+    #ffbd5f 65%,
+    #ffa25c
+  );
+  transform-origin: center bottom;
+  box-shadow:
+    0 0 20px rgba(255, 173, 72, 0.75),
+    0 0 40px rgba(255, 195, 111, 0.4);
+}
+
+.cakeTopTier {
+  position: absolute;
+  z-index: 5;
+  top: 93px;
+  left: 50%;
+  width: 180px;
+  height: 92px;
+  transform: translateX(-50%);
+  border-radius: 12px 12px 20px 20px;
+  background: linear-gradient(#ffe3eb, #f5b5c8);
+  box-shadow: 0 8px 0 rgba(220, 132, 161, 0.18);
+
+  > span {
+    position: absolute;
+    top: 41px;
+    left: 50%;
+    color: #d98aa4;
+    font-size: 23px;
+    transform: translateX(-50%);
+  }
+}
+
+.topTierIcing {
+  position: absolute;
+  top: -11px;
+  left: -2px;
+  width: calc(100% + 4px);
+  height: 35px;
+  border-radius: 50%;
+  background: #fffdfd;
+  box-shadow: 0 7px 0 #fff3f7;
+}
+
+.cakeBottomTier {
+  position: absolute;
+  z-index: 4;
+  top: 164px;
+  left: 50%;
+  width: 290px;
+  height: 115px;
+  transform: translateX(-50%);
+  border-radius: 15px 15px 27px 27px;
+  background: linear-gradient(
+    180deg,
+    #ffd5e0,
+    #eea1b8
+  );
+  box-shadow: 0 17px 35px rgba(217, 128, 158, 0.18);
+}
+
+.bottomTierIcing {
+  position: absolute;
+  top: -16px;
+  left: -2px;
+  width: calc(100% + 4px);
+  height: 43px;
+  border-radius: 50%;
+  background: #fffdfd;
+  box-shadow: 0 6px 0 #ffeaf0;
+}
+
+.cakeText {
+  position: relative;
+  z-index: 1;
+  margin-top: 48px;
+  color: #a85d76;
+  font-size: 26px;
+  font-style: italic;
+  text-align: center;
+}
+
+.cakeHearts {
+  margin-top: 6px;
+  color: #d87e9d;
+  font-size: 14px;
+  letter-spacing: 8px;
+  text-align: center;
+}
+
+.cakePlate {
+  position: absolute;
+  z-index: 3;
+  bottom: 9px;
+  left: 50%;
+  width: 315px;
+  height: 21px;
+  border-radius: 50%;
+  background: #fffafc;
+  transform: translateX(-50%);
+  box-shadow: 0 8px 15px rgba(200, 124, 151, 0.14);
+}
+
+.cakeFlower,
+.cakeStar {
+  position: absolute;
+  z-index: 7;
+  color: #e69db5;
+  pointer-events: none;
+}
+
+.cakeFlower {
+  font-size: 37px;
+}
+
+.flowerLeft {
+  bottom: 30px;
+  left: 5px;
+}
+
+.flowerRight {
+  right: 2px;
+  bottom: 43px;
+  font-size: 30px;
+}
+
+.cakeStar {
+  font-size: 31px;
+}
+
+.starLeft {
+  top: 85px;
+  left: 12px;
+}
+
+.starRight {
+  top: 120px;
+  right: 0;
+}
+
+.ending {
+  margin: 12px auto 0;
+  text-align: center;
+
+  p {
+    margin: 12px 0;
+    color: #9d687a;
+    font-style: italic;
+    line-height: 1.5;
+  }
+}
+
+.endingDecoration {
+  color: #d998b0;
+  font-size: 15px;
+  letter-spacing: 9px;
+}
+
+.endingSignature {
+  color: #cb809c;
+  font-size: 26px;
+  font-style: italic;
+}
+
+.secretMessage {
+  width: min(100%, 480px);
+  margin: 32px auto 0;
+  padding: 20px 25px;
+  border: 1px solid #efc2d0;
+  border-radius: 18px;
+  background: #fff9fb;
+  color: #a56a7e;
+  font-size: 22px;
+  font-style: italic;
+  line-height: 1.5;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(218, 143, 170, 0.1);
+
+  strong {
+    display: block;
+    color: #c47191;
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 600px) {
+  .section {
+    padding: 75px 14px 80px;
+  }
+
+  .heading {
+    margin-bottom: 32px;
+
+    h2 {
+      font-size: clamp(59px, 14vw, 78px);
+    }
+
+    p {
+      font-size: 21px;
+    }
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 3px;
+  }
+
+  .wishList {
+    gap: 11px;
+  }
+
+  .wishCard {
+    gap: 10px;
+    padding: 15px 14px;
+    border-radius: 19px;
+  }
+
+  .cardTitle {
+    font-size: 12px;
+  }
+
+  .cardMessage {
+    font-size: 11px;
+  }
+
+  .cardHeart {
+    font-size: 15px;
+  }
+
+  .cardDecoration {
+    font-size: 16px;
+  }
+
+  .hint {
+    font-size: 10px;
+  }
+
+  .cakeScene {
+    margin-top: 48px;
+    height: 290px;
+  }
+
+  .cakeFloat {
+    transform: scale(0.88);
+    transform-origin: top center;
+  }
+
+  .ending {
+    p {
+      font-size: 23px;
+    }
+  }
+
+  .secretMessage {
+    font-size: 19px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section *,
+  .section *::before,
+  .section *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

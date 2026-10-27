@@ -85,7 +85,7 @@ export const birthdayData = {
         "Luôn xinh đẹp ♡",
         "Luôn hạnh phúc ♡",
         "Luôn thành công ♡",
-        "Luôn là em bé Tờ Hiên có tình cảm với dinhhung thật sự ♡",
-        "Và mãi mãi ở bên dinhhung em nhé ♡",
+        "Luôn được yêu thương ♡",
+        "Luôn ở bên dinhhung ♡",
     ],
 };
