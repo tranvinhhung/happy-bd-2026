@@ -18,6 +18,9 @@ import CatchHeartGame from "./CatchHeartGame.jsx";
 import LoveGacha from "./LoveGacha.jsx";
 import WaveText from "./WaveText.jsx";
 import HandwritingLetter from "./HandwritingLetter.jsx";
+import LoveUniverse from "@/components/features/hpbd/components/LoveUniverse";
+import NewPromises from "./Promises.jsx";
+import NewBirthdayWish from "./BirthdayWish.jsx";
 // import FlyingCupid from "./FlyingCupid.jsx";
 import "./birthday.scss";
 
@@ -287,7 +290,9 @@ const birthday =
             <Hero />
             <BirthdayCountdown birthday={birthday} />
 
-            <Memories />
+            {/* <Memories /> */}
+
+            <LoveUniverse />
 
             <PolaroidAlbum />
 
@@ -299,9 +304,11 @@ const birthday =
 
             <ThingsILove />
 
-            <Promises />
+            {/* <Promises /> */}
+            <NewPromises data={data} />
 
-            <BirthdayWish />
+            {/* <BirthdayWish /> */}
+            <NewBirthdayWish data={data} />
 
             <CatchHeartGame />
 

@@ -2,6 +2,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: 'Cormorant Garamond', serif;
 }
 
 html {
@@ -25,4 +26,30 @@ img {
 ::selection {
   background: #f4a8b8;
   color: white;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  -webkit-appearance: none;
+  appearance: none;
+
+  outline: none;
+
+  -webkit-touch-callout: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #e5a0b7;
+    outline-offset: 3px;
+  }
 }
