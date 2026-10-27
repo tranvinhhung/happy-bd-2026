@@ -18,6 +18,7 @@ import CatchHeartGame from "./CatchHeartGame.jsx";
 import LoveGacha from "./LoveGacha.jsx";
 import WaveText from "./WaveText.jsx";
 import HandwritingLetter from "./HandwritingLetter.jsx";
+import LoveUniverse from "@/components/features/hpbd/components/LoveUniverse";
 // import FlyingCupid from "./FlyingCupid.jsx";
 import "./birthday.scss";
 
@@ -287,7 +288,9 @@ export default function BirthdayExperience() {
             <Hero />
             <BirthdayCountdown birthday={birthday} />
 
-            <Memories />
+            {/* <Memories /> */}
+
+            <LoveUniverse />
 
             <PolaroidAlbum />
 
