@@ -21,6 +21,7 @@ import HandwritingLetter from "./HandwritingLetter.jsx";
 import LoveUniverse from "@/components/features/hpbd/components/LoveUniverse";
 import NewPromises from "./Promises.jsx";
 import NewBirthdayWish from "./BirthdayWish.jsx";
+import LoveRoom3D from "@/components/features/hpbd/components/LoveRoom3D/LoveRoom3D";
 // import FlyingCupid from "./FlyingCupid.jsx";
 import "./birthday.scss";
 
@@ -315,6 +316,7 @@ export default function BirthdayExperience() {
             <LoveGacha />
 
             <MakeAWish />
+            <LoveRoom3D />
 
             <Ending />
           </motion.div>
