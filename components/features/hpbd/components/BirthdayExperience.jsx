@@ -734,6 +734,7 @@ function LoveLetter() {
 }
 
 function ThingsILove() {
+  const reduceMotion = useReducedMotion();
   const noteColors = ["pink", "cream", "lavender", "peach", "mint", "rose"];
 
   const noteRotations = [-5, 4, -3, 5, -4, 3];
@@ -763,15 +764,15 @@ function ThingsILove() {
 
       <motion.div
         className="notes"
-        initial="hidden"
+        initial={reduceMotion ? false : "hidden"}
         whileInView="visible"
         viewport={{ once: true, amount: 0.15 }}
         variants={{
           hidden: {},
           visible: {
             transition: {
-              staggerChildren: 0.13,
-              delayChildren: 0.15,
+              staggerChildren: 0.2,
+              delayChildren: 0.25,
             },
           },
         }}
@@ -791,9 +792,9 @@ function ThingsILove() {
               variants={{
                 hidden: {
                   opacity: 0,
-                  y: 90,
-                  scale: 0.75,
-                  rotate: rotation * 2,
+                  y: 70,
+                  scale: 0.82,
+                  rotate: rotation - 8,
                   filter: "blur(8px)",
                 },
                 visible: {
@@ -804,8 +805,8 @@ function ThingsILove() {
                   filter: "blur(0px)",
                   transition: {
                     type: "spring",
-                    stiffness: 105,
-                    damping: 13,
+                    stiffness: 90,
+                    damping: 15,
                     mass: 0.9,
                   },
                 },

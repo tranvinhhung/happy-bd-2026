@@ -165,6 +165,44 @@ const PolaroidCard = memo(function PolaroidCard({
         <motion.div
             className={`polaroid-album__card ${isActive ? "is-active" : ""
                 }`}
+            initial={
+                reduceMotion
+                    ? false
+                    : {
+                          opacity: 0,
+                          filter: "blur(5px)",
+                          scale: scale * 0.82,
+                      }
+            }
+            whileInView={
+                reduceMotion
+                    ? undefined
+                    : {
+                          opacity: 1,
+                          filter: "blur(0px)",
+                          scale,
+                      }
+            }
+            viewport={{
+                once: true,
+                amount: 0.2,
+                margin: "0px 0px -10% 0px",
+            }}
+            transition={{
+                opacity: {
+                    duration: 0.9,
+                    delay: index * 0.14,
+                },
+                filter: {
+                    duration: 0.9,
+                    delay: index * 0.14,
+                },
+                scale: {
+                    duration: 1.1,
+                    delay: index * 0.14,
+                    ease: [0.22, 1, 0.36, 1],
+                },
+            }}
             style={{
                 zIndex: index,
                 x,
