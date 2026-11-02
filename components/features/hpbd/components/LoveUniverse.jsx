@@ -18,9 +18,9 @@ const DEFAULT_MEMORIES = [
         x: 12,
         y: 15,
         rotate: -7,
-        date: "14.02.2024",
-        title: "Lần đầu gặp nhau",
-        caption: "Lần đầu gặp nhau ♡",
+        date: "13.10.2023",
+        title: "Những buổi hẹn đầu tiên",
+        caption: "Những buổi hẹn đầu tiên ♡",
         message:
             "Giữa hàng triệu người trên thế giới, thật may mắn vì chúng mình đã gặp nhau. Khoảnh khắc ấy là khởi đầu của những điều đẹp đẽ nhất.",
         image: "/images/memories/memory-1.jpg",
@@ -30,9 +30,9 @@ const DEFAULT_MEMORIES = [
         x: 27,
         y: 45,
         rotate: -8,
-        date: "08.03.2024",
-        title: "Buổi hẹn đầu tiên",
-        caption: "Buổi hẹn đầu tiên ♡",
+        date: "19.12.2023",
+        title: "Buổi sinh nhật đầu tiên cho em",
+        caption: "Buổi sinh nhật đầu tiên cho em ♡",
         message:
             "Anh vẫn nhớ cảm giác hồi hộp hôm ấy, những câu chuyện nhỏ và nụ cười khiến anh muốn thời gian trôi chậm lại.",
         image: "/images/memories/memory-2.jpg",
@@ -42,9 +42,9 @@ const DEFAULT_MEMORIES = [
         x: 45,
         y: 10,
         rotate: -10,
-        date: "20.04.2024",
-        title: "Chuyến đi Đà Lạt",
-        caption: "Chuyến đi Đà Lạt ♡",
+        date: "07.03.2024",
+        title: "Chuyến đi Đà Lạt đầu tiên",
+        caption: "Chuyến đi Đà Lạt đầu tiên ♡",
         message:
             "Điều anh nhớ nhất không phải là phong cảnh, mà là người đã cùng anh ngắm nhìn tất cả.",
         image: "/images/memories/memory-3.jpg",
@@ -54,9 +54,9 @@ const DEFAULT_MEMORIES = [
         x: 51,
         y: 50,
         rotate: 9,
-        date: "01.06.2024",
-        title: "Những ngày bên nhau",
-        caption: "Những ngày bên nhau ♡",
+        date: "18.07.2024",
+        title: "Những ngày bên nhau ở Sài Gòn",
+        caption: "Những ngày bên nhau ở Sài Gòn ♡",
         message:
             "Chẳng cần điều gì quá đặc biệt. Chỉ cần ở cạnh em, một ngày bình thường cũng trở thành kỷ niệm.",
         image: "/images/memories/memory-4.jpg",
@@ -66,24 +66,24 @@ const DEFAULT_MEMORIES = [
         x: 75,
         y: 20,
         rotate: 7,
-        date: "10.10.2024",
+        date: "24.01.2026",
         title: "Cùng nhau trưởng thành",
         caption: "Cùng nhau trưởng thành ♡",
         message:
-            "Cảm ơn em vì đã ở đây, cùng anh đi qua những ngày vui và cả những ngày không dễ dàng.",
-        image: "/images/memories/memory-6.jpg",
+            "Trải qua thời gian thật dài , gần hơn 1 năm, em đã về bên anh , và anh biết ơn vì điều đó . Cảm ơn em vì đã ở đây, cùng anh đi qua những ngày vui và cả những ngày không dễ dàng.(Cùng em đi đà lạt lần 2)",
+        image: "/images/memories/memory-5.jpg",
     },
     {
         id: 7,
         x: 75,
         y: 63,
         rotate: -12,
-        date: "14.02.2025",
+        date: "02.03.2026",
         title: "Và còn nữa...",
         caption: "Và còn nữa... ♡",
         message:
-            "Chuyện của chúng mình vẫn đang được viết tiếp. Anh mong những trang sau sẽ luôn có em.",
-        image: "/images/memories/memory-7.jpg",
+            "Chuyện của chúng mình vẫn đang được viết tiếp. Anh mong những trang sau sẽ luôn có em. (Dh cùng em đi chơi hà hội để e về Úc nè)",
+        image: "/images/memories/memory-6.jpg",
     },
 ];
 
@@ -134,7 +134,7 @@ function glow(ctx, x, y, radius, color) {
     ctx.fill();
 }
 
-function UniverseCanvas({ memories, finale, revealComplete }) {
+function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
     const starsRef = useRef([]);
@@ -178,6 +178,28 @@ function UniverseCanvas({ memories, finale, revealComplete }) {
             if (!width || !height) return;
 
             ctx.clearRect(0, 0, width, height);
+
+            const layoutRect = layoutRef?.current?.getBoundingClientRect();
+            const memoryPoints = memories.map((memory, index) => {
+                const element =
+                    layoutRef?.current?.querySelector(
+                        `[data-memory-index="${index}"]`,
+                    );
+
+                if (!element || !layoutRect) {
+                    return {
+                        x: (memory.x / 100) * width,
+                        y: (memory.y / 100) * height,
+                    };
+                }
+
+                const rect = element.getBoundingClientRect();
+
+                return {
+                    x: rect.left - layoutRect.left + rect.width / 2,
+                    y: Math.max(12, rect.top - layoutRect.top - 14),
+                };
+            });
 
             const sky = ctx.createLinearGradient(0, 0, 0, height);
 
@@ -241,13 +263,13 @@ function UniverseCanvas({ memories, finale, revealComplete }) {
             const visibleConnections = revealComplete ? memories.length - 1 : 0;
 
             for (let i = 0; i < visibleConnections; i++) {
-                const from = memories[i];
-                const to = memories[i + 1];
+                const from = memoryPoints[i];
+                const to = memoryPoints[i + 1];
 
-                const x1 = (from.x / 100) * width;
-                const y1 = (from.y / 100) * height;
-                const x2 = (to.x / 100) * width;
-                const y2 = (to.y / 100) * height;
+                const x1 = from.x;
+                const y1 = from.y;
+                const x2 = to.x;
+                const y2 = to.y;
 
                 const midX = (x1 + x2) / 2;
                 const midY = (y1 + y2) / 2 - 40;
@@ -261,9 +283,9 @@ function UniverseCanvas({ memories, finale, revealComplete }) {
             ctx.restore();
 
             // Ánh sáng tại các điểm kỷ niệm.
-            memories.forEach((memory, index) => {
-                const x = (memory.x / 100) * width;
-                const y = (memory.y / 100) * height;
+            memoryPoints.forEach((point, index) => {
+                const x = point.x;
+                const y = point.y;
 
                 const pulse = reduceMotion
                     ? 1
@@ -373,7 +395,7 @@ function UniverseCanvas({ memories, finale, revealComplete }) {
 
             document.removeEventListener("visibilitychange", syncAnimation);
         };
-    }, [memories, finale, reduceMotion, revealComplete]);
+    }, [layoutRef, memories, finale, reduceMotion, revealComplete]);
 
     return (
         <div ref={containerRef} className={styles.canvasLayer}>
@@ -388,6 +410,7 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
     const [visited, setVisited] = useState([]);
     const reduceMotion = useReducedMotion();
     const sectionRef = useRef(null);
+    const universeRef = useRef(null);
 
     const isSectionInView = useInView(sectionRef, {
         once: true,
@@ -514,11 +537,12 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
                     subtitle="tạo nên một vũ trụ tình yêu thật lớn của tụi mình ♡"
                 />
             </Reveal>
-            <div className={styles.universe}>
+            <div ref={universeRef} className={styles.universe}>
                 <UniverseCanvas
                     memories={memories}
                     finale={finale}
                     revealComplete={revealComplete}
+                    layoutRef={universeRef}
                 />
 
                 <div className={styles.vignette} />
@@ -539,6 +563,7 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
                             key={memory.id}
                             type="button"
                             className={styles.polaroid}
+                            data-memory-index={index}
                             custom={index}
                             variants={memoryVariants}
                             initial={reduceMotion ? false : "hidden"}

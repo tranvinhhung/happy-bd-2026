@@ -693,11 +693,34 @@
 
 @media (max-width: 900px) {
   .universe {
-    height: 900px;
+    height: auto;
+    min-height: 980px;
+  }
+
+  .memories {
+    position: relative;
+    inset: auto;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    justify-items: center;
+    gap: 34px 22px;
+    padding: 165px 28px 250px;
   }
 
   .polaroid {
-    width: 135px;
+    position: relative;
+    top: auto !important;
+    left: auto !important;
+    width: min(150px, 100%);
+    margin-top: 0;
+    transform: translate(0, 0) !important;
+    transform-origin: center;
+
+    &:nth-child(even) {
+      margin-top: 28px;
+    }
   }
 
   .topNote,
@@ -721,8 +744,7 @@
   }
 
   .universe {
-    height: auto;
-    min-height: 750px;
+    min-height: 0;
     border-radius: 20px;
   }
 
@@ -755,28 +777,19 @@
   }
 
   .memories {
-    position: relative;
-    inset: auto;
-
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
-    justify-items: center;
-    gap: 35px 12px;
-
-    padding: 40px 14px 250px;
+    gap: 30px 12px;
+    padding: 165px 14px 250px;
   }
 
   .polaroid {
-    position: relative;
-    top: auto !important;
-    left: auto !important;
-
     width: min(145px, 100%);
-    transform-origin: center;
 
     &:last-child:nth-child(odd) {
       grid-column: 1 / -1;
+    }
+
+    &:nth-child(even) {
+      margin-top: 20px;
     }
   }
 
@@ -875,6 +888,10 @@
 
   .polaroid {
     width: min(128px, 100%);
+
+    &:nth-child(even) {
+      margin-top: 16px;
+    }
   }
 
   .photoCaption {

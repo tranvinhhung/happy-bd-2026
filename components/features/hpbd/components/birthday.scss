@@ -1746,7 +1746,6 @@ $text: #53383c;
 .promises-ending {
   margin: 55px auto 0;
   color: #d8c6d0;
-  font-size: clamp(19px, 2.4vw, 26px);
   font-style: italic;
   line-height: 1.65;
   text-align: center;
@@ -1755,7 +1754,7 @@ $text: #53383c;
     display: block;
     margin-top: 12px;
     color: #f5b7d3;
-    font-size: 30px;
+    font-size: 25px;
   }
 }
 
@@ -1830,12 +1829,12 @@ $text: #53383c;
     font-size: 15px;
 
     span {
-      font-size: 25px;
+      font-size: 15px;
     }
   }
 
   .promises-complete {
-    font-size: 18px;
+    font-size: 15px;
   }
 }
 

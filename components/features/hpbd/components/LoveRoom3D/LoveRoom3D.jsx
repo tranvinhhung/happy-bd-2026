@@ -200,8 +200,8 @@ export default function LoveRoom3D() {
       >
         <SectionTitle
           small="AN INTERACTIVE LOVE STORY"
-          title="Tương tác tình yêu nào em!"
-          subtitle=" Bốn mảnh kỷ niệm, một thế giới dành riêng cho hai đứa."
+          title="Tương tác tình yêu nào em !!!"
+          subtitle="Căn phòng nhỏ với những mảnh kỷ niệm, một thế giới dành riêng cho hai đứa ♡"
           light
         />
       </motion.div>
