@@ -115,7 +115,7 @@ export default function RoomScene({
   return (
     <Canvas
       shadows
-      dpr={[1, 1.75]}
+      dpr={[1, 1.25]}
       camera={{
         position: [9, 7, 10],
         fov: 38,

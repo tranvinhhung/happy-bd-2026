@@ -221,21 +221,27 @@ export default function LoveRoom3D() {
       </div>
 
       <div className={styles.sceneWrapper} style={{ position: "relative" }}>
-        <RoomScene
-          isNight={isNight}
-          isHugging={isHugging}
-          cameraTarget={cameraTarget}
-          resetVersion={cameraVersion}
-          activeObject={completed ? null : currentStory?.id}
-          onInteract={handleInteract}
-          celebrate={celebrate}
-          cakeBlownOut={cakeBlownOut}
-          onBlowCake={handleBlowCake}
-          cinematicActive={cinematicActive}
-          cinematicProgress={cinematicProgress}
-          cinematicResetKey={cinematicResetKey}
-          onCornerInteract={handleCornerInteract}
-        />
+        {isInView ? (
+          <RoomScene
+            isNight={isNight}
+            isHugging={isHugging}
+            cameraTarget={cameraTarget}
+            resetVersion={cameraVersion}
+            activeObject={completed ? null : currentStory?.id}
+            onInteract={handleInteract}
+            celebrate={celebrate}
+            cakeBlownOut={cakeBlownOut}
+            onBlowCake={handleBlowCake}
+            cinematicActive={cinematicActive}
+            cinematicProgress={cinematicProgress}
+            cinematicResetKey={cinematicResetKey}
+            onCornerInteract={handleCornerInteract}
+          />
+        ) : (
+          <div className={styles.loading}>
+            Cuộn xuống để mở cánh cửa vào thế giới nhỏ của chúng mình... ♡
+          </div>
+        )}
 
         <LoveCornerMessage
           active={cornerMessage}

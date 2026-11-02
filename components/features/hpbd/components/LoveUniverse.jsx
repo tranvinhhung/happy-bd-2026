@@ -138,6 +138,7 @@ function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
     const starsRef = useRef([]);
+    const memoryPointsRef = useRef([]);
     const visibleRef = useRef(false);
     const reduceMotion = useReducedMotion();
 
@@ -156,31 +157,11 @@ function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
         let lastFrame = 0;
         let running = false;
         let shootingStar = null;
+        let layoutTimer = null;
 
-        const resize = () => {
-            const rect = container.getBoundingClientRect();
-            const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-            width = rect.width;
-            height = rect.height;
-
-            canvas.width = Math.round(width * dpr);
-            canvas.height = Math.round(height * dpr);
-
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-            starsRef.current = createStars(width < 600 ? 110 : 220);
-
-            draw(performance.now());
-        };
-
-        const draw = (time) => {
-            if (!width || !height) return;
-
-            ctx.clearRect(0, 0, width, height);
-
+        const measureMemoryPoints = () => {
             const layoutRect = layoutRef?.current?.getBoundingClientRect();
-            const memoryPoints = memories.map((memory, index) => {
+            memoryPointsRef.current = memories.map((memory, index) => {
                 const element =
                     layoutRef?.current?.querySelector(
                         `[data-memory-index="${index}"]`,
@@ -200,6 +181,33 @@ function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
                     y: Math.max(12, rect.top - layoutRect.top - 14),
                 };
             });
+        };
+
+        const resize = () => {
+            const rect = container.getBoundingClientRect();
+            const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+
+            width = rect.width;
+            height = rect.height;
+
+            canvas.width = Math.round(width * dpr);
+            canvas.height = Math.round(height * dpr);
+
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            starsRef.current = createStars(width < 600 ? 110 : 220);
+            measureMemoryPoints();
+
+            window.clearTimeout(layoutTimer);
+            layoutTimer = window.setTimeout(measureMemoryPoints, 2200);
+
+            draw(performance.now());
+        };
+
+        const draw = (time) => {
+            if (!width || !height) return;
+
+            ctx.clearRect(0, 0, width, height);
 
             const sky = ctx.createLinearGradient(0, 0, 0, height);
 
@@ -263,8 +271,8 @@ function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
             const visibleConnections = revealComplete ? memories.length - 1 : 0;
 
             for (let i = 0; i < visibleConnections; i++) {
-                const from = memoryPoints[i];
-                const to = memoryPoints[i + 1];
+                const from = memoryPointsRef.current[i];
+                const to = memoryPointsRef.current[i + 1];
 
                 const x1 = from.x;
                 const y1 = from.y;
@@ -283,7 +291,7 @@ function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
             ctx.restore();
 
             // Ánh sáng tại các điểm kỷ niệm.
-            memoryPoints.forEach((point, index) => {
+            memoryPointsRef.current.forEach((point, index) => {
                 const x = point.x;
                 const y = point.y;
 
@@ -390,6 +398,7 @@ function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
 
         return () => {
             stop();
+            window.clearTimeout(layoutTimer);
             resizeObserver.disconnect();
             intersectionObserver.disconnect();
 
