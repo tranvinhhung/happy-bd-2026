@@ -94,14 +94,14 @@ const memoryVariants = {
         scale: 0.72,
         filter: "blur(8px)",
     },
-    visible: (index) => ({
+    visible: ({ index, compact }) => ({
         opacity: 1,
         y: 0,
         scale: 1,
         filter: "blur(0px)",
         transition: {
-            delay: 0.35 + index * 0.17,
-            duration: 0.85,
+            delay: compact ? 0.25 + (index % 2) * 0.22 : 0.35 + index * 0.17,
+            duration: compact ? 1.15 : 0.85,
             ease: [0.22, 1, 0.36, 1],
         },
     }),
@@ -420,6 +420,17 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
     const reduceMotion = useReducedMotion();
     const sectionRef = useRef(null);
     const universeRef = useRef(null);
+    const [isCompactLayout, setIsCompactLayout] = useState(false);
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia("(max-width: 900px)");
+        const updateLayout = () => setIsCompactLayout(mediaQuery.matches);
+
+        updateLayout();
+        mediaQuery.addEventListener("change", updateLayout);
+
+        return () => mediaQuery.removeEventListener("change", updateLayout);
+    }, []);
 
     const isSectionInView = useInView(sectionRef, {
         once: true,
@@ -573,10 +584,28 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
                             type="button"
                             className={styles.polaroid}
                             data-memory-index={index}
-                            custom={index}
+                            custom={{ index, compact: isCompactLayout }}
                             variants={memoryVariants}
                             initial={reduceMotion ? false : "hidden"}
-                            animate={isSectionInView ? "visible" : "hidden"}
+                            animate={
+                                isCompactLayout
+                                    ? undefined
+                                    : isSectionInView
+                                      ? "visible"
+                                      : "hidden"
+                            }
+                            whileInView={
+                                isCompactLayout ? "visible" : undefined
+                            }
+                            viewport={
+                                isCompactLayout
+                                    ? {
+                                          once: true,
+                                          amount: 0.2,
+                                          margin: "0px 0px -10% 0px",
+                                      }
+                                    : undefined
+                            }
                             style={{
                                 left: `${memory.x}%`,
                                 top: `${memory.y}%`,
