@@ -1,4 +1,3 @@
-
 "use client";
 
 /* eslint-disable react-hooks/set-state-in-effect */
@@ -15,7 +14,7 @@ const GIRL_URL = "/images/love-room/girlfriend.glb";
 
 const START_DISTANCE = 0.95;
 const HUG_DISTANCE = 0.45;
-const HOLD_DISTANCE = 0.7;
+const HOLD_DISTANCE = 0.5;
 const FACING_DIRECTION = 1;
 
 function MovingChibi({
@@ -49,13 +48,10 @@ function MovingChibi({
     if (mode === "hug") {
       targetX = direction * HUG_DISTANCE;
 
-      targetRotation =
-        (isBoy ? 1 : -1) *
-        FACING_DIRECTION *
-        Math.PI / 2;
+      targetRotation = ((isBoy ? 1 : -1) * FACING_DIRECTION * Math.PI) / 2;
     } else if (mode === "hold") {
       targetX = direction * HOLD_DISTANCE;
-      targetRotation = (isBoy ? 1 : -1) * 0.22;
+      targetRotation = (isBoy ? 1 : -1) * 0.3;
     } else if (mode === "kiss") {
       // Hai bé hơi nhìn về phía nhau khi hôn gió.
       targetRotation = (isBoy ? 1 : -1) * 0.25;
@@ -65,34 +61,21 @@ function MovingChibi({
       group.rotation.y,
       targetRotation,
       3.5,
-      delta
+      delta,
     );
 
-    const rotationReady =
-      Math.abs(group.rotation.y - targetRotation) < 0.12;
+    const rotationReady = Math.abs(group.rotation.y - targetRotation) < 0.12;
 
     // Khi ôm, xoay trước rồi mới tiến tới.
     if (mode !== "hug" || rotationReady) {
-      group.position.x = MathUtils.damp(
-        group.position.x,
-        targetX,
-        3,
-        delta
-      );
+      group.position.x = MathUtils.damp(group.position.x, targetX, 3, delta);
     }
 
-    const positionReady =
-      Math.abs(group.position.x - targetX) < 0.025;
+    const positionReady = Math.abs(group.position.x - targetX) < 0.025;
 
-    const facingReady =
-      Math.abs(group.rotation.y - targetRotation) < 0.08;
+    const facingReady = Math.abs(group.rotation.y - targetRotation) < 0.08;
 
-    if (
-      mode === "hug" &&
-      positionReady &&
-      facingReady &&
-      !arrivedRef.current
-    ) {
+    if (mode === "hug" && positionReady && facingReady && !arrivedRef.current) {
       arrivedRef.current = true;
       onArrived?.(side);
     }
@@ -157,8 +140,7 @@ export default function CoupleCharacters({
 
   const shouldHug = mode === "hug";
 
-  const actionIsTemporary =
-    mode === "wave" || mode === "kiss";
+  const actionIsTemporary = mode === "wave" || mode === "kiss";
 
   // Mỗi lần bấm nút, kể cả bấm lặp,
   // khởi động lại animation và hiệu ứng.
@@ -169,16 +151,11 @@ export default function CoupleCharacters({
 
     const timer = setTimeout(
       () => setActionExpired(true),
-      mode === "kiss" ? 2900 : 2400
+      mode === "kiss" ? 2900 : 2400,
     );
 
     return () => clearTimeout(timer);
-  }, [
-    mode,
-    coupleActionVersion,
-    cinematicActive,
-    actionIsTemporary,
-  ]);
+  }, [mode, coupleActionVersion, cinematicActive, actionIsTemporary]);
 
   // Khi bắt đầu ôm phải chờ cả hai tới vị trí.
   useEffect(() => {
@@ -192,10 +169,7 @@ export default function CoupleCharacters({
 
     setCelebratePlaying(true);
 
-    const timer = setTimeout(
-      () => setCelebratePlaying(false),
-      2500
-    );
+    const timer = setTimeout(() => setCelebratePlaying(false), 2500);
 
     return () => clearTimeout(timer);
   }, [celebrate, cinematicActive, shouldHug]);
@@ -213,10 +187,7 @@ export default function CoupleCharacters({
 
     arrivedRef.current[side] = true;
 
-    if (
-      arrivedRef.current.boy &&
-      arrivedRef.current.girl
-    ) {
+    if (arrivedRef.current.boy && arrivedRef.current.girl) {
       setHugReady(true);
     }
   };
@@ -277,10 +248,7 @@ export default function CoupleCharacters({
     return "Idle";
   };
 
-  const showKissHearts =
-    !cinematicActive &&
-    mode === "kiss" &&
-    !actionExpired;
+  const showKissHearts = !cinematicActive && mode === "kiss" && !actionExpired;
 
   return (
     <group position={[0.2, 0, 1.65]}>
@@ -307,9 +275,7 @@ export default function CoupleCharacters({
       />
 
       {showKissHearts && (
-        <KissHeartEffect
-          key={`kiss-${coupleActionVersion}`}
-        />
+        <KissHeartEffect key={`kiss-${coupleActionVersion}`} />
       )}
     </group>
   );

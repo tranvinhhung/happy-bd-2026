@@ -3,12 +3,11 @@
 
 const ACTIONS = [
   { id: "wave", label: "👋 Vẫy tay" },
-  { id: "hold", label: "🫶 Nắm tay" },
+  { id: "hold", label: "🫶 Khoắc vai" },
   { id: "dance", label: "💃 Nhảy vui" },
   { id: "kiss", label: "😘 Hôn gió" },
   { id: "hug", label: "❤️ Ôm nhau" },
   { id: "idle", label: "↩ Đứng lại" },
-  { id: "cinematic", label: "🎬 Xem đoạn phim" },
 ];
 
 export default function CoupleActionButtons({

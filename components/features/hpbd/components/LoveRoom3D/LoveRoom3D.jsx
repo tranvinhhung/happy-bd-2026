@@ -163,6 +163,7 @@ export default function LoveRoom3D() {
       setCameraTarget("couple");
       setCameraVersion((value) => value + 1);
       setCompleted(true);
+      startCinematic();
       return;
     }
 
