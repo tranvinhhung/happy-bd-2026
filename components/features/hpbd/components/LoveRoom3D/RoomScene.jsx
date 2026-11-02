@@ -106,10 +106,11 @@ export default function RoomScene({
   onBlowCake,
   cinematicActive = false,
   cinematicProgress = 0,
+  coupleActionVersion = 0,
   cinematicResetKey = 0,
   onCornerInteract,
+  coupleAction,
 }) {
-
   const showHearts = cinematicActive ? cinematicProgress >= 5 : isHugging;
 
   return (
@@ -155,6 +156,8 @@ export default function RoomScene({
           cinematicActive={cinematicActive}
           cinematicProgress={cinematicProgress}
           cinematicResetKey={cinematicResetKey}
+          coupleActionVersion={coupleActionVersion}
+          coupleAction={coupleAction}
         />
 
         <HugEffects active={showHearts} />

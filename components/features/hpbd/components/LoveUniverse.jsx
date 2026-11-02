@@ -133,7 +133,7 @@ function glow(ctx, x, y, radius, color) {
     ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.fill();
 }
-
+ 
 function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
     const canvasRef = useRef(null);
     const containerRef = useRef(null);

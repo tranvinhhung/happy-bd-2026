@@ -2,13 +2,19 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
-import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useInView,
+  useReducedMotion,
+} from "framer-motion";
 
 import { ROOM_STORY } from "./roomStory";
 import CinematicEnding from "./CinematicEnding";
 import LoveCornerMessage from "./LoveCornerMessage";
 import styles from "../../styles/LoveRoom3D.module.scss";
 import SectionTitle from "../SectionTitle";
+import CoupleActionButtons from "./CoupleActionButtons";
 
 const RoomScene = dynamic(() => import("./RoomScene"), {
   ssr: false,
@@ -31,6 +37,8 @@ export default function LoveRoom3D() {
   const [cakeBlownOut, setCakeBlownOut] = useState(false);
   const [cinematicResetKey, setCinematicResetKey] = useState(0);
   const [cornerMessage, setCornerMessage] = useState(null);
+  const [coupleAction, setCoupleAction] = useState(null);
+  const [coupleActionVersion, setCoupleActionVersion] = useState(0);
 
   // Cinematic
   const [cinematicActive, setCinematicActive] = useState(false);
@@ -43,6 +51,16 @@ export default function LoveRoom3D() {
   const reduceMotion = useReducedMotion();
 
   const currentStory = ROOM_STORY[chapter];
+
+  const chooseCoupleAction = (action) => {
+    switch (action) {
+      case "cinematic":
+        startCinematic();
+        return;
+    }
+    setCoupleAction(action);
+    setCoupleActionVersion((value) => value + 1);
+  };
 
   const clearCinematicTimers = useCallback(() => {
     if (cinematicIntervalRef.current !== null) {
@@ -57,6 +75,7 @@ export default function LoveRoom3D() {
   }, []);
 
   const handleCornerInteract = useCallback(
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     (type) => {
       if (cinematicActive || activeStory) return;
 
@@ -99,6 +118,9 @@ export default function LoveRoom3D() {
     setCinematicActive(false);
     setCinematicMessage(false);
     setCinematicProgress(0);
+    setCoupleAction(null);
+    setIsHugging(true);
+    setCameraTarget("couple");
 
     setCameraVersion((value) => value + 1);
   }, [clearCinematicTimers]);
@@ -163,6 +185,8 @@ export default function LoveRoom3D() {
     setCelebrate(false);
     setCakeBlownOut(false);
     setCornerMessage(null);
+    setCoupleAction(null);
+    setCoupleActionVersion(0);
   };
 
   const isInView = useInView(sectionRef, {
@@ -172,7 +196,6 @@ export default function LoveRoom3D() {
 
   return (
     <section ref={sectionRef} className={styles.section} id="our-little-world">
-
       <motion.div
         className={styles.heading}
         initial={
@@ -236,6 +259,8 @@ export default function LoveRoom3D() {
             cinematicProgress={cinematicProgress}
             cinematicResetKey={cinematicResetKey}
             onCornerInteract={handleCornerInteract}
+            coupleAction={coupleAction}
+            coupleActionVersion={coupleActionVersion}
           />
         ) : (
           <div className={styles.loading}>
@@ -277,24 +302,11 @@ export default function LoveRoom3D() {
           onClose={closeCinematic}
         />
 
-        <button
-          type="button"
-          onClick={() => setCelebrate((prev) => !prev)}
-          style={{
-            position: "absolute",
-            left: 16,
-            bottom: 72,
-            zIndex: 20,
-            padding: "12px 18px",
-            borderRadius: 999,
-            background: "rgba(38,21,57,.8)",
-            border: "1px solid rgba(255,255,255,.35)",
-            color: "#fff",
-            cursor: "pointer",
-          }}
-        >
-          🎉 Cùng vui nào!
-        </button>
+        <CoupleActionButtons
+          value={coupleAction}
+          disabled={cinematicActive || Boolean(activeStory)}
+          onSelect={chooseCoupleAction}
+        />
 
         <div className={styles.sceneHint}>
           ✧ Kéo để xoay · Chạm vào đồ vật phát sáng
