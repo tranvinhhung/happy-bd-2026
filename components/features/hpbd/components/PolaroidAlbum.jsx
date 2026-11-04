@@ -12,6 +12,7 @@ import {
 
 import {
     animate,
+    AnimatePresence,
     motion,
     useMotionValue,
     useReducedMotion,
@@ -72,6 +73,7 @@ const PolaroidCard = memo(function PolaroidCard({
     reduceMotion,
     onActivate,
     onFlip,
+    onOpen,
     onPositionChange,
     layoutVersion,
 }) {
@@ -84,6 +86,11 @@ const PolaroidCard = memo(function PolaroidCard({
     const rotate = useMotionValue(position.rotate);
 
     const dragStartRef = useRef({ x: 0, y: 0 });
+    const photoTouchRef = useRef({
+        lastTapAt: 0,
+        startX: 0,
+        startY: 0,
+    });
     const animationsRef = useRef([]);
 
     const stopAnimations = useCallback(() => {
@@ -161,6 +168,37 @@ const PolaroidCard = memo(function PolaroidCard({
         onPositionChange(memory.id, nextPosition);
     };
 
+    const handlePhotoTouchStart = (event) => {
+        const touch = event.changedTouches[0];
+
+        photoTouchRef.current.startX = touch.clientX;
+        photoTouchRef.current.startY = touch.clientY;
+    };
+
+    const handlePhotoTouchEnd = (event) => {
+        const touch = event.changedTouches[0];
+        const touchState = photoTouchRef.current;
+        const movedDistance = Math.hypot(
+            touch.clientX - touchState.startX,
+            touch.clientY - touchState.startY,
+        );
+        const now = Date.now();
+
+        if (movedDistance > 24) {
+            touchState.lastTapAt = 0;
+            return;
+        }
+
+        if (now - touchState.lastTapAt <= 350) {
+            event.stopPropagation();
+            touchState.lastTapAt = 0;
+            onOpen(memory);
+            return;
+        }
+
+        touchState.lastTapAt = now;
+    };
+
     return (
         <motion.div
             className={`polaroid-album__card ${isActive ? "is-active" : ""
@@ -234,7 +272,17 @@ const PolaroidCard = memo(function PolaroidCard({
             >
                 {/* FRONT */}
                 <div className="polaroid-album__front">
-                    <div className="polaroid-album__photo">
+                    <button
+                        type="button"
+                        className="polaroid-album__photo"
+                        onDoubleClick={(event) => {
+                            event.stopPropagation();
+                            onOpen(memory);
+                        }}
+                        onTouchStart={handlePhotoTouchStart}
+                        onTouchEnd={handlePhotoTouchEnd}
+                        aria-label={`Nhấp đúp để xem lớn ảnh ${memory.title}`}
+                    >
                         <img
                             src={memory.image}
                             alt={memory.title}
@@ -242,7 +290,7 @@ const PolaroidCard = memo(function PolaroidCard({
                             decoding="async"
                             draggable={false}
                         />
-                    </div>
+                    </button>
 
                     <div className="polaroid-album__caption">
                         <span>{memory.title}</span>
@@ -292,7 +340,7 @@ const PolaroidCard = memo(function PolaroidCard({
 // Main Album
 // ======================================================
 
-export default function PolaroidAlbum() {
+export default function PolaroidAlbum({ onMemoryAudioChange }) {
     const reduceMotion = useReducedMotion();
 
     const [positions, setPositions] = useState(
@@ -309,6 +357,9 @@ export default function PolaroidAlbum() {
     // Nhờ vậy, reset vẫn chạy kể cả khi tọa độ
     // trong state không thay đổi.
     const [layoutVersion, setLayoutVersion] = useState(0);
+    const [selectedMemory, setSelectedMemory] = useState(null);
+    const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+    const audioRef = useRef(null);
 
     // ==================================================
     // Responsive
@@ -400,6 +451,47 @@ export default function PolaroidAlbum() {
         setLayoutVersion((current) => current + 1);
     }, []);
 
+    useEffect(() => {
+        return () => {
+            audioRef.current?.pause();
+            onMemoryAudioChange?.(false);
+        };
+    }, [onMemoryAudioChange]);
+
+    const openMemory = useCallback((memory) => {
+        setSelectedMemory(memory);
+        setIsAudioPlaying(false);
+        audioRef.current?.pause();
+        audioRef.current?.load();
+        onMemoryAudioChange?.(false);
+    }, [onMemoryAudioChange]);
+
+    const closeMemory = useCallback(() => {
+        audioRef.current?.pause();
+        setIsAudioPlaying(false);
+        setSelectedMemory(null);
+        onMemoryAudioChange?.(false);
+    }, [onMemoryAudioChange]);
+
+    const toggleMemoryAudio = async () => {
+        if (!audioRef.current) return;
+
+        if (isAudioPlaying) {
+            audioRef.current.pause();
+            setIsAudioPlaying(false);
+            onMemoryAudioChange?.(false);
+            return;
+        }
+
+        try {
+            await audioRef.current.play();
+            setIsAudioPlaying(true);
+            onMemoryAudioChange?.(true);
+        } catch (error) {
+            console.warn("Không thể phát âm thanh kỷ niệm:", error);
+        }
+    };
+
     // ==================================================
     // Render
     // ==================================================
@@ -474,6 +566,7 @@ export default function PolaroidAlbum() {
                                 activateCard(memory.id)
                             }
                             onFlip={flipCard}
+                            onOpen={openMemory}
                             onPositionChange={updatePosition}
                             layoutVersion={layoutVersion}
                         />
@@ -501,6 +594,175 @@ export default function PolaroidAlbum() {
                 Five little moments, a thousand beautiful
                 memories ♡
             </p>
+
+            <AnimatePresence>
+                {selectedMemory && (
+                    <motion.div
+                        className="polaroid-album__lightbox"
+                        role="presentation"
+                        onClick={closeMemory}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                    >
+                    <motion.div
+                        className="polaroid-album__lightbox-content"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="memory-title"
+                        onClick={(event) => event.stopPropagation()}
+                        initial={{ opacity: 0, scale: 0.86, y: 24 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.92, y: 12 }}
+                        transition={{
+                            duration: 0.35,
+                            ease: [0.22, 1, 0.36, 1],
+                        }}
+                    >
+                        <button
+                            type="button"
+                            className="polaroid-album__lightbox-close"
+                            onClick={closeMemory}
+                            aria-label="Đóng ảnh"
+                        >
+                            ×
+                        </button>
+                        <motion.div
+                            className="polaroid-album__lightbox-photo"
+                            initial={
+                                reduceMotion
+                                    ? false
+                                    : {
+                                          opacity: 0,
+                                          scale: 1.14,
+                                          filter: "blur(10px)",
+                                      }
+                            }
+                            animate={{
+                                opacity: 1,
+                                scale: 1,
+                                filter: "blur(0px)",
+                            }}
+                            transition={{
+                                duration: 1.15,
+                                delay: 0.12,
+                                ease: [0.16, 1, 0.3, 1],
+                            }}
+                        >
+                            <motion.span
+                                className="polaroid-album__lightbox-photo-shine"
+                                initial={
+                                    reduceMotion
+                                        ? false
+                                        : { x: "-120%", opacity: 0 }
+                                }
+                                animate={
+                                    reduceMotion
+                                        ? undefined
+                                        : { x: "120%", opacity: [0, 0.8, 0] }
+                                }
+                                transition={{
+                                    duration: 1.3,
+                                    delay: 0.45,
+                                    ease: "easeInOut",
+                                }}
+                            />
+                            <img
+                            src={selectedMemory.image}
+                            alt={selectedMemory.title}
+                            />
+                        </motion.div>
+                        <div className="polaroid-album__lightbox-info">
+                            <span>{selectedMemory.date}</span>
+                            <motion.h3
+                                id="memory-title"
+                                initial={
+                                    reduceMotion
+                                        ? false
+                                        : { opacity: 0, y: 28 }
+                                }
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{
+                                    duration: 0.9,
+                                    delay: 0.3,
+                                    ease: [0.22, 1, 0.36, 1],
+                                }}
+                            >
+                                {selectedMemory.title}
+                            </motion.h3>
+                            <motion.small
+                                initial={
+                                    reduceMotion
+                                        ? false
+                                        : { opacity: 0, x: -28 }
+                                }
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{
+                                    duration: 0.8,
+                                    delay: 0.78,
+                                    ease: [0.22, 1, 0.36, 1],
+                                }}
+                            >
+                                {selectedMemory.location}
+                            </motion.small>
+                            <motion.p
+                                initial={
+                                    reduceMotion
+                                        ? false
+                                        : { opacity: 0, y: 24 }
+                                }
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{
+                                    duration: 0.9,
+                                    delay: 0.55,
+                                    ease: [0.22, 1, 0.36, 1],
+                                }}
+                            >
+                                {selectedMemory.message}
+                            </motion.p>
+                            <motion.button
+                                type="button"
+                                className="polaroid-album__audio-button"
+                                onClick={toggleMemoryAudio}
+                                initial={
+                                    reduceMotion
+                                        ? false
+                                        : { opacity: 0, scale: 0.7, y: 18 }
+                                }
+                                animate={
+                                    reduceMotion
+                                        ? undefined
+                                        : {
+                                              opacity: 1,
+                                              scale: [0.7, 1.12, 0.92, 1.04, 1],
+                                              y: [18, -8, 3, -2, 0],
+                                          }
+                                }
+                                transition={{
+                                    duration: 1.05,
+                                    delay: 1.05,
+                                    ease: [0.22, 1, 0.36, 1],
+                                }}
+                            >
+                                {isAudioPlaying
+                                    ? "Tạm dừng âm thanh ♫"
+                                    : "Nghe âm thanh kỷ niệm ♫"}
+                            </motion.button>
+                            <audio
+                                ref={audioRef}
+                                src={selectedMemory.audio || "/audio/beautiful_in_white.mp3"}
+                                loop={false}
+                                preload="auto"
+                                controls={false}
+                                autoPlay={isAudioPlaying}
+                                onEnded={() => setIsAudioPlaying(false)}
+                            />
+                        </div>
+                    </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     );
 }
