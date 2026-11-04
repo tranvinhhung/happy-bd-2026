@@ -14,7 +14,7 @@ import {
 } from "framer-motion";
 
 const REVEAL_THRESHOLD = 0.55;
-const BRUSH_SIZE = 32;
+const BRUSH_SIZE = 26;
 
 export default function ScratchReveal() {
   const canvasRef = useRef(null);

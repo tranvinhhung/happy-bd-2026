@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import {
   AnimatePresence,
   motion,
@@ -105,7 +105,7 @@ export default function BirthdayExperience() {
   const openGift = () => {
     setGiftOpened(true);
 
-    if (audioRef.current && process.env.NODE_ENV !== "development") {
+    if (audioRef.current) {
       audioRef.current.volume = 0.3;
       audioRef.current.currentTime = 0;
       audioRef.current.play().catch((error) => {
@@ -117,6 +117,12 @@ export default function BirthdayExperience() {
       setStarted(true);
     }, 1300);
   };
+
+  const handleMemoryAudioChange = useCallback((isPlaying) => {
+    if (!audioRef.current) return;
+
+    audioRef.current.volume = isPlaying ? 0.1 : 0.3;
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -295,7 +301,7 @@ export default function BirthdayExperience() {
 
             <LoveUniverse />
 
-            <PolaroidAlbum />
+            <PolaroidAlbum onMemoryAudioChange={handleMemoryAudioChange} />
 
             <Timeline />
 
@@ -1253,11 +1259,31 @@ function Ending() {
             ease: [0.22, 1, 0.36, 1],
           }}
         >
-          Cảm ơn em
-          <br />
-          vì đã xuất hiện
-          <br />
-          trong cuộc đời anh
+          {["Cảm ơn em", "vì đã xuất hiện", "trong cuộc đời anh"].map(
+            (line, index) => (
+              <motion.span
+                key={line}
+                className="ending__title-line"
+                initial={
+                  reduceMotion
+                    ? false
+                    : {
+                        opacity: 0,
+                        y: 34,
+                      }
+                }
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={revealViewport}
+                transition={{
+                  duration: 0.9,
+                  delay: 0.35 + index * 0.22,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                {line}
+              </motion.span>
+            ),
+          )}
         </motion.h2>
 
         {/* DIVIDER */}
