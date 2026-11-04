@@ -202,7 +202,7 @@
     }
 
     p {
-      font-size: 20px;
+      font-size: 20px !important;
     }
   }
 
@@ -401,3 +401,48 @@
     font-size: 34px;
   }
 }
+
+.actionButtons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  button {
+    padding: 10px 15px;
+    border: 1px solid rgba(255, 211, 231, 0.32);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffe5ef;
+    font-size: 11px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      background 0.25s,
+      transform 0.25s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.16);
+      transform: translateY(-2px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #f3b2d0;
+      outline-offset: 3px;
+    }
+  }
+}
+
+
+@media (max-width: 600px) {
+  .actionButtons button {
+    font-size: 9px;
+    padding: 8px 12px;
+  }
+}
+
