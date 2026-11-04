@@ -725,11 +725,12 @@
 
   .topNote,
   .rightNote {
-    display: none;
   }
 
   .leftQuote {
-    display: none;
+    top:auto;
+    bottom: 14%;
+    left: 42%;
   }
 
   .bottomQuote {
@@ -773,7 +774,13 @@
   .topNote,
   .rightNote,
   .leftQuote {
-    display: none;
+    // display: none;
+  }
+
+  .leftQuote {
+    top: auto;
+    bottom: 10%;
+    left: 40%;
   }
 
   .memories {
