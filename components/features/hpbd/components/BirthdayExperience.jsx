@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useId } from "react";
 import {
   AnimatePresence,
   motion,
@@ -1417,9 +1417,26 @@ function SectionTitle({ small, title, subtitle, light = false }) {
 }
 
 function SectionConnector({ variant = "flower" }) {
+  const connectorRef = useRef(null);
+  const isInView = useInView(connectorRef, {
+    amount: 0.1,
+    once: false,
+  });
+  const connectorId = useId().replace(/:/g, "");
+  const pathId = `section-connector-path-${connectorId}`;
+  const animationDuration = 18;
+  const pulseInterval = 2.4;
+  const trailCycleDuration = pulseInterval * 3;
+  const startOffset = Array.from(connectorId).reduce(
+    (total, character) => total + character.charCodeAt(0),
+    0,
+  ) % animationDuration;
+
   return (
     <motion.div
+      ref={connectorRef}
       className={`section-connector section-connector--${variant}`}
+      data-animation-active={isInView ? "true" : "false"}
       initial={{ opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.8 }}
@@ -1427,7 +1444,46 @@ function SectionConnector({ variant = "flower" }) {
       aria-hidden="true"
     >
       <svg viewBox="0 0 640 100" role="presentation">
-        <path className="section-connector__stem" d="M25 51 C145 18 215 82 320 50 S495 18 615 51" />
+        <path
+          id={pathId}
+          className="section-connector__stem"
+          d="M25 51 C145 18 215 82 320 50 S495 18 615 51"
+        />
+
+        <g className="section-connector__heart-trail">
+          <g
+            className="section-connector__heart section-connector__heart--main"
+            style={{ animationDelay: `-${startOffset % pulseInterval}s` }}
+          >
+            <animateMotion
+              dur={`${animationDuration}s`}
+              begin={`-${startOffset}s`}
+              repeatCount="indefinite"
+              rotate="auto"
+            >
+              <mpath href={`#${pathId}`} />
+            </animateMotion>
+            <path d="M0 -3 C-6 -10 -14 -5 -12 1 C-10 7 0 12 0 12 C0 12 10 7 12 1 C14 -5 6 -10 0 -3Z" />
+          </g>
+
+          {[0, 1, 2].map((trailIndex) => (
+            <g
+              key={trailIndex}
+              className={`section-connector__heart section-connector__heart--trail-${trailIndex}`}
+              style={{ animationDelay: `-${startOffset % trailCycleDuration}s` }}
+            >
+              <animateMotion
+                dur={`${animationDuration}s`}
+                begin={`-${(startOffset - (trailIndex + 1) * 0.6 + animationDuration) % animationDuration}s`}
+                repeatCount="indefinite"
+                rotate="auto"
+              >
+                <mpath href={`#${pathId}`} />
+              </animateMotion>
+              <path d="M0 -3 C-6 -10 -14 -5 -12 1 C-10 7 0 12 0 12 C0 12 10 7 12 1 C14 -5 6 -10 0 -3Z" />
+            </g>
+          ))}
+        </g>
 
         {variant === "branch" && (
           <>
