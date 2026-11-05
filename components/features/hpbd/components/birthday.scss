@@ -72,25 +72,6 @@ $text: #53383c;
   color: rgba(200, 109, 125, 0.65);
   pointer-events: none;
 
-  &::before {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background:
-      radial-gradient(
-        ellipse at 50% 0%,
-        rgba(255, 219, 224, 0.2),
-        transparent 48%
-      ),
-      radial-gradient(
-        ellipse at 50% 100%,
-        rgba(108, 76, 110, 0.12),
-        transparent 48%
-      );
-    content: "";
-    filter: blur(12px);
-    opacity: 0.75;
-  }
 
   svg {
     position: relative;
@@ -116,9 +97,70 @@ $text: #53383c;
     opacity: 0.82;
   }
 
-  &--branch svg {
+  &__heart-trail {
+    pointer-events: none;
+  }
+
+  &[data-animation-active="false"] {
+    .section-connector__heart-trail {
+      display: none;
+    }
+
+    svg,
+    .section-connector__heart,
+    .section-connector__flower,
+    .section-connector__envelope,
+    .section-connector__envelope-flap,
+    .section-connector__seal {
+      animation-play-state: paused;
+    }
+  }
+
+  &__heart {
+    fill: rgba(215, 104, 132, 0.86);
+    transform-box: fill-box;
+    transform-origin: center;
+
+    path {
+      stroke: rgba(167, 73, 101, 0.3);
+      stroke-width: 0.65;
+    }
+  }
+
+  &__heart--main {
+    filter: drop-shadow(0 0 3px rgba(255, 156, 180, 0.9));
+    transform: scale(0.72);
+    animation: connector-heart-pulse 2.4s ease-in-out infinite;
+  }
+
+  &__heart--trail-0 {
+    transform: scale(0.5);
+    animation: connector-heart-trail-0 7.2s linear infinite;
+  }
+
+  &__heart--trail-1 {
+    transform: scale(0.36);
+    animation: connector-heart-trail-1 7.2s linear infinite;
+  }
+
+  &__heart--trail-2 {
+    transform: scale(0.24);
+    animation: connector-heart-trail-2 7.2s linear infinite;
+  }
+
+  &--branch svg,
+  &--flower svg,
+  &--letter svg {
     transform-origin: 50% 50%;
     animation: connector-branch-sway 5.5s ease-in-out infinite;
+  }
+
+  &--flower svg {
+    animation-delay: -1.4s;
+  }
+
+  &--letter svg {
+    animation-delay: -2.6s;
   }
 
   &__twig {
@@ -242,6 +284,64 @@ $text: #53383c;
   }
 }
 
+@keyframes connector-heart-pulse {
+  0%,
+  100% {
+    transform: scale(0.72);
+  }
+
+  10% {
+    filter: drop-shadow(0 0 8px rgba(255, 156, 180, 1));
+    transform: scale(1);
+  }
+
+  22% {
+    filter: drop-shadow(0 0 3px rgba(255, 156, 180, 0.9));
+    transform: scale(0.72);
+  }
+}
+
+@keyframes connector-heart-trail-0 {
+  0%,
+  2% {
+    opacity: 0.58;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes connector-heart-trail-1 {
+  0%,
+  32% {
+    opacity: 0;
+  }
+
+  34% {
+    opacity: 0.34;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes connector-heart-trail-2 {
+  0%,
+  65% {
+    opacity: 0;
+  }
+
+  67% {
+    opacity: 0.16;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
 @media (max-width: 600px) {
   .section-connector {
     height: 68px;
@@ -256,11 +356,17 @@ $text: #53383c;
 
 @media (prefers-reduced-motion: reduce) {
   .section-connector svg,
+  .section-connector__heart-trail,
+  .section-connector__heart,
   .section-connector__flower,
   .section-connector__envelope,
   .section-connector__envelope-flap,
   .section-connector__seal {
     animation: none;
+  }
+
+  .section-connector__heart-trail {
+    display: none;
   }
 }
 
