@@ -5392,16 +5392,78 @@ $text: #53383c;
   }
 
   &__card {
+    position: relative;
+    isolation: isolate;
     width: min(520px, 100%);
     margin: 0 auto;
-    padding: 32px;
-    border: 1px solid rgba(255, 190, 215, 0.18);
-    border-radius: 24px;
-    background: rgba(255, 255, 255, 0.035);
+    padding: 46px 38px 32px;
+    border: 1px solid rgba(255, 205, 222, 0.28);
+    border-radius: 30px 30px 24px 24px;
+    background:
+      linear-gradient(135deg,
+        rgba(255, 218, 228, 0.12),
+        rgba(255, 255, 255, 0.035) 48%,
+        rgba(218, 137, 175, 0.1));
+    box-shadow:
+      0 25px 55px rgba(2, 5, 18, 0.24),
+      inset 0 1px rgba(255, 255, 255, 0.16);
+
+    &--gift::before,
+    &--gift::after {
+      position: absolute;
+      z-index: 0;
+      border-radius: inherit;
+      content: "";
+      pointer-events: none;
+    }
+
+    &--gift::before {
+      inset: -10px 12px auto;
+      height: 28px;
+      border: 1px solid rgba(255, 212, 225, 0.3);
+      border-radius: 16px 16px 10px 10px;
+      background: linear-gradient(180deg, rgba(255, 195, 216, 0.18), rgba(208, 122, 164, 0.08));
+      box-shadow: 0 8px 18px rgba(4, 5, 20, 0.15);
+      transform: perspective(90px) rotateX(7deg);
+    }
+
+    &--gift::after {
+      top: -10px;
+      bottom: 0;
+      left: 50%;
+      width: 42px;
+      border-right: 1px solid rgba(255, 218, 229, 0.08);
+      border-left: 1px solid rgba(255, 218, 229, 0.08);
+      background: linear-gradient(180deg, rgba(255, 190, 214, 0.12), rgba(219, 126, 171, 0.045));
+      opacity: 0.45;
+      transform: translateX(-50%);
+    }
+
+    &--gift {
+      overflow: visible;
+
+      .make-wish__card-icon,
+      h3,
+      form,
+      .make-wish__hint {
+        position: relative;
+        z-index: 1;
+      }
+    }
 
     &-icon {
       color: #f5adc2;
       font-size: 38px;
+      text-shadow: 0 0 18px rgba(255, 155, 201, 0.5);
+    }
+
+    &-icon::after {
+      display: block;
+      width: 55px;
+      height: 1px;
+      margin: 8px auto 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 196, 218, 0.7), transparent);
+      content: "";
     }
 
     h3 {
@@ -5436,6 +5498,68 @@ $text: #53383c;
         border-color: #e8a5bd;
       }
     }
+  }
+
+  &__gift-bow {
+    position: absolute;
+    top: -27px;
+    left: 50%;
+    z-index: 3;
+    width: 78px;
+    height: 42px;
+    transform: translateX(-50%);
+    pointer-events: none;
+
+    &::after {
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      width: 17px;
+      height: 17px;
+      border: 2px solid rgba(255, 222, 232, 0.75);
+      border-radius: 50%;
+      background: #e48fb3;
+      box-shadow: 0 0 15px rgba(255, 153, 200, 0.5);
+      content: "";
+      transform: translateX(-50%);
+    }
+
+    span {
+      position: absolute;
+      top: 3px;
+      width: 42px;
+      height: 30px;
+      border: 1px solid rgba(255, 220, 232, 0.7);
+      border-radius: 80% 20% 65% 35%;
+      background: linear-gradient(135deg, #f8b4cf, #bd6e9a);
+      box-shadow: 0 7px 12px rgba(4, 5, 20, 0.18);
+
+      &:first-child {
+        right: 35px;
+        transform: rotate(25deg);
+      }
+
+      &:last-child {
+        left: 35px;
+        border-radius: 20% 80% 35% 65%;
+        transform: rotate(-25deg);
+      }
+    }
+  }
+
+  &__gift-tag {
+    position: absolute;
+    top: 37px;
+    right: 22px;
+    z-index: 2;
+    padding: 5px 9px;
+    border: 1px solid rgba(255, 220, 231, 0.4);
+    border-radius: 5px;
+    background: rgba(255, 224, 232, 0.12);
+    color: rgba(255, 220, 231, 0.7);
+    font-family: "Dancing Script", cursive;
+    font-size: 11px;
+    transform: rotate(8deg);
   }
 
   &__form-bottom {
@@ -5538,7 +5662,20 @@ $text: #53383c;
     }
 
     &__card {
-      padding: 10px 18px;
+      padding: 42px 18px 22px;
+
+      &::after {
+        width: 28px;
+      }
+
+      &::before {
+        inset: -8px 8px auto;
+      }
+
+      .make-wish__gift-tag {
+        top: 30px;
+        right: 12px;
+      }
 
       h3 {
         font-size: 30px;
