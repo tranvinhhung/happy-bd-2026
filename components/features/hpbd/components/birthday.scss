@@ -57,6 +57,213 @@ $text: #53383c;
   background-size: 15px 15px;
 }
 
+/* SECTION CONNECTORS */
+
+.section-connector {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  height: 92px;
+  margin: -46px 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: transparent;
+  color: rgba(200, 109, 125, 0.65);
+  pointer-events: none;
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(
+        ellipse at 50% 0%,
+        rgba(255, 219, 224, 0.2),
+        transparent 48%
+      ),
+      radial-gradient(
+        ellipse at 50% 100%,
+        rgba(108, 76, 110, 0.12),
+        transparent 48%
+      );
+    content: "";
+    filter: blur(12px);
+    opacity: 0.75;
+  }
+
+  svg {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: min(640px, 92vw);
+    height: 100px;
+    overflow: visible;
+  }
+
+  &__stem,
+  &__twig,
+  &__envelope path,
+  &__envelope rect {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &__stem {
+    stroke-width: 1.15;
+    opacity: 0.82;
+  }
+
+  &--branch svg {
+    transform-origin: 50% 50%;
+    animation: connector-branch-sway 5.5s ease-in-out infinite;
+  }
+
+  &__twig {
+    stroke-width: 1.1;
+    opacity: 0.75;
+  }
+
+  &__leaf {
+    fill: rgba(118, 157, 125, 0.72);
+    stroke: rgba(81, 125, 92, 0.45);
+    stroke-width: 0.8;
+  }
+
+  &__leaf--soft {
+    fill: rgba(171, 190, 132, 0.62);
+  }
+
+  &__flower {
+    fill: rgba(242, 166, 179, 0.78);
+    stroke: rgba(200, 109, 125, 0.45);
+    stroke-width: 0.7;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: connector-flower-sway 4.2s ease-in-out infinite;
+  }
+
+  &__flower--first {
+    animation-delay: -1.2s;
+  }
+
+  &__flower--second {
+    fill: rgba(255, 211, 183, 0.95);
+    animation-delay: -2.7s;
+  }
+
+  &__flower-center,
+  &__seal {
+    fill: #d69172;
+    stroke: none;
+  }
+
+  &__envelope {
+    fill: rgba(255, 247, 242, 0.82);
+    stroke-width: 1.2;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: connector-letter-float 4.8s ease-in-out infinite;
+  }
+
+  &__envelope-flap {
+    transform-box: fill-box;
+    transform-origin: top center;
+    animation: connector-letter-flap 4.8s ease-in-out infinite;
+  }
+
+  &__seal {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: connector-seal-pulse 4.8s ease-in-out infinite;
+  }
+}
+
+@keyframes connector-branch-sway {
+  0%,
+  100% {
+    transform: rotate(-1.2deg) translateX(-1px);
+  }
+
+  50% {
+    transform: rotate(1.2deg) translateX(1px);
+  }
+}
+
+@keyframes connector-flower-sway {
+  0%,
+  100% {
+    transform: rotate(-3deg) scale(0.96);
+  }
+
+  50% {
+    transform: rotate(3deg) scale(1.04);
+  }
+}
+
+@keyframes connector-letter-float {
+  0%,
+  100% {
+    transform: translateY(2px) rotate(-1deg);
+  }
+
+  50% {
+    transform: translateY(-3px) rotate(1deg);
+  }
+}
+
+@keyframes connector-letter-flap {
+  0%,
+  72%,
+  100% {
+    opacity: 1;
+    transform: rotateX(0deg);
+  }
+
+  80%,
+  90% {
+    opacity: 0.72;
+    transform: rotateX(18deg);
+  }
+}
+
+@keyframes connector-seal-pulse {
+  0%,
+  72%,
+  100% {
+    transform: scale(1);
+  }
+
+  82%,
+  90% {
+    transform: scale(1.18);
+  }
+}
+
+@media (max-width: 600px) {
+  .section-connector {
+    height: 68px;
+    margin: -34px 0;
+
+    svg {
+      width: 110vw;
+      height: 76px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-connector svg,
+  .section-connector__flower,
+  .section-connector__envelope,
+  .section-connector__envelope-flap,
+  .section-connector__seal {
+    animation: none;
+  }
+}
+
 /* FLOATING */
 
 .floating-hearts {

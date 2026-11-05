@@ -464,7 +464,20 @@ export default function CatchHeartGame() {
                 </div>
 
                 {/* Game Arena */}
-                <div className="catch-heart-game__arena">
+                <motion.div
+                    className="catch-heart-game__arena"
+                    initial={
+                        reduceMotion
+                            ? false
+                            : { opacity: 0, y: 35, scale: 0.96 }
+                    }
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{
+                        duration: 1,
+                        ease: [0.22, 1, 0.36, 1],
+                    }}
+                >
                     <div
                         className="catch-heart-game__decorations"
                         aria-hidden="true"
@@ -700,7 +713,7 @@ export default function CatchHeartGame() {
                             </motion.div>
                         )}
                     </AnimatePresence>
-                </div>
+                </motion.div>
 
                 <p className="catch-heart-game__footer">
                     Một trò chơi nhỏ, một niềm vui xinh xắn ✧

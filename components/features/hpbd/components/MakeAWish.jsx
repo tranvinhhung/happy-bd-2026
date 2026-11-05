@@ -285,10 +285,24 @@ export default function MakeAWish() {
                     </p>
                 </motion.div>
 
-                <div
+                <motion.div
                     className={`make-wish__sky ${isSkyVisible ? "is-visible" : ""}`}
                     ref={skyRef}
                     aria-label="Bầu trời những ngôi sao điều ước"
+                    initial={
+                        reduceMotion
+                            ? false
+                            : { opacity: 0, y: 35, scale: 0.96 }
+                    }
+                    animate={
+                        isSkyVisible
+                            ? { opacity: 1, y: 0, scale: 1 }
+                            : undefined
+                    }
+                    transition={{
+                        duration: 1,
+                        ease: [0.22, 1, 0.36, 1],
+                    }}
                 >
                     <div className="make-wish__moon" aria-hidden="true">
                         ☾
@@ -393,11 +407,12 @@ export default function MakeAWish() {
                                 key={selectedWish.id}
                                 className="make-wish__wish-detail"
                                 initial={
-                                    reduceMotion ? false : { opacity: 0, y: 15, scale: 0.96 }
+                                    { opacity: 0, y: 15, scale: 0.96 }
                                 }
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, y: 8 }}
-                                transition={{ duration: 0.25 }}
+                                transition={{ duration: 0.5 }}
+                                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                                viewport={{ once: true, amount: 0.2 }}
                                 role="status"
                             >
                                 <button
@@ -441,7 +456,7 @@ export default function MakeAWish() {
                             </motion.div>
                         )}
                     </AnimatePresence>
-                </div>
+                </motion.div>
 
                 <AnimatePresence mode="wait">
                     {isWishLimitReached ? (
@@ -449,7 +464,8 @@ export default function MakeAWish() {
                             key="wish-completed"
                             className="make-wish__card make-wish__completed"
                             initial={{ opacity: 0, y: 20, scale: 0.96 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                            viewport={{ once: true, amount: 0.2 }}
                             exit={{ opacity: 0, y: -15 }}
                             transition={{ duration: 0.5 }}
                         >
@@ -478,7 +494,8 @@ export default function MakeAWish() {
                             key="wish-form"
                             className="make-wish__card"
                             initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.2 }}
                             exit={{ opacity: 0, y: -15 }}
                             transition={{ duration: 0.4 }}
                         >

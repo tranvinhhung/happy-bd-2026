@@ -295,35 +295,51 @@ const birthday =
             transition={{ duration: 1 }}
           >
             <Hero />
+            
+            <SectionConnector variant="letter" />
             <BirthdayCountdown birthday={birthday} />
 
             {/* <Memories /> */}
 
+            <SectionConnector variant="flower" />
             <LoveUniverse />
 
+            <SectionConnector variant="branch" />
             <PolaroidAlbum onMemoryAudioChange={handleMemoryAudioChange} />
 
+            <SectionConnector variant="letter" />
             <Timeline />
 
+            <SectionConnector variant="flower" />
             <ScratchReveal />
 
+            <SectionConnector variant="branch" />
             <LoveLetter />
 
+            <SectionConnector variant="letter" />
             <ThingsILove />
 
             {/* <Promises /> */}
+            <SectionConnector variant="flower" />
             <NewPromises data={data} />
 
             {/* <BirthdayWish /> */}
+            <SectionConnector variant="branch" />
             <NewBirthdayWish data={data} />
 
+            <SectionConnector variant="flower" />
             <CatchHeartGame />
 
+            <SectionConnector variant="letter" />
             <LoveGacha />
 
+            <SectionConnector variant="branch" />
             <MakeAWish />
+
+            <SectionConnector variant="flower" />
             <LoveRoom3D />
 
+            <SectionConnector variant="letter" />
             <Ending />
           </motion.div>
         )}
@@ -1397,5 +1413,68 @@ function SectionTitle({ small, title, subtitle, light = false }) {
 
       <p>{subtitle}</p>
     </header>
+  );
+}
+
+function SectionConnector({ variant = "flower" }) {
+  return (
+    <motion.div
+      className={`section-connector section-connector--${variant}`}
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.8 }}
+      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      aria-hidden="true"
+    >
+      <svg viewBox="0 0 640 100" role="presentation">
+        <path className="section-connector__stem" d="M25 51 C145 18 215 82 320 50 S495 18 615 51" />
+
+        {variant === "branch" && (
+          <>
+            <path className="section-connector__twig" d="M166 48 C172 27 187 21 203 13" />
+            <path className="section-connector__twig" d="M474 52 C468 73 453 80 437 87" />
+            <ellipse className="section-connector__leaf" cx="195" cy="18" rx="12" ry="5" transform="rotate(-28 195 18)" />
+            <ellipse className="section-connector__leaf" cx="445" cy="82" rx="12" ry="5" transform="rotate(-28 445 82)" />
+            <ellipse className="section-connector__leaf section-connector__leaf--soft" cx="210" cy="29" rx="10" ry="4" transform="rotate(32 210 29)" />
+            <ellipse className="section-connector__leaf section-connector__leaf--soft" cx="430" cy="70" rx="10" ry="4" transform="rotate(32 430 70)" />
+          </>
+        )}
+
+        {variant === "flower" && (
+          <>
+            <g transform="translate(178 25)">
+              <g className="section-connector__flower section-connector__flower--first">
+                <circle cx="0" cy="-8" r="7" />
+                <circle cx="8" cy="0" r="7" />
+                <circle cx="0" cy="8" r="7" />
+                <circle cx="-8" cy="0" r="7" />
+                <circle className="section-connector__flower-center" cx="0" cy="0" r="4" />
+              </g>
+            </g>
+            <g transform="translate(462 73)">
+              <g className="section-connector__flower section-connector__flower--second">
+                <circle cx="0" cy="-7" r="6" />
+                <circle cx="7" cy="0" r="6" />
+                <circle cx="0" cy="7" r="6" />
+                <circle cx="-7" cy="0" r="6" />
+                <circle className="section-connector__flower-center" cx="0" cy="0" r="3.5" />
+              </g>
+            </g>
+          </>
+        )}
+
+        {variant === "letter" && (
+          <g transform="translate(292 29)">
+            <g className="section-connector__envelope">
+              <rect x="0" y="0" width="56" height="40" rx="5" />
+              <path className="section-connector__envelope-flap" d="M2 5 L28 25 L54 5" />
+              <path d="M2 36 L20 20" />
+              <path d="M54 36 L36 20" />
+              <path className="section-connector__seal" d="M28 34 l3 3 l-3 3 l-3-3 z" />
+            </g>
+          </g>
+        )}
+      </svg>
+    </motion.div>
   );
 }

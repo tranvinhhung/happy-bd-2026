@@ -567,15 +567,49 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
 
                 <div className={styles.vignette} />
 
-                <div className={styles.topNote}>
+                <motion.div
+                    className={styles.topNote}
+                    initial={
+                        reduceMotion
+                            ? false
+                            : { opacity: 0, y: -18, rotate: -9 }
+                    }
+                    animate={
+                        isSectionInView
+                            ? { opacity: 1, y: 0, rotate: -9 }
+                            : undefined
+                    }
+                    transition={{
+                        duration: 0.9,
+                        delay: 0.25,
+                        ease: [0.22, 1, 0.36, 1],
+                    }}
+                >
                     Our Love ♡<span>A universe of memories</span>
-                </div>
+                </motion.div>
 
-                <div className={styles.rightNote}>
+                <motion.div
+                    className={styles.rightNote}
+                    initial={
+                        reduceMotion
+                            ? false
+                            : { opacity: 0, x: 24, rotate: -5 }
+                    }
+                    animate={
+                        isSectionInView
+                            ? { opacity: 1, x: 0, rotate: -5 }
+                            : undefined
+                    }
+                    transition={{
+                        duration: 0.9,
+                        delay: 0.4,
+                        ease: [0.22, 1, 0.36, 1],
+                    }}
+                >
                     Different moments
                     <span>Same love</span>
                     <span>Forever us ♡</span>
-                </div>
+                </motion.div>
 
                 <div className={styles.memories}>
                     {memories.map((memory, index) => (
@@ -635,7 +669,24 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
                     ))}
                 </div>
 
-                <div className={styles.leftQuote}>
+                <motion.div
+                    className={styles.leftQuote}
+                    initial={
+                        reduceMotion
+                            ? false
+                            : { opacity: 0, x: -28, y: 16, rotate: -10 }
+                    }
+                    animate={
+                        isSectionInView
+                            ? { opacity: 1, x: 0, y: 0, rotate: -10 }
+                            : undefined
+                    }
+                    transition={{
+                        duration: 1,
+                        delay: 0.55,
+                        ease: [0.22, 1, 0.36, 1],
+                    }}
+                >
                     Every moment
                     <br />
                     with you
@@ -643,7 +694,7 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
                     is a star in
                     <br />
                     my universe ♡
-                </div>
+                </motion.div>
 
                 <div className={styles.bottomQuote}>
                     Cảm ơn vì đã luôn ở đây,
