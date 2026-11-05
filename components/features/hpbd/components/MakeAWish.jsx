@@ -492,13 +492,22 @@ export default function MakeAWish() {
                     ) : (
                         <motion.div
                             key="wish-form"
-                            className="make-wish__card"
+                            className="make-wish__card make-wish__card--gift"
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, amount: 0.2 }}
                             exit={{ opacity: 0, y: -15 }}
                             transition={{ duration: 0.4 }}
                         >
+                            <span className="make-wish__gift-bow" aria-hidden="true">
+                                <span />
+                                <span />
+                            </span>
+
+                            <span className="make-wish__gift-tag" aria-hidden="true">
+                                make a wish
+                            </span>
+
                             <span className="make-wish__card-icon">♡</span>
 
                             <h3>Điều ước của em là gì?</h3>
