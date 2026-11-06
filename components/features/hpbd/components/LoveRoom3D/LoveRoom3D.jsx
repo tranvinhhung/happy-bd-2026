@@ -48,6 +48,7 @@ export default function LoveRoom3D() {
   const cinematicIntervalRef = useRef(null);
   const cinematicMessageTimerRef = useRef(null);
   const sectionRef = useRef(null);
+  const sceneWrapperRef = useRef(null);
   const reduceMotion = useReducedMotion();
 
   const currentStory = ROOM_STORY[chapter];
@@ -194,6 +195,14 @@ export default function LoveRoom3D() {
     once: true,
     amount: 0.1,
   });
+  // Bắt đầu tải bundle 3D và các model trước khi người xem cuộn tới phòng.
+  const isSceneNear = useInView(sceneWrapperRef, {
+    once: true,
+    margin: "1200px 0px",
+  });
+  const isSceneVisible = useInView(sceneWrapperRef, {
+    amount: 0.05,
+  });
 
   return (
     <section ref={sectionRef} className={styles.section} id="our-little-world">
@@ -244,9 +253,10 @@ export default function LoveRoom3D() {
         ))}
       </div>
 
-      <div className={styles.sceneWrapper} style={{ position: "relative" }}>
-        {isInView ? (
+      <div ref={sceneWrapperRef} className={styles.sceneWrapper} style={{ position: "relative" }}>
+        {isSceneNear ? (
           <RoomScene
+            active={isSceneVisible}
             isNight={isNight}
             isHugging={isHugging}
             cameraTarget={cameraTarget}

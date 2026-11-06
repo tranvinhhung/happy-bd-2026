@@ -95,6 +95,7 @@ function RoomLighting({ isNight, cinematicActive }) {
 }
 
 export default function RoomScene({
+  active = true,
   isNight,
   isHugging,
   cameraTarget,
@@ -115,6 +116,7 @@ export default function RoomScene({
 
   return (
     <Canvas
+      frameloop={active ? "always" : "never"}
       shadows
       dpr={[1, 1.25]}
       camera={{
