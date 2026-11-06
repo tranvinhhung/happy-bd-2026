@@ -7,6 +7,7 @@ import { useFrame } from "@react-three/fiber";
 export default function QuestGlow({
   position = [0, 0, 0],
   active = false,
+  emphasized = false,
 }) {
   const meshRef = useRef();
 
@@ -19,7 +20,7 @@ export default function QuestGlow({
       position[1] + Math.sin(time * 2) * 0.1;
 
     meshRef.current.scale.setScalar(
-      1 + Math.sin(time * 3) * 0.12
+      (emphasized ? 1.7 : 1) + Math.sin(time * 3) * (emphasized ? 0.25 : 0.12)
     );
   });
 
@@ -29,8 +30,8 @@ export default function QuestGlow({
     <group>
       <pointLight
         position={position}
-        color="#ffb9d8"
-        intensity={2.5}
+        color={emphasized ? "#ffe9a8" : "#ffb9d8"}
+        intensity={emphasized ? 4.5 : 2.5}
         distance={2}
       />
 
@@ -40,7 +41,7 @@ export default function QuestGlow({
       >
         <sphereGeometry args={[0.12, 12, 12]} />
         <meshBasicMaterial
-          color="#ffd8e8"
+          color={emphasized ? "#fff0b5" : "#ffd8e8"}
           transparent
           opacity={0.85}
         />

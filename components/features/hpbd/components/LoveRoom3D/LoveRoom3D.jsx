@@ -39,6 +39,7 @@ export default function LoveRoom3D() {
   const [cornerMessage, setCornerMessage] = useState(null);
   const [coupleAction, setCoupleAction] = useState(null);
   const [coupleActionVersion, setCoupleActionVersion] = useState(0);
+  const [hintedChapter, setHintedChapter] = useState(null);
 
   // Cinematic
   const [cinematicActive, setCinematicActive] = useState(false);
@@ -144,6 +145,7 @@ export default function LoveRoom3D() {
 
       setCameraTarget(type);
       setCameraVersion((value) => value + 1);
+      setHintedChapter(null);
       setActiveStory(expected);
     },
     [chapter, completed, activeStory, cinematicActive],
@@ -156,7 +158,17 @@ export default function LoveRoom3D() {
     setCelebrate(true);
   };
 
+  const showHint = () => {
+    if (!currentStory || activeStory || completed || cinematicActive) return;
+
+    setHintedChapter(chapter);
+    setCameraTarget(currentStory.id);
+    // Cho phép bấm lại sau khi người xem tự xoay camera.
+    setCameraVersion((value) => value + 1);
+  };
+
   const continueStory = () => {
+    setHintedChapter(null);
     if (chapter === ROOM_STORY.length - 1) {
       setActiveStory(null);
       setIsNight(true);
@@ -176,6 +188,8 @@ export default function LoveRoom3D() {
 
   const resetStory = () => {
     closeCinematic();
+
+    setHintedChapter(null);
 
     setChapter(0);
     setActiveStory(null);
@@ -257,6 +271,7 @@ export default function LoveRoom3D() {
         {isSceneNear ? (
           <RoomScene
             active={isSceneVisible}
+            hintedObject={hintedChapter === chapter ? currentStory?.id : null}
             isNight={isNight}
             isHugging={isHugging}
             cameraTarget={cameraTarget}
@@ -276,6 +291,23 @@ export default function LoveRoom3D() {
         ) : (
           <div className={styles.loading}>
             Cuộn xuống để mở cánh cửa vào thế giới nhỏ của chúng mình... ♡
+          </div>
+        )}
+
+        {!completed && !cinematicActive && !activeStory && (
+          <button
+            type="button"
+            className={styles.hintButton}
+            onClick={showHint}
+            aria-label={`Chỉ vị trí ${currentStory.title}`}
+          >
+            ✨ Gợi ý
+          </button>
+        )}
+
+        {hintedChapter === chapter && !activeStory && (
+          <div className={styles.hintMessage} role="status">
+            Camera đang hướng tới vật cần tìm. Chạm vào điểm sáng nhé ♡
           </div>
         )}
 
