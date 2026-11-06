@@ -96,6 +96,7 @@ function RoomLighting({ isNight, cinematicActive }) {
 
 export default function RoomScene({
   active = true,
+  hintedObject = null,
   isNight,
   isHugging,
   cameraTarget,
@@ -189,21 +190,25 @@ export default function RoomScene({
 
         <QuestGlow
           active={activeObject === "photo"}
+          emphasized={hintedObject === "photo"}
           position={[-3.05, 2.85, -0.85]}
         />
 
         <QuestGlow
           active={activeObject === "gift"}
+          emphasized={hintedObject === "gift"}
           position={[2.25, 1.3, 2.25]}
         />
 
         <QuestGlow
           active={activeObject === "bed"}
+          emphasized={hintedObject === "bed"}
           position={[1.25, 1.55, -1.45]}
         />
 
         <QuestGlow
           active={activeObject === "couple"}
+          emphasized={hintedObject === "couple"}
           position={[0.2, 2.7, 1.15]}
         />
 
