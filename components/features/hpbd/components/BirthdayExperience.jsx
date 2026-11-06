@@ -136,7 +136,7 @@ const birthday =
       <audio
         ref={audioRef}
         src="/audio/beautiful_in_white.mp3"
-        preload="auto"
+        preload="none"
         loop
       />
 
@@ -509,7 +509,7 @@ function Timeline() {
               >
                 <span className="love-timeline__tape" />
 
-                <img src={image} alt={item.title} />
+                <img src={image} alt={item.title} loading="lazy" decoding="async" />
               </motion.div>
 
               {/* Tim nằm giữa timeline */}
