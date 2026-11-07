@@ -184,8 +184,8 @@ export default function Promises({ data }) {
 
   return (
     <section className="promises-section section-dark" id="our-promises">
-      <div className="promises-glow promises-glow--left" />
-      <div className="promises-glow promises-glow--right" />
+      <div className="promises-glow promises-glow--left" data-parallax="decoration" />
+      <div className="promises-glow promises-glow--right" data-parallax="decoration" />
 
       <FloatingHearts />
 
@@ -200,7 +200,7 @@ export default function Promises({ data }) {
         </Reveal>
 
         <motion.p
-          className="promises-intro"
+          className="promises-intro" data-parallax="text"
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -276,7 +276,7 @@ export default function Promises({ data }) {
         </AnimatePresence>
 
         <motion.div
-          className="promises-photo-area"
+          className="promises-photo-area" data-parallax="media"
           initial={{
             opacity: 0,
             y: 70,
@@ -357,7 +357,7 @@ export default function Promises({ data }) {
         </motion.div>
 
         <motion.div
-          className="promises-ending"
+          className="promises-ending" data-parallax="text"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

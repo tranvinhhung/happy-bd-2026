@@ -8,8 +8,10 @@ import {
   useReducedMotion,
 } from "framer-motion";
 import { birthdayData as data } from "@/components/features/hpbd/utils/data/birthday";
-import IntroTitle from "./IntroTitle..jsx";
+import GiftIntro from "./GiftIntro.jsx";
 import BirthdayAngel from "./BirthdayAngel.jsx";
+import BirthdaySmoothScroll from "./BirthdaySmoothScroll.jsx";
+import SectionParallax from "./SectionParallax.jsx";
 import ScratchReveal from "./ScratchReveal.jsx";
 import PolaroidAlbum from "./PolaroidAlbum.jsx";
 import MakeAWish from "./MakeAWish.jsx";
@@ -17,7 +19,8 @@ import BirthdayCountdown from "./BirthdayCountdown.jsx";
 import CatchHeartGame from "./CatchHeartGame.jsx";
 import LoveGacha from "./LoveGacha.jsx";
 import WaveText from "./WaveText.jsx";
-import HandwritingLetter from "./HandwritingLetter.jsx";
+import LoveLetter from "./LoveLetter.jsx";
+import Ending from "./Ending.jsx";
 import LoveUniverse from "@/components/features/hpbd/components/LoveUniverse";
 import NewPromises from "./Promises.jsx";
 import NewBirthdayWish from "./BirthdayWish.jsx";
@@ -88,10 +91,9 @@ const Reveal = ({ children, className = "" }) => (
 );
 
 export default function BirthdayExperience() {
-  const [giftOpened, setGiftOpened] = useState(false);
+  const experienceRef = useRef(null);
   const [started, setStarted] = useState(false);
   const audioRef = useRef(null);
-  const timeoutRef = useRef(null);
 
   const [testBirthday] = useState(() =>
     new Date(Date.now() + 1 * 60 * 1000).toISOString(),
@@ -103,20 +105,17 @@ export default function BirthdayExperience() {
       : "2026-12-19T00:00:00+07:00";
 
   const openGift = () => {
-    setGiftOpened(true);
-
-    if (audioRef.current) {
-      audioRef.current.volume = 0.3;
+    if (audioRef.current && process.env.NODE_ENV !== "development") {
+      audioRef.current.volume =  0.3;
       audioRef.current.currentTime = 0;
       audioRef.current.play().catch((error) => {
         console.warn("Không thể phát nhạc:", error);
       });
     }
 
-    timeoutRef.current = setTimeout(() => {
-      setStarted(true);
-    }, 1300);
   };
+
+  const startExperience = useCallback(() => setStarted(true), []);
 
   const handleMemoryAudioChange = useCallback((isPlaying) => {
     if (!audioRef.current) return;
@@ -125,14 +124,15 @@ export default function BirthdayExperience() {
   }, []);
 
   useEffect(() => {
+    const audio = audioRef.current;
     return () => {
-      clearTimeout(timeoutRef.current);
-      audioRef.current?.pause();
+      audio?.pause();
     };
   }, []);
 
   return (
-    <main className="birthday">
+    <main ref={experienceRef} className="birthday">
+      <BirthdaySmoothScroll enabled={started} />
       <audio
         ref={audioRef}
         src="/audio/beautiful_in_white.mp3"
@@ -144,149 +144,12 @@ export default function BirthdayExperience() {
 
       <AnimatePresence mode="wait">
         {!started ? (
-          <motion.section
+          <GiftIntro
             key="intro"
-            className="intro"
-            exit={{
-              opacity: 0,
-              scale: 1.08,
-              filter: "blur(15px)",
-            }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="intro__glow" />
-
-            <motion.div
-              className="intro__content"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1 }}
-            >
-              <span className="eyebrow">A little surprise for you</span>
-
-              <IntroTitle />
-
-              <h2>{data.intro.subtitle}</h2>
-
-              <p>{data.intro.description}</p>
-
-              <motion.div
-                className={`gift ${giftOpened ? "gift--opened" : ""}`}
-                animate={
-                  giftOpened
-                    ? {
-                        x: 0,
-                        y: 0,
-                        rotate: 0,
-                        scale: 1,
-                      }
-                    : {
-                        x: [0, 0, -3, 3, -3, 3, -2, 2, 0, 0],
-                        y: [0, 0, -2, 0, -2, 0, 0, 0, 0, 0],
-                        rotate: [0, 0, -2, 2, -2, 2, -1, 1, 0, 0],
-                        scale: [1, 1, 1.02, 1.02, 1.02, 1.02, 1, 1, 1, 1],
-                      }
-                }
-                transition={
-                  giftOpened
-                    ? {
-                        duration: 0.3,
-                      }
-                    : {
-                        duration: 3.8,
-                        repeat: Infinity,
-                        repeatDelay: 2.5,
-                        ease: "easeInOut",
-                      }
-                }
-              >
-                <motion.div
-                  className="gift__lid"
-                  animate={
-                    giftOpened
-                      ? {
-                          y: -100,
-                          rotate: -12,
-                          opacity: 0,
-                        }
-                      : {}
-                  }
-                  transition={{
-                    duration: 0.7,
-                    ease: "easeOut",
-                  }}
-                >
-                  <div className="gift__ribbon-vertical" />
-
-                  <motion.div
-                    className="gift__bow"
-                    animate={
-                      giftOpened
-                        ? {}
-                        : {
-                            scale: [1, 1, 1.08, 0.97, 1.06, 1],
-                            rotate: [0, 0, -3, 3, -2, 0],
-                          }
-                    }
-                    transition={{
-                      duration: 3.8,
-                      repeat: Infinity,
-                      repeatDelay: 2.5,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <span />
-                    <span />
-                  </motion.div>
-                </motion.div>
-
-                <div className="gift__box">
-                  <div className="gift__ribbon-vertical" />
-
-                  <AnimatePresence>
-                    {giftOpened && (
-                      <>
-                        {[0, 1, 2, 3, 4, 5].map((item) => (
-                          <motion.span
-                            key={item}
-                            className="gift__heart"
-                            initial={{
-                              x: 0,
-                              y: 0,
-                              opacity: 0,
-                              scale: 0,
-                            }}
-                            animate={{
-                              x: (item - 2.5) * 30,
-                              y: -100 - (item % 3) * 40,
-                              opacity: [0, 1, 0],
-                              scale: [0, 1.3, 0.8],
-                            }}
-                            transition={{
-                              duration: 1.3,
-                              delay: item * 0.08,
-                            }}
-                          >
-                            ♥
-                          </motion.span>
-                        ))}
-                      </>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </motion.div>
-
-              <motion.button
-                className="love-button"
-                onClick={openGift}
-                disabled={giftOpened}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {giftOpened ? "Đang mở món quà..." : "Mở món quà ♡"}
-              </motion.button>
-            </motion.div>
-          </motion.section>
+            intro={data.intro}
+            onOpen={openGift}
+            onComplete={startExperience}
+          />
         ) : (
           <motion.div
             key="content"
@@ -294,6 +157,7 @@ export default function BirthdayExperience() {
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
+            <SectionParallax rootRef={experienceRef} />
             <Hero />
             
             <SectionConnector variant="letter" />
@@ -314,7 +178,7 @@ export default function BirthdayExperience() {
             <ScratchReveal />
 
             <SectionConnector variant="branch" />
-            <LoveLetter />
+            <LoveLetter paragraphs={data.letter} />
 
             <SectionConnector variant="letter" />
             <ThingsILove />
@@ -349,33 +213,130 @@ export default function BirthdayExperience() {
 }
 
 function Hero() {
-  return (
-    <section className="hero section-dark">
-      <div className="stars" />
+  const heroRef = useRef(null);
 
-      <Reveal className="hero__content">
+  useEffect(() => {
+    let disposed = false;
+    let media;
+
+    const setup = async () => {
+      const photo = heroRef.current?.querySelector(".hero__couple img");
+      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+        // Keep font/image loading from changing the layout during the entrance.
+        document.fonts.ready,
+        photo?.decode().catch(() => {}),
+      ]);
+      if (disposed || !heroRef.current) return;
+
+      gsap.registerPlugin(ScrollTrigger);
+      media = gsap.matchMedia();
+      media.add(
+        {
+          motion: "(prefers-reduced-motion: no-preference)",
+          desktop: "(min-width: 768px)",
+        },
+        (context) => {
+          if (!context.conditions.motion) return;
+
+          const select = gsap.utils.selector(heroRef.current);
+          const strength = context.conditions.desktop ? 0.75 : 0.45;
+
+          // Fixed overscan covers the frame while the photo translates; no zoom tween.
+          gsap.set(photo, {
+            scale: context.conditions.desktop ? 1.22 : 1.18,
+            force3D: true,
+          });
+
+          gsap.timeline({ defaults: { ease: "power3.out" } })
+            .from(select(".hero__stars"), { opacity: 0, duration: 1.4 }, 0)
+            .from(select(".hero__date"), { opacity: 0, y: 16, duration: 0.7 }, 0.15)
+            .from(select(".hero__title-char"), {
+              opacity: 0, yPercent: 55, rotation: 6, stagger: 0.045, duration: 0.9,
+            }, 0.3)
+            .from(select(".hero__heart"), {
+              opacity: 0, scale: 0.4, duration: 0.7, ease: "back.out(1.6)",
+            }, 0.8)
+            .from(select(".hero__description"), { opacity: 0, y: 18, duration: 0.8 }, 0.95)
+            .from(select(".hero__couple"), {
+              opacity: 0, y: 24, duration: 1, force3D: true,
+            }, 1.05)
+            .from(select(".scroll-text"), { opacity: 0, duration: 0.8 }, 1.55);
+
+          gsap.timeline({
+            defaults: { ease: "none", duration: 1 },
+            scrollTrigger: {
+              trigger: heroRef.current,
+              start: "top top",
+              end: "bottom top",
+              scrub: 1.2,
+            },
+          })
+            .to(select(".hero__stars"), { y: 160 * strength, force3D: true }, 0)
+            .to(select(".hero__stars span:nth-child(3n)"), { y: 70 * strength }, 0)
+            .to(select(".hero__angel"), { y: 75 * strength, force3D: true }, 0)
+            .to(select(".hero__heart"), { y: -45 * strength, force3D: true }, 0)
+            .fromTo(photo,
+              { y: context.conditions.desktop ? -12 : -8 },
+              { y: context.conditions.desktop ? 12 : 8 }, 0,
+            );
+        },
+        heroRef,
+      );
+
+    };
+
+    setup().catch((error) => {
+      media?.revert();
+      console.warn("Không thể khởi tạo hiệu ứng Hero:", error);
+    });
+
+    return () => {
+      disposed = true;
+      media?.revert();
+    };
+  }, []);
+
+  return (
+    <section ref={heroRef} className="hero section-dark">
+      <div className="hero__stars" aria-hidden="true">
+        {stars.map((star, index) => (
+          <span key={index} style={{ left: star.left, top: star.top }} />
+        ))}
+      </div>
+
+      <div className="hero__content">
         {/* ANGEL */}
-        <BirthdayAngel />
+        <div className="hero__angel">
+          <BirthdayAngel />
+        </div>
         {/* <FlyingCupid /> */}
 
-        <span className="eyebrow">19 · 12 · 2026</span>
+        <span className="eyebrow hero__date">19 · 12 · 2026</span>
 
-        <h1>
-          Happy
-          <br />
-          Birthday!
+        <h1 aria-label="Happy Birthday!">
+          {["Happy", "Birthday!"].map((word) => (
+            <span className="hero__title-line" key={word} aria-hidden="true">
+              {Array.from(word).map((character, index) => (
+                <span className="hero__title-char" key={`${word}-${index}`}>
+                  {character}
+                </span>
+              ))}
+            </span>
+          ))}
         </h1>
 
         <div className="hero__heart">♡</div>
 
-        <p>{data.hero.description}</p>
+        <p className="hero__description">{data.hero.description}</p>
 
         <div className="hero__couple">
           <img src="/images/bg.jpg" alt="Our memory" />
         </div>
 
         <span className="scroll-text">Cuộn xuống để xem món quà ↓</span>
-      </Reveal>
+      </div>
     </section>
   );
 }
@@ -431,13 +392,158 @@ function Memories() {
   );
 }
 
+const LOVE_TIMELINE_PATH = "M50 0 C25 70,25 120,50 175 C75 230,75 280,50 350 C25 420,25 470,50 535 C75 600,75 650,50 720";
+
 function Timeline() {
+  const sectionRef = useRef(null);
+  const isNear = useInView(sectionRef, { once: true, margin: "600px 0px" });
+
+  useEffect(() => {
+    if (!isNear) return;
+
+    let disposed = false;
+    let media;
+
+    const setup = async () => {
+      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+      ]);
+
+      if (disposed || !sectionRef.current) return;
+
+      gsap.registerPlugin(ScrollTrigger);
+      media = gsap.matchMedia();
+      media.add("(prefers-reduced-motion: no-preference)", () => {
+        const section = sectionRef.current;
+        const content = section.querySelector(".love-timeline__content");
+        const svg = section.querySelector(".love-timeline__path");
+        const path = section.querySelector(".love-timeline__progress-path");
+        const traveler = section.querySelector(".love-timeline__traveler");
+        const items = [...section.querySelectorAll(".love-timeline__item")];
+        const length = path.getTotalLength();
+        const journey = { progress: 0 };
+        let geometry;
+
+        gsap.set(traveler, { xPercent: -50, yPercent: -50, opacity: 1 });
+        const setX = gsap.quickSetter(traveler, "x", "px");
+        const setY = gsap.quickSetter(traveler, "y", "px");
+
+        const updateJourney = () => {
+          if (!geometry) return;
+          const point = path.getPointAtLength(length * journey.progress);
+          const y = geometry.top + point.y * geometry.scaleY;
+          setX(geometry.left + point.x * geometry.scaleX);
+          setY(y);
+          items.forEach((item, index) => {
+            item.classList.toggle("is-reached", y >= geometry.milestones[index]);
+          });
+        };
+
+        // Chỉ đo lại bố cục khi refresh/resize, không đọc layout mỗi khung hình.
+        const measureJourney = () => {
+          const svgRect = svg.getBoundingClientRect();
+          const contentRect = content.getBoundingClientRect();
+          geometry = {
+            left: svgRect.left - contentRect.left,
+            top: svgRect.top - contentRect.top,
+            scaleX: svgRect.width / 100,
+            scaleY: svgRect.height / 720,
+            milestones: items.map((item) => item.offsetTop + item.offsetHeight / 2),
+          };
+          updateJourney();
+        };
+
+        measureJourney();
+
+        gsap.timeline({
+          defaults: { duration: 1, ease: "none" },
+          scrollTrigger: {
+            trigger: content,
+            start: "top 70%",
+            end: "bottom 60%",
+            scrub: 0.45,
+            invalidateOnRefresh: true,
+            onRefresh: measureJourney,
+          },
+        })
+          .fromTo(path,
+            { strokeDasharray: length, strokeDashoffset: length },
+            { strokeDashoffset: 0 }, 0,
+          )
+          .to(journey, { progress: 1, onUpdate: updateJourney }, 0);
+
+        items.forEach((item, index) => {
+          const photo = item.querySelector(".love-timeline__photo");
+          const heart = item.querySelector(".love-timeline__heart");
+          const text = item.querySelector(".love-timeline__text");
+
+          gsap.timeline({
+            defaults: { ease: "power2.out" },
+            scrollTrigger: {
+              trigger: item,
+              start: "top 85%",
+              end: "center 60%",
+              scrub: 0.45,
+              invalidateOnRefresh: true,
+            },
+          })
+            .from(photo, { opacity: 0, x: index % 2 ? 24 : -24, y: 24, rotation: index % 2 ? 6 : -6, scale: 0.94, duration: 0.6 })
+            .from(heart, { opacity: 0, scale: 0.3, duration: 0.35 }, 0.2)
+            .from(text, { opacity: 0, y: 18, duration: 0.5 }, 0.35);
+
+          gsap.fromTo(photo.querySelector("img"),
+            { yPercent: -3, scale: 1.1 },
+            {
+              yPercent: 3,
+              scale: 1.1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: item,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.6,
+              },
+            },
+          );
+        });
+
+        gsap.from(".love-timeline__epilogue", {
+          opacity: 0,
+          y: 20,
+          scrollTrigger: {
+            trigger: ".love-timeline__epilogue",
+            start: "top 95%",
+            end: "top 75%",
+            scrub: 0.45,
+          },
+        });
+
+        return () => items.forEach((item) => item.classList.remove("is-reached"));
+      }, sectionRef);
+
+      document.fonts.ready.then(() => {
+        if (!disposed) ScrollTrigger.refresh();
+      });
+    };
+
+    setup().catch((error) => {
+      media?.revert();
+      console.warn("Không thể khởi tạo hiệu ứng dòng thời gian:", error);
+    });
+
+    return () => {
+      disposed = true;
+      media?.revert();
+    };
+  }, [isNear]);
+
   return (
-    <section className="love-timeline">
+    <section ref={sectionRef} className="love-timeline">
       <Reveal className="love-timeline__header">
         <span>OUR STORY</span>
 
-        <h2>Hành trình yêu xa của chúng mình ♡</h2>
+        <h2 data-parallax="heading">Hành trình yêu xa của chúng mình ♡</h2>
       </Reveal>
 
       <div className="love-timeline__content">
@@ -448,87 +554,59 @@ function Timeline() {
           preserveAspectRatio="none"
           aria-hidden="true"
         >
-          <motion.path
-            d="
-              M50 0
-              C25 70, 25 120, 50 175
-              C75 230, 75 280, 50 350
-              C25 420, 25 470, 50 535
-              C75 600, 75 650, 50 720
-            "
+          <path
+            className="love-timeline__track"
+            d={LOVE_TIMELINE_PATH}
+            fill="none"
+            stroke="#edcbd2"
+            strokeWidth="1.2"
+            strokeDasharray="3 5"
+          />
+          <path
+            className="love-timeline__progress-path"
+            d={LOVE_TIMELINE_PATH}
             fill="none"
             stroke="#ec9eaa"
             strokeWidth="1.2"
             strokeLinecap="round"
-            initial={{ pathLength: 0 }}
-            whileInView={{ pathLength: 1 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 2.5,
-              ease: "easeInOut",
-            }}
           />
         </svg>
+
+        <span className="love-timeline__traveler" aria-hidden="true">♥</span>
 
         {data.timeline.map((item, index) => {
           const image =
             item.image || `/images/timelines/timeline-0${(index % 4) + 1}.jpg`;
 
           return (
-            <motion.article
+            <article
               key={`${item.title}-${index}`}
               className={`love-timeline__item ${
                 index % 2 === 0
                   ? "love-timeline__item--left"
                   : "love-timeline__item--right"
               }`}
-              initial={{
-                opacity: 0,
-                y: 50,
-              }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-              }}
-              viewport={{
-                once: true,
-                amount: 0.4,
-              }}
-              transition={{
-                duration: 0.7,
-                delay: index * 0.12,
-              }}
             >
               {/* Ảnh */}
-              <motion.div
+              <div
                 className="love-timeline__photo"
-                whileHover={{
-                  scale: 1.06,
-                  rotate: index % 2 === 0 ? -3 : 3,
-                }}
               >
                 <span className="love-timeline__tape" />
 
-                <img src={image} alt={item.title} loading="lazy" decoding="async" />
-              </motion.div>
+                <div className="love-timeline__image-window">
+                  <img src={image} alt={item.title} loading="lazy" decoding="async" />
+                </div>
+              </div>
 
               {/* Tim nằm giữa timeline */}
-              <motion.div
+              <div
                 className="love-timeline__heart"
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ once: true }}
-                transition={{
-                  delay: 0.25 + index * 0.12,
-                  type: "spring",
-                  stiffness: 200,
-                }}
               >
                 <img src="/heart.svg" alt="Heart" />
-              </motion.div>
+              </div>
 
               {/* Nội dung */}
-              <div className="love-timeline__text">
+              <div className="love-timeline__text" data-parallax="text">
                 <span className="love-timeline__number">
                   {String(index + 1).padStart(2, "0")}
                 </span>
@@ -538,9 +616,15 @@ function Timeline() {
                   <p>{item.description}</p>
                 </div>
               </div>
-            </motion.article>
+            </article>
           );
         })}
+      </div>
+
+      <div className="love-timeline__epilogue" data-parallax="text">
+        <span aria-hidden="true">✧ ♡ ✧</span>
+        <p>Dù gần hay xa, anh vẫn luôn hướng về em.</p>
+        <span>Câu chuyện tụi mình vẫn sẽ được viết tiếp ♡</span>
       </div>
 
       <motion.div
@@ -559,212 +643,90 @@ function Timeline() {
   );
 }
 
-const paragraphVariants = {
-  hidden: {
-    opacity: 0,
-    y: 25,
-    filter: "blur(3px)",
-  },
-
-  visible: (index) => ({
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-
-    transition: {
-      duration: 0.9,
-      delay: index * 0.18,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  }),
-};
-
-function LoveLetter() {
-  const [isWritingComplete, setIsWritingComplete] = useState(false);
-  return (
-    <section className="letter-section">
-      <motion.div
-        className="letter"
-        initial={{
-          opacity: 0,
-          y: 80,
-          rotate: -3,
-          scale: 0.94,
-        }}
-        whileInView={{
-          opacity: 1,
-          y: 0,
-          rotate: -1,
-          scale: 1,
-        }}
-        viewport={{
-          once: true,
-          amount: 0.15,
-        }}
-        transition={{
-          duration: 1.1,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-      >
-        {/* Ribbon */}
-        <motion.div
-          className="letter__ribbon"
-          initial={{
-            opacity: 0,
-            x: -80,
-            rotate: -25,
-          }}
-          whileInView={{
-            opacity: 1,
-            x: 0,
-            rotate: -10,
-          }}
-          viewport={{ once: true }}
-          transition={{
-            duration: 0.8,
-            delay: 0.4,
-          }}
-        />
-
-        {/* Small title */}
-        <motion.span
-          className="letter__small"
-          initial={{
-            opacity: 0,
-            letterSpacing: "10px",
-          }}
-          whileInView={{
-            opacity: 1,
-            letterSpacing: "4px",
-          }}
-          viewport={{ once: true }}
-          transition={{
-            duration: 1.2,
-            delay: 0.3,
-          }}
-        >
-          A letter for you
-        </motion.span>
-
-        {/* Heading */}
-        <motion.h2
-          initial={{
-            opacity: 0,
-            x: -30,
-          }}
-          whileInView={{
-            opacity: 1,
-            x: 0,
-          }}
-          viewport={{ once: true }}
-          transition={{
-            duration: 0.8,
-            delay: 0.45,
-          }}
-        >
-          Gửi em,
-        </motion.h2>
-
-        {/* Magic handwriting */}
-        <div className="letter__content">
-          <HandwritingLetter
-            paragraphs={data.letter}
-            speed={65}
-            onComplete={() => setIsWritingComplete(true)}
-          />
-        </div>
-
-        {/* Signature */}
-        <motion.div
-          className="letter__signature"
-          initial={{
-            opacity: 0,
-            y: 25,
-            filter: "blur(5px)",
-          }}
-          animate={
-            isWritingComplete
-              ? {
-                  opacity: 1,
-                  y: 0,
-                  filter: "blur(0px)",
-                }
-              : {
-                  opacity: 0,
-                  y: 25,
-                  filter: "blur(5px)",
-                }
-          }
-          transition={{
-            duration: 0.9,
-            delay: 0.35,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-        >
-          <motion.span
-            initial={{ opacity: 0, x: -15 }}
-            animate={
-              isWritingComplete ? { opacity: 1, x: 0 } : { opacity: 0, x: -15 }
-            }
-            transition={{
-              duration: 0.8,
-              delay: 0.65,
-            }}
-          >
-            Yêu em rất nhiều
-          </motion.span>
-
-          <motion.strong
-            initial={{
-              opacity: 0,
-              scale: 0,
-              rotate: -25,
-            }}
-            animate={
-              isWritingComplete
-                ? {
-                    opacity: 1,
-                    scale: 1,
-                    rotate: 0,
-                  }
-                : {
-                    opacity: 0,
-                    scale: 0,
-                    rotate: -25,
-                  }
-            }
-            transition={{
-              type: "spring",
-              stiffness: 170,
-              damping: 12,
-              delay: 1.15,
-            }}
-          >
-            ♡
-          </motion.strong>
-        </motion.div>
-
-        {/* Decorative hearts */}
-        <span className="letter__decor-heart letter__decor-heart--1">♡</span>
-
-        <span className="letter__decor-heart letter__decor-heart--2">♡</span>
-
-        <span className="letter__decor-heart letter__decor-heart--3">♡</span>
-      </motion.div>
-    </section>
-  );
-}
-
 function ThingsILove() {
+  const sectionRef = useRef(null);
+  const isNear = useInView(sectionRef, { once: true, margin: "600px 0px" });
   const reduceMotion = useReducedMotion();
   const noteColors = ["pink", "cream", "lavender", "peach", "mint", "rose"];
 
   const noteRotations = [-5, 4, -3, 5, -4, 3];
 
+  useEffect(() => {
+    if (!isNear) return;
+
+    let disposed = false;
+    let media;
+
+    const setup = async () => {
+      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+      ]);
+      if (disposed || !sectionRef.current) return;
+
+      gsap.registerPlugin(ScrollTrigger);
+      media = gsap.matchMedia();
+      media.add({
+        motion: "(prefers-reduced-motion: no-preference)",
+        desktop: "(min-width: 901px)",
+        tablet: "(min-width: 601px) and (max-width: 900px)",
+        mobile: "(max-width: 600px)",
+      }, (context) => {
+        if (!context.conditions.motion) return;
+
+        const section = sectionRef.current;
+        const notes = [...section.querySelectorAll(".note-reveal")];
+        const columns = context.conditions.desktop ? 3 : context.conditions.tablet ? 2 : 1;
+
+        // Reveal each row when it enters view, so mobile cards don't finish offscreen.
+        for (let index = 0; index < notes.length; index += columns) {
+          const row = notes.slice(index, index + columns);
+          const tape = row.map((note) => note.querySelector(".note__tape"));
+          const pins = row.map((note) => note.querySelector(".note__pin"));
+
+          gsap.timeline({
+            defaults: { ease: "power3.out" },
+            // Keep completed triggers registered until context cleanup. Removing
+            // them during matchMedia refresh can invalidate GSAP's refresh list.
+            scrollTrigger: { trigger: row[0], start: "top 88%", toggleActions: "play none none none" },
+          })
+            .fromTo(row, {
+              opacity: 0, y: columns === 1 ? 30 : 44, scale: 0.96,
+              rotation: (itemIndex) => (index + itemIndex) % 2 ? 5 : -5,
+            }, {
+              opacity: 1, y: 0, scale: 1, rotation: 0,
+              duration: 0.85, stagger: 0.16,
+            })
+            .from(tape, { opacity: 0, scaleX: 0.5, duration: 0.4, stagger: 0.16 }, 0.35)
+            .from(pins, { opacity: 0, scale: 0.3, duration: 0.4, stagger: 0.16, ease: "back.out(1.4)" }, 0.5);
+        }
+
+        [".things__intro", ".things__footer"].forEach((selector) => {
+          const element = section.querySelector(selector);
+          if (!element) return;
+          gsap.from(element, {
+            opacity: 0, y: 18, duration: 0.75, ease: "power2.out",
+            scrollTrigger: { trigger: element, start: "top 92%", toggleActions: "play none none none" },
+          });
+        });
+      }, sectionRef);
+    };
+
+    setup().catch((error) => {
+      media?.revert();
+      console.warn("Không thể khởi tạo hiệu ứng giấy ghi chú:", error);
+    });
+
+    return () => {
+      disposed = true;
+      media?.revert();
+    };
+  }, [isNear]);
+
   return (
-    <section className="things section-paper">
-      <div className="things__decoration things__decoration--one">✦</div>
-      <div className="things__decoration things__decoration--two">♡</div>
+    <section ref={sectionRef} className="things section-paper">
+      <div className="things__decoration things__decoration--one" data-parallax="decoration">✦</div>
+      <div className="things__decoration things__decoration--two" data-parallax="decoration">♡</div>
 
       <Reveal>
         <SectionTitle
@@ -774,115 +736,69 @@ function ThingsILove() {
         />
       </Reveal>
 
-      <motion.p
-        className="things__intro"
-        initial={{ opacity: 0, y: 18 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.5 }}
-        transition={{ duration: 0.65, ease: "easeOut" }}
-      >
+      <p className="things__intro" data-parallax="text">
         Có rất nhiều điều nhỏ ở em khiến anh yêu em nhiều hơn mỗi ngày...
-      </motion.p>
+      </p>
 
-      <motion.div
-        className="notes"
-        initial={reduceMotion ? false : "hidden"}
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.15 }}
-        variants={{
-          hidden: {},
-          visible: {
-            transition: {
-              staggerChildren: 0.2,
-              delayChildren: 0.25,
-            },
-          },
-        }}
-      >
+      <div className="notes">
         {data.thingsILove.map((item, index) => {
           const rotation = noteRotations[index % noteRotations.length];
 
           const color = noteColors[index % noteColors.length];
 
           return (
-            <motion.div
-              className={`note note--${color}`}
-              key={`${item}-${index}`}
-              style={{
-                "--note-rotation": `${rotation}deg`,
-              }}
-              variants={{
-                hidden: {
-                  opacity: 0,
-                  y: 70,
-                  scale: 0.82,
-                  rotate: rotation - 8,
-                  filter: "blur(8px)",
-                },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  scale: 1,
+            <div className="note-reveal" key={`${item}-${index}`} data-parallax="media">
+              <motion.div
+                className={`note note--${color}`}
+                style={{
+                  "--note-rotation": `${rotation}deg`,
                   rotate: rotation,
-                  filter: "blur(0px)",
+                }}
+                whileHover={reduceMotion ? undefined : {
+                  y: -14,
+                  scale: 1.07,
+                  rotate: 0,
+                  zIndex: 10,
                   transition: {
                     type: "spring",
-                    stiffness: 90,
-                    damping: 15,
-                    mass: 0.9,
+                    stiffness: 300,
+                    damping: 18,
                   },
-                },
-              }}
-              whileHover={{
-                y: -14,
-                scale: 1.07,
-                rotate: 0,
-                zIndex: 10,
-                transition: {
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 18,
-                },
-              }}
-              whileTap={{
-                scale: 0.97,
-              }}
-            >
-              <span className="note__tape" aria-hidden="true" />
+                }}
+                whileTap={reduceMotion ? undefined : {
+                  scale: 0.97,
+                }}
+              >
+                <span className="note__tape" aria-hidden="true" />
 
-              <span className="note__pin" aria-hidden="true">
-                ♥
-              </span>
+                <span className="note__pin" aria-hidden="true">
+                  ♥
+                </span>
 
-              <span className="note__number">
-                {String(index + 1).padStart(2, "0")}
-              </span>
+                <span className="note__number">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
 
-              <span className="note__content">
-                <WaveText text={item} />
-              </span>
+                <span className="note__content">
+                  <WaveText text={item} />
+                </span>
 
-              <span className="note__heart" aria-hidden="true">
-                ♡
-              </span>
+                <span className="note__heart" aria-hidden="true">
+                  ♡
+                </span>
 
-              <span className="note__bottom">a little thing I love</span>
-            </motion.div>
+                <span className="note__bottom">a little thing I love</span>
+              </motion.div>
+            </div>
           );
         })}
-      </motion.div>
+      </div>
 
-      <motion.div
-        className="things__footer"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.4, duration: 0.7 }}
-      >
+      <div className="things__footer" data-parallax="text">
         <span>♡</span>
         <p>Và còn hàng nghìn điều khác nữa...</p>
         <span>♡</span>
-      </motion.div>
+      </div>
     </section>
   );
 }
@@ -996,17 +912,6 @@ function BirthdayWish() {
   );
 }
 
-const floatingHearts = [
-  { left: "8%", delay: 0, duration: 7, size: 18 },
-  { left: "18%", delay: 2, duration: 8, size: 25 },
-  { left: "30%", delay: 1, duration: 9, size: 15 },
-  { left: "42%", delay: 3, duration: 7, size: 22 },
-  { left: "55%", delay: 0.5, duration: 8, size: 16 },
-  { left: "68%", delay: 2.5, duration: 9, size: 26 },
-  { left: "78%", delay: 1.5, duration: 7, size: 18 },
-  { left: "90%", delay: 4, duration: 9, size: 22 },
-];
-
 const stars = Array.from({ length: 18 }, (_, index) => ({
   left: `${(index * 37) % 100}%`,
   top: `${(index * 53) % 100}%`,
@@ -1014,399 +919,9 @@ const stars = Array.from({ length: 18 }, (_, index) => ({
   delay: index * 0.15,
 }));
 
-const revealViewport = {
-  once: true,
-  amount: 0.2,
-};
-
-function Ending() {
-  const sectionRef = useRef(null);
-
-  const isInView = useInView(sectionRef, {
-    amount: 0.05,
-    margin: "100px 0px 100px 0px",
-  });
-
-  const reduceMotion = useReducedMotion();
-  const isPlaying = isInView && !reduceMotion;
-
-  return (
-    <section ref={sectionRef} className="ending">
-      {/* BACKGROUND GLOW */}
-      <motion.div
-        className="ending__glow ending__glow--1"
-        animate={
-          isPlaying
-            ? {
-                x: [-30, 40, -30],
-                y: [-20, 30, -20],
-                scale: [1, 1.2, 1],
-              }
-            : { x: 0, y: 0, scale: 1 }
-        }
-        transition={{
-          duration: 9,
-          repeat: isPlaying ? Infinity : 0,
-          ease: "easeInOut",
-        }}
-      />
-
-      <motion.div
-        className="ending__glow ending__glow--2"
-        animate={
-          isPlaying
-            ? {
-                x: [30, -40, 30],
-                y: [30, -20, 30],
-                scale: [1.2, 0.9, 1.2],
-              }
-            : { x: 0, y: 0, scale: 1 }
-        }
-        transition={{
-          duration: 11,
-          repeat: isPlaying ? Infinity : 0,
-          ease: "easeInOut",
-        }}
-      />
-
-      {/* STARS */}
-      <div className="ending__stars">
-        {stars.map((star, index) => (
-          <motion.span
-            key={index}
-            style={{
-              left: star.left,
-              top: star.top,
-            }}
-            animate={
-              isPlaying
-                ? {
-                    opacity: [0.1, 0.7, 0.1],
-                    scale: [0.7, 1.3, 0.7],
-                  }
-                : {
-                    opacity: 0.2,
-                    scale: 1,
-                  }
-            }
-            transition={{
-              duration: star.duration,
-              delay: star.delay,
-              repeat: isPlaying ? Infinity : 0,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
-
-      {/* FLOATING HEARTS */}
-      <div className="ending__floating-hearts">
-        {floatingHearts.map((heart, index) => (
-          <motion.span
-            key={index}
-            style={{
-              left: heart.left,
-              fontSize: heart.size,
-            }}
-            initial={{
-              y: 100,
-              opacity: 0,
-            }}
-            animate={
-              isPlaying
-                ? {
-                    y: [100, "-110vh"],
-                    opacity: [0, 0.35, 0.5, 0],
-                    rotate: [0, 15, -15, 10],
-                    x: [0, 15, -10, 5],
-                  }
-                : {
-                    opacity: 0,
-                  }
-            }
-            transition={{
-              duration: heart.duration,
-              delay: heart.delay,
-              repeat: isPlaying ? Infinity : 0,
-              ease: "linear",
-            }}
-          >
-            ♡
-          </motion.span>
-        ))}
-      </div>
-
-      <div className="ending__content">
-        {/* MAIN HEART */}
-        <motion.div
-          className="ending-heart"
-          initial={{
-            opacity: 0,
-            scale: 0.4,
-          }}
-          whileInView={{
-            opacity: 1,
-            scale: 1,
-          }}
-          viewport={revealViewport}
-          transition={{
-            duration: 1.1,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-        >
-          <motion.div
-            className="ending-heart__glow"
-            animate={
-              isPlaying
-                ? {
-                    opacity: [0.2, 0.55, 0.2],
-                    scale: [0.8, 1.25, 0.8],
-                  }
-                : {
-                    opacity: 0.3,
-                    scale: 1,
-                  }
-            }
-            transition={{
-              duration: 2.4,
-              repeat: isPlaying ? Infinity : 0,
-              ease: "easeInOut",
-            }}
-          />
-
-          {/* PULSE RINGS */}
-          {[0, 1].map((index) => (
-            <motion.div
-              key={index}
-              className="ending-heart__ring"
-              animate={
-                isPlaying
-                  ? {
-                      scale: [0.7, 1.6],
-                      opacity: [0.4, 0],
-                    }
-                  : {
-                      scale: 1,
-                      opacity: 0,
-                    }
-              }
-              transition={{
-                duration: 2.5,
-                delay: index * 1.2,
-                repeat: isPlaying ? Infinity : 0,
-                ease: "easeOut",
-              }}
-            />
-          ))}
-
-          {/* HEART BEAT */}
-          <motion.div
-            className="ending-heart__main"
-            animate={
-              isPlaying
-                ? {
-                    scale: [1, 1.05, 1, 1.09, 1],
-                  }
-                : {
-                    scale: 1,
-                  }
-            }
-            transition={{
-              duration: 1.8,
-              repeat: isPlaying ? Infinity : 0,
-              ease: "easeInOut",
-            }}
-          >
-            ♡
-          </motion.div>
-
-          {/* ORBIT HEARTS */}
-          <motion.div
-            className="ending-heart__orbit"
-            animate={isPlaying ? { rotate: 360 } : { rotate: 0 }}
-            transition={{
-              duration: 12,
-              repeat: isPlaying ? Infinity : 0,
-              ease: "linear",
-            }}
-          >
-            <span className="ending-heart__mini ending-heart__mini--1">♥</span>
-            <span className="ending-heart__mini ending-heart__mini--2">♡</span>
-            <span className="ending-heart__mini ending-heart__mini--3">♥</span>
-          </motion.div>
-        </motion.div>
-
-        {/* SMALL TITLE */}
-        <motion.span
-          className="ending__eyebrow"
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={revealViewport}
-          transition={{
-            duration: 0.9,
-            delay: 0.2,
-          }}
-        >
-          AND FINALLY...
-        </motion.span>
-
-        {/* TITLE */}
-        <motion.h2
-          initial={{
-            opacity: 0,
-            y: 35,
-            scale: 0.97,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-            scale: 1,
-          }}
-          viewport={revealViewport}
-          transition={{
-            duration: 1.1,
-            delay: 0.35,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-        >
-          {["Cảm ơn em", "vì đã xuất hiện", "trong cuộc đời anh"].map(
-            (line, index) => (
-              <motion.span
-                key={line}
-                className="ending__title-line"
-                initial={
-                  reduceMotion
-                    ? false
-                    : {
-                        opacity: 0,
-                        y: 34,
-                      }
-                }
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={revealViewport}
-                transition={{
-                  duration: 0.9,
-                  delay: 0.35 + index * 0.22,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
-                {line}
-              </motion.span>
-            ),
-          )}
-        </motion.h2>
-
-        {/* DIVIDER */}
-        <motion.div
-          className="ending__divider"
-          initial={{
-            opacity: 0,
-            scaleX: 0,
-          }}
-          whileInView={{
-            opacity: 1,
-            scaleX: 1,
-          }}
-          viewport={revealViewport}
-          transition={{
-            duration: 0.8,
-            delay: 0.65,
-          }}
-        >
-          <span>♡</span>
-        </motion.div>
-
-        {/* DESCRIPTION */}
-        <motion.p
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={revealViewport}
-          transition={{
-            duration: 0.8,
-            delay: 0.8,
-          }}
-        >
-          Hy vọng món quà nhỏ này sẽ khiến em mỉm cười.
-        </motion.p>
-
-        {/* LOVE BUTTON */}
-        <motion.div
-          className="ending__love"
-          initial={{
-            opacity: 0,
-            y: 25,
-            scale: 0.95,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-            scale: 1,
-          }}
-          viewport={revealViewport}
-          whileHover={{
-            scale: 1.06,
-            y: -3,
-          }}
-          transition={{
-            duration: 0.8,
-            delay: 0.95,
-          }}
-        >
-          <span>Yêu em nhiều</span>
-
-          <motion.strong
-            animate={
-              isPlaying
-                ? {
-                    scale: [1, 1.25, 1],
-                  }
-                : {
-                    scale: 1,
-                  }
-            }
-            transition={{
-              duration: 1.5,
-              repeat: isPlaying ? Infinity : 0,
-              ease: "easeInOut",
-            }}
-          >
-            ♡
-          </motion.strong>
-        </motion.div>
-
-        {/* FOOTER */}
-        <motion.span
-          className="ending__forever"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={revealViewport}
-          transition={{
-            delay: 1.2,
-            duration: 1,
-          }}
-        >
-          today · tomorrow · always
-        </motion.span>
-      </div>
-    </section>
-  );
-}
-
 function SectionTitle({ small, title, subtitle, light = false }) {
   return (
-    <header className={`section-title ${light ? "section-title--light" : ""}`}>
+    <header className={`section-title ${light ? "section-title--light" : ""}`} data-parallax="heading">
       <span>{small}</span>
 
       <h2>{title}</h2>
@@ -1418,6 +933,7 @@ function SectionTitle({ small, title, subtitle, light = false }) {
 
 function SectionConnector({ variant = "flower" }) {
   const connectorRef = useRef(null);
+  const isNear = useInView(connectorRef, { once: true, margin: "600px 0px" });
   const isInView = useInView(connectorRef, {
     amount: 0.1,
     once: false,
@@ -1432,15 +948,84 @@ function SectionConnector({ variant = "flower" }) {
     0,
   ) % animationDuration;
 
+  useEffect(() => {
+    if (!isNear) return;
+
+    let disposed = false;
+    let media;
+
+    const setup = async () => {
+      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+      ]);
+      if (disposed || !connectorRef.current) return;
+
+      gsap.registerPlugin(ScrollTrigger);
+      media = gsap.matchMedia();
+      media.add("(prefers-reduced-motion: no-preference)", () => {
+        const connector = connectorRef.current;
+        const stem = connector.querySelector(".section-connector__stem");
+        const twigs = connector.querySelectorAll(".section-connector__twig");
+        const ornaments = connector.querySelectorAll(".section-connector__ornament");
+        const trail = connector.querySelector(".section-connector__heart-trail");
+        const length = stem.getTotalLength();
+
+        const timeline = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: connector,
+            start: "top 92%",
+            end: "top 55%",
+            scrub: 0.7,
+            onLeave: (trigger) => {
+              trigger.animation?.progress(1);
+              trigger.disable(false);
+            },
+          },
+        });
+
+        timeline.fromTo(stem,
+          { strokeDasharray: length, strokeDashoffset: length },
+          { strokeDashoffset: 0, duration: 0.7 }, 0,
+        );
+
+        twigs.forEach((twig, index) => {
+          const twigLength = twig.getTotalLength();
+          timeline.fromTo(twig,
+            { strokeDasharray: twigLength, strokeDashoffset: twigLength },
+            { strokeDashoffset: 0, duration: 0.2 }, 0.25 + index * 0.3,
+          );
+        });
+
+        if (ornaments.length) {
+          timeline.fromTo(ornaments,
+            { opacity: 0, scale: 0.3, transformOrigin: "50% 50%" },
+            { opacity: 1, scale: 1, duration: 0.3, stagger: 0.08, ease: "power2.out" },
+            0.45,
+          );
+        }
+
+        timeline.fromTo(trail, { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.85);
+      }, connectorRef);
+    };
+
+    setup().catch((error) => {
+      media?.revert();
+      console.warn("Không thể khởi tạo hiệu ứng đường nối:", error);
+    });
+
+    return () => {
+      disposed = true;
+      media?.revert();
+    };
+  }, [isNear, variant]);
+
   return (
-    <motion.div
+    <div
       ref={connectorRef}
       className={`section-connector section-connector--${variant}`}
       data-animation-active={isInView ? "true" : "false"}
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.8 }}
-      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
       aria-hidden="true"
     >
       <svg viewBox="0 0 640 100" role="presentation">
@@ -1489,16 +1074,20 @@ function SectionConnector({ variant = "flower" }) {
           <>
             <path className="section-connector__twig" d="M166 48 C172 27 187 21 203 13" />
             <path className="section-connector__twig" d="M474 52 C468 73 453 80 437 87" />
-            <ellipse className="section-connector__leaf" cx="195" cy="18" rx="12" ry="5" transform="rotate(-28 195 18)" />
-            <ellipse className="section-connector__leaf" cx="445" cy="82" rx="12" ry="5" transform="rotate(-28 445 82)" />
-            <ellipse className="section-connector__leaf section-connector__leaf--soft" cx="210" cy="29" rx="10" ry="4" transform="rotate(32 210 29)" />
-            <ellipse className="section-connector__leaf section-connector__leaf--soft" cx="430" cy="70" rx="10" ry="4" transform="rotate(32 430 70)" />
+            <g className="section-connector__ornament">
+              <ellipse className="section-connector__leaf" cx="195" cy="18" rx="12" ry="5" transform="rotate(-28 195 18)" />
+              <ellipse className="section-connector__leaf section-connector__leaf--soft" cx="210" cy="29" rx="10" ry="4" transform="rotate(32 210 29)" />
+            </g>
+            <g className="section-connector__ornament">
+              <ellipse className="section-connector__leaf" cx="445" cy="82" rx="12" ry="5" transform="rotate(-28 445 82)" />
+              <ellipse className="section-connector__leaf section-connector__leaf--soft" cx="430" cy="70" rx="10" ry="4" transform="rotate(32 430 70)" />
+            </g>
           </>
         )}
 
         {variant === "flower" && (
           <>
-            <g transform="translate(178 25)">
+            <g className="section-connector__ornament" transform="translate(178 25)">
               <g className="section-connector__flower section-connector__flower--first">
                 <circle cx="0" cy="-8" r="7" />
                 <circle cx="8" cy="0" r="7" />
@@ -1507,7 +1096,7 @@ function SectionConnector({ variant = "flower" }) {
                 <circle className="section-connector__flower-center" cx="0" cy="0" r="4" />
               </g>
             </g>
-            <g transform="translate(462 73)">
+            <g className="section-connector__ornament" transform="translate(462 73)">
               <g className="section-connector__flower section-connector__flower--second">
                 <circle cx="0" cy="-7" r="6" />
                 <circle cx="7" cy="0" r="6" />
@@ -1520,7 +1109,7 @@ function SectionConnector({ variant = "flower" }) {
         )}
 
         {variant === "letter" && (
-          <g transform="translate(292 29)">
+          <g className="section-connector__ornament" transform="translate(292 29)">
             <g className="section-connector__envelope">
               <rect x="0" y="0" width="56" height="40" rx="5" />
               <path className="section-connector__envelope-flap" d="M2 5 L28 25 L54 5" />
@@ -1531,6 +1120,6 @@ function SectionConnector({ variant = "flower" }) {
           </g>
         )}
       </svg>
-    </motion.div>
+    </div>
   );
 }

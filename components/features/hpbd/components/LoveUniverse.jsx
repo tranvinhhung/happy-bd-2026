@@ -91,14 +91,12 @@ const memoryVariants = {
     hidden: {
         opacity: 0,
         y: 65,
-        scale: 0.72,
-        filter: "blur(8px)",
+        scale: 0.94,
     },
     visible: ({ index, compact }) => ({
         opacity: 1,
         y: 0,
         scale: 1,
-        filter: "blur(0px)",
         transition: {
             delay: compact ? 0.25 + (index % 2) * 0.22 : 0.35 + index * 0.17,
             duration: compact ? 1.15 : 0.85,
@@ -151,6 +149,11 @@ function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
+        // Cache the static sky; only stars and connections change each frame.
+        const skyCanvas = document.createElement("canvas");
+        const skyCtx = skyCanvas.getContext("2d");
+        if (!skyCtx) return;
+
         let width = 0;
         let height = 0;
         let frame = 0;
@@ -195,6 +198,11 @@ function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
 
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
+            skyCanvas.width = canvas.width;
+            skyCanvas.height = canvas.height;
+            skyCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            paintSky();
+
             starsRef.current = createStars(width < 600 ? 110 : 220);
             measureMemoryPoints();
 
@@ -204,24 +212,20 @@ function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
             draw(performance.now());
         };
 
-        const draw = (time) => {
-            if (!width || !height) return;
-
-            ctx.clearRect(0, 0, width, height);
-
-            const sky = ctx.createLinearGradient(0, 0, 0, height);
+        const paintSky = () => {
+            const sky = skyCtx.createLinearGradient(0, 0, 0, height);
 
             sky.addColorStop(0, "#070b20");
             sky.addColorStop(0.45, "#17102d");
             sky.addColorStop(0.8, "#43213e");
             sky.addColorStop(1, "#9d4b62");
 
-            ctx.fillStyle = sky;
-            ctx.fillRect(0, 0, width, height);
+            skyCtx.fillStyle = sky;
+            skyCtx.fillRect(0, 0, width, height);
 
             // Tinh vân màu hồng, tím.
             glow(
-                ctx,
+                skyCtx,
                 width * 0.44,
                 height * 0.37,
                 width * 0.35,
@@ -229,7 +233,7 @@ function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
             );
 
             glow(
-                ctx,
+                skyCtx,
                 width * 0.77,
                 height * 0.23,
                 width * 0.33,
@@ -237,12 +241,19 @@ function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
             );
 
             glow(
-                ctx,
+                skyCtx,
                 width * 0.15,
                 height * 0.72,
                 width * 0.45,
                 "rgba(231, 91, 153, 0.13)",
             );
+        };
+
+        const draw = (time) => {
+            if (!width || !height) return;
+
+            ctx.clearRect(0, 0, width, height);
+            ctx.drawImage(skyCanvas, 0, 0, width, height);
 
             // Các ngôi sao nhỏ.
             for (const star of starsRef.current) {
@@ -569,6 +580,7 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
 
                 <motion.div
                     className={styles.topNote}
+                    data-parallax="text"
                     initial={
                         reduceMotion
                             ? false
@@ -590,6 +602,7 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
 
                 <motion.div
                     className={styles.rightNote}
+                    data-parallax="text"
                     initial={
                         reduceMotion
                             ? false
@@ -649,7 +662,7 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
                             onClick={() => openMemory(index)}
                             aria-label={`Xem kỷ niệm ${memory.title}`}
                         >
-                            <div className={styles.float}>
+                            <div className={styles.float} data-parallax="media">
                                 <div className={styles.photoFrame}>
                                     <img src={memory.image} alt={memory.title} loading="lazy" />
                                 </div>
@@ -696,7 +709,7 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
                     my universe ♡
                 </motion.div>
 
-                <div className={styles.bottomQuote}>
+                <div className={styles.bottomQuote} data-parallax="text">
                     Cảm ơn vì đã luôn ở đây,
                     <br />
                     trong mọi khoảnh khắc đẹp nhất của anh ♡

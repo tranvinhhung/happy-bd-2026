@@ -155,7 +155,7 @@ export default function BirthdayCountdown({
             className={`birthday-countdown ${isVisible ? "is-visible" : ""
                 }`}
         >
-            <div className="birthday-countdown__ambient" />
+            <div className="birthday-countdown__ambient" data-parallax="decoration" />
 
             <div className="birthday-countdown__stars" aria-hidden="true">
                 {DECORATIONS.map((star, index) => (
@@ -176,6 +176,7 @@ export default function BirthdayCountdown({
             <div className="birthday-countdown__container">
                 <motion.div
                     className="birthday-countdown__heading"
+                    data-parallax="heading"
                     initial={{
                         opacity: 0,
                         y: 55,
@@ -243,6 +244,7 @@ export default function BirthdayCountdown({
                         >
                             <div
                                 className="birthday-countdown__timer"
+                                data-parallax="media"
                                 role="timer"
                                 aria-label={`${remaining.days} ngày, ${remaining.hours} giờ, ${remaining.minutes} phút, ${remaining.seconds} giây còn lại`}
                             >
@@ -293,6 +295,7 @@ export default function BirthdayCountdown({
                         <motion.div
                             key="celebration"
                             className="birthday-countdown__celebration"
+                            data-parallax="media"
                             initial={
                                 reducedMotion
                                     ? false
@@ -335,7 +338,7 @@ export default function BirthdayCountdown({
                     )}
                 </AnimatePresence>
 
-                <div className="birthday-countdown__date">
+                <div className="birthday-countdown__date" data-parallax="text">
                     <span>✧</span>
                     <span>19 · 12 · 2026</span>
                     <span>✧</span>

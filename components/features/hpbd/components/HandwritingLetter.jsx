@@ -70,6 +70,7 @@ export default function HandwritingLetter({
   paragraphs = [],
   onComplete,
   speed = CHAR_DELAY,
+  enabled = true,
 }) {
   const rootRef = useRef(null);
   const penRef = useRef(null);
@@ -119,7 +120,7 @@ export default function HandwritingLetter({
       return;
     }
 
-    if (!isInView || finishedRef.current) return;
+    if (!enabled || !isInView || finishedRef.current) return;
 
     startedRef.current = true;
 
@@ -259,12 +260,13 @@ export default function HandwritingLetter({
       petalsRef.current.forEach((petal) => petal.remove());
       petalsRef.current.clear();
     };
-  }, [isInView, reduceMotion, allCharacters, speed]);
+  }, [enabled, isInView, reduceMotion, allCharacters, speed]);
 
   return (
     <div
       ref={rootRef}
       className={styles.letterWriting}
+      data-writing-enabled={enabled}
       aria-label={paragraphs.join(" ")}
     >
       {groups.map((tokens, paragraphIndex) => (
@@ -304,6 +306,7 @@ export default function HandwritingLetter({
       <span
         ref={penRef}
         className={styles.pen}
+        style={{ visibility: enabled ? undefined : "hidden" }}
         aria-hidden="true"
       >
         ✒️

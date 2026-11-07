@@ -241,7 +241,7 @@ export default function LoveGacha() {
     <section className={styles.section}>
       <div className={styles.container}>
         <motion.div
-          className={styles.heading}
+          className={styles.heading} data-parallax="heading"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -311,7 +311,7 @@ export default function LoveGacha() {
           viewport={{ once: true, amount: 0.2 }}
         >
           <motion.div
-            className={styles.machine}
+            className={styles.machine} data-parallax="media"
             animate={
               isRolling
                 ? {

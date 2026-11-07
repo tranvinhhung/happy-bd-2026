@@ -500,6 +500,7 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
         <section className="polaroid-album">
             <motion.div
                 className="polaroid-album__heading"
+                data-parallax="heading"
                 initial={
                     reduceMotion
                         ? false
@@ -544,7 +545,7 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
                     ♡
                 </div>
 
-                <div className="polaroid-album__stage">
+                <div className="polaroid-album__stage" data-parallax="media" data-parallax-interactive>
                     {polaroidMemories.map((memory) => (
                         <PolaroidCard
                             key={memory.id}
@@ -590,7 +591,7 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
                 </button>
             </div>
 
-            <p className="polaroid-album__footer">
+            <p className="polaroid-album__footer" data-parallax="text">
                 Five little moments, a thousand beautiful
                 memories ♡
             </p>

@@ -260,11 +260,11 @@ export default function MakeAWish() {
 
     return (
         <section className="make-wish">
-            <div className="make-wish__background" />
+            <div className="make-wish__background" data-parallax="decoration" />
 
             <div className="make-wish__container">
                 <motion.div
-                    className="make-wish__heading"
+                    className="make-wish__heading" data-parallax="heading"
                     initial={reduceMotion ? false : { opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.3 }}
@@ -286,7 +286,7 @@ export default function MakeAWish() {
                 </motion.div>
 
                 <motion.div
-                    className={`make-wish__sky ${isSkyVisible ? "is-visible" : ""}`}
+                    className={`make-wish__sky ${isSkyVisible ? "is-visible" : ""}`} data-parallax="media"
                     ref={skyRef}
                     aria-label="Bầu trời những ngôi sao điều ước"
                     initial={
@@ -559,7 +559,7 @@ export default function MakeAWish() {
                     </div>
                 )}
 
-                <div className="make-wish__footer">
+                <div className="make-wish__footer" data-parallax="text">
                     <span>{wishes.length}/3 điều ước đã được gửi lên bầu trời ✦</span>
                 </div>
             </div>

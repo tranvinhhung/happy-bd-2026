@@ -290,7 +290,7 @@ export default function ScratchReveal() {
     <section className="scratch-reveal">
       <div className="scratch-reveal__inner">
         <motion.div
-          className="scratch-reveal__heading"
+          className="scratch-reveal__heading" data-parallax="heading"
           initial={reduceMotion ? false : { opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -314,7 +314,7 @@ export default function ScratchReveal() {
         </motion.div>
 
         <motion.div
-          className="scratch-reveal__frame"
+          className="scratch-reveal__frame" data-parallax="media" data-parallax-interactive
           initial={reduceMotion ? false : { opacity: 0, scale: 0.94 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, amount: 0.2 }}
@@ -364,6 +364,7 @@ export default function ScratchReveal() {
                   key={`scratch-${resetKey}`}
                   ref={canvasRef}
                   className="scratch-reveal__canvas"
+                  data-lenis-prevent-touch
                   onPointerDown={handlePointerDown}
                   onPointerMove={handlePointerMove}
                   onPointerUp={handlePointerUp}

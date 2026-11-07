@@ -185,7 +185,7 @@ function WishCard({ wish, index, active, onClick, reducedMotion }) {
 function BirthdayCake({ reducedMotion }) {
   return (
     <motion.div
-      className={styles.cakeScene}
+      className={styles.cakeScene} data-parallax="media"
       initial={reducedMotion ? false : { opacity: 0, y: 50, scale: 0.9 }}
       whileInView={{
         opacity: 1,
@@ -275,12 +275,12 @@ export default function BirthdayWish({ data = [] }) {
 
   return (
     <section ref={sectionRef} className={styles.section} id="birthday-wish">
-      <div className={styles.backgroundGlow} />
+      <div className={styles.backgroundGlow} data-parallax="decoration" />
       <FallingPetals reducedMotion={reducedMotion} />
 
       <div className={styles.container}>
         <motion.div
-          className={styles.heading}
+          className={styles.heading} data-parallax="heading"
           initial={
             reducedMotion
               ? false
@@ -312,7 +312,7 @@ export default function BirthdayWish({ data = [] }) {
           />
         </motion.div>
 
-        <div className={styles.wishList}>
+        <div className={styles.wishList} data-parallax="text">
           {wishes.map((wish, index) => (
             <WishCard
               key={`${index}-${wish}`}
@@ -338,7 +338,7 @@ export default function BirthdayWish({ data = [] }) {
         <BirthdayCake reducedMotion={reducedMotion} />
 
         <motion.div
-          className={styles.ending}
+          className={styles.ending} data-parallax="text"
           initial={reducedMotion ? false : { opacity: 0, y: 25 }}
           whileInView={{
             opacity: 1,

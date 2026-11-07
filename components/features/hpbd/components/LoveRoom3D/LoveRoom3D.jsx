@@ -221,7 +221,7 @@ export default function LoveRoom3D() {
   return (
     <section ref={sectionRef} className={styles.section} id="our-little-world">
       <motion.div
-        className={styles.heading}
+        className={styles.heading} data-parallax="heading"
         initial={
           reduceMotion
             ? false
@@ -253,7 +253,7 @@ export default function LoveRoom3D() {
         />
       </motion.div>
 
-      <div className={styles.storyProgress}>
+      <div className={styles.storyProgress} data-parallax="text">
         {ROOM_STORY.map((item, index) => (
           <div
             key={item.id}
@@ -360,7 +360,7 @@ export default function LoveRoom3D() {
         {!completed ? (
           <motion.div
             key={chapter}
-            className={styles.storyInstruction}
+            className={styles.storyInstruction} data-parallax="text"
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -14 }}

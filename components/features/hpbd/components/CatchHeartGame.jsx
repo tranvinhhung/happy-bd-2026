@@ -366,10 +366,10 @@ export default function CatchHeartGame() {
 
     return (
         <section className="catch-heart-game">
-            <div className="catch-heart-game__ambient" />
+            <div className="catch-heart-game__ambient" data-parallax="decoration" />
 
             <motion.div
-                className="catch-heart-game__heading"
+                className="catch-heart-game__heading" data-parallax="heading"
                 initial={
                     reduceMotion
                         ? false
@@ -715,7 +715,7 @@ export default function CatchHeartGame() {
                     </AnimatePresence>
                 </motion.div>
 
-                <p className="catch-heart-game__footer">
+                <p className="catch-heart-game__footer" data-parallax="text">
                     Một trò chơi nhỏ, một niềm vui xinh xắn ✧
                 </p>
             </div>
