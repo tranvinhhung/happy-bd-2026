@@ -2,6 +2,9 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { useRef } from "react";
+import Image from "next/image";
+import useAmbientMotion from "./useAmbientMotion";
 
 const sparkles = [
   { left: "12%", top: "25%", delay: 0 },
@@ -13,10 +16,12 @@ const sparkles = [
 ];
 
 export default function BirthdayAngel() {
+  const rootRef = useRef(null);
+  const active = useAmbientMotion(rootRef);
   const reduceMotion = useReducedMotion();
 
   return (
-    <div className="birthday-angel" aria-label="Thiên thần sinh nhật">
+    <div ref={rootRef} className="birthday-angel" aria-label="Thiên thần sinh nhật">
       {/* Ánh sáng phía sau */}
       <div className="birthday-angel__glow" />
 
@@ -49,8 +54,8 @@ export default function BirthdayAngel() {
         <motion.div
           className="birthday-angel__float"
           animate={
-            reduceMotion
-              ? {}
+            !active
+              ? { y: 0, rotate: 0 }
               : {
                   y: [0, -12, 0],
                   rotate: [0, 2, 0, -2, 0],
@@ -58,12 +63,15 @@ export default function BirthdayAngel() {
           }
           transition={{
             duration: 5,
-            repeat: Infinity,
+            repeat: active ? Infinity : 0,
             ease: "easeInOut",
           }}
         >
-          <img
+          <Image
             src="/images/hero/angel.webp"
+            width={360}
+            height={360}
+            sizes="(max-width: 600px) 155px, 220px"
             alt="Thiên thần nhỏ ôm trái tim"
             draggable={false}
           />
@@ -80,8 +88,8 @@ export default function BirthdayAngel() {
               top: item.top,
             }}
             animate={
-              reduceMotion
-                ? {}
+              !active
+                ? { opacity: 0, scale: 1, y: 0 }
                 : {
                     opacity: [0, 0.9, 0],
                     scale: [0.5, 1.2, 0.5],
@@ -91,7 +99,7 @@ export default function BirthdayAngel() {
             transition={{
               duration: 3,
               delay: item.delay,
-              repeat: Infinity,
+              repeat: active ? Infinity : 0,
               ease: "easeInOut",
             }}
           >
@@ -104,8 +112,8 @@ export default function BirthdayAngel() {
       <motion.span
         className="birthday-angel__heart birthday-angel__heart--left"
         animate={
-          reduceMotion
-            ? {}
+          !active
+            ? { y: 0, opacity: 0.3, scale: 1 }
             : {
                 y: [0, -15, 0],
                 opacity: [0.3, 0.8, 0.3],
@@ -114,7 +122,7 @@ export default function BirthdayAngel() {
         }
         transition={{
           duration: 4,
-          repeat: Infinity,
+          repeat: active ? Infinity : 0,
           ease: "easeInOut",
         }}
       >
@@ -124,8 +132,8 @@ export default function BirthdayAngel() {
       <motion.span
         className="birthday-angel__heart birthday-angel__heart--right"
         animate={
-          reduceMotion
-            ? {}
+          !active
+            ? { y: 0, opacity: 0.3, scale: 1 }
             : {
                 y: [0, -18, 0],
                 opacity: [0.2, 0.7, 0.2],
@@ -135,7 +143,7 @@ export default function BirthdayAngel() {
         transition={{
           duration: 4.8,
           delay: 1,
-          repeat: Infinity,
+          repeat: active ? Infinity : 0,
           ease: "easeInOut",
         }}
       >

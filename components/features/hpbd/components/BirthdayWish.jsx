@@ -10,6 +10,7 @@ import {
 import { useRef } from "react";
 import styles from "../styles/BirthdayWish.module.scss";
 import SectionTitle from "./SectionTitle";
+import useAmbientMotion from "./useAmbientMotion";
 
 const WISH_MESSAGES = [
   "Mong em luôn rạng rỡ, tự tin và yêu thương chính mình mỗi ngày.",
@@ -40,8 +41,8 @@ const SPARKS = Array.from({ length: 9 }, (_, index) => {
   };
 });
 
-function FallingPetals({ reducedMotion }) {
-  if (reducedMotion) return null;
+function FallingPetals({ active }) {
+  if (!active) return null;
 
   return (
     <div className={styles.petals} aria-hidden="true">
@@ -182,7 +183,7 @@ function WishCard({ wish, index, active, onClick, reducedMotion }) {
   );
 }
 
-function BirthdayCake({ reducedMotion }) {
+function BirthdayCake({ reducedMotion, active }) {
   return (
     <motion.div
       className={styles.cakeScene} data-parallax="media"
@@ -200,10 +201,10 @@ function BirthdayCake({ reducedMotion }) {
     >
       <motion.div
         className={styles.cakeFloat}
-        animate={reducedMotion ? {} : { y: [0, -8, 0] }}
+        animate={active ? { y: [0, -8, 0] } : { y: 0 }}
         transition={{
           duration: 5,
-          repeat: Infinity,
+          repeat: active ? Infinity : 0,
           ease: "easeInOut",
         }}
       >
@@ -213,8 +214,8 @@ function BirthdayCake({ reducedMotion }) {
           <motion.div
             className={styles.flame}
             animate={
-              reducedMotion
-                ? {}
+              !active
+                ? { scale: 1, rotate: 0 }
                 : {
                     scale: [1, 1.12, 0.94, 1],
                     rotate: [-3, 4, -2, -3],
@@ -222,7 +223,7 @@ function BirthdayCake({ reducedMotion }) {
             }
             transition={{
               duration: 0.85,
-              repeat: Infinity,
+              repeat: active ? Infinity : 0,
               ease: "easeInOut",
             }}
           />
@@ -252,6 +253,7 @@ function BirthdayCake({ reducedMotion }) {
 
 export default function BirthdayWish({ data = [] }) {
   const sectionRef = useRef(null);
+  const active = useAmbientMotion(sectionRef);
   const reducedMotion = useReducedMotion();
   const isInView = useInView(sectionRef, {
     once: true,
@@ -276,7 +278,7 @@ export default function BirthdayWish({ data = [] }) {
   return (
     <section ref={sectionRef} className={styles.section} id="birthday-wish">
       <div className={styles.backgroundGlow} data-parallax="decoration" />
-      <FallingPetals reducedMotion={reducedMotion} />
+      <FallingPetals active={active} />
 
       <div className={styles.container}>
         <motion.div
@@ -335,7 +337,7 @@ export default function BirthdayWish({ data = [] }) {
           ✧ Chạm vào từng tấm thiệp để đọc lời nhắn nhỏ ♡
         </motion.p>
 
-        <BirthdayCake reducedMotion={reducedMotion} />
+        <BirthdayCake reducedMotion={reducedMotion} active={active} />
 
         <motion.div
           className={styles.ending} data-parallax="text"

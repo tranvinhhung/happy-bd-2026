@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { BIRTHDAY_DATE } from "../utils/data/birthday";
 import {
     AnimatePresence,
     motion,
@@ -14,19 +15,6 @@ const MINUTE = 60 * SECOND;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
 
-const DEFAULT_BIRTHDAY = "2026-12-19T00:00:00+07:00";
-
-function getCountdown(target) {
-    const distance = Math.max(0, target - Date.now());
-
-    return {
-        total: distance,
-        days: Math.floor(distance / DAY),
-        hours: Math.floor((distance % DAY) / HOUR),
-        minutes: Math.floor((distance % HOUR) / MINUTE),
-        seconds: Math.floor((distance % MINUTE) / SECOND),
-    };
-}
 
 function pad(value) {
     return String(value).padStart(2, "0");
@@ -75,7 +63,7 @@ function TimeUnit({ value, label, reducedMotion }) {
 }
 
 export default function BirthdayCountdown({
-    birthday = DEFAULT_BIRTHDAY,
+    birthday = BIRTHDAY_DATE,
 }) {
     const sectionRef = useRef(null);
     const isVisible = useInView(sectionRef, {

@@ -28,6 +28,7 @@ export default function SectionParallax({ rootRef }) {
         mobile: "(max-width: 600px)",
       }, (context) => {
         if (!context.conditions.motion) return;
+        let contextDisposed = false;
 
         const root = rootRef.current;
         const strength = context.conditions.mobile ? 0.6 : 1;
@@ -41,7 +42,7 @@ export default function SectionParallax({ rootRef }) {
         // Create only nearby sections' tweens and record them in the GSAP context.
         const observer = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
-            if (!entry.isIntersecting || disposed) return;
+            if (!entry.isIntersecting || disposed || contextDisposed) return;
             const section = entry.target;
             observer.unobserve(section);
 
@@ -50,6 +51,7 @@ export default function SectionParallax({ rootRef }) {
               section.querySelectorAll("[data-parallax]").forEach((element, index) => {
                 const layer = layers[element.dataset.parallax];
                 if (!layer || element.closest("section") !== section) return;
+                if (element.parentElement.closest("[data-parallax]")?.dataset.parallax === element.dataset.parallax) return;
                 const distance = layer.distance * strength * (0.88 + (index % 3) * 0.06);
 
                 const tween = gsap.fromTo(element,
@@ -95,6 +97,7 @@ export default function SectionParallax({ rootRef }) {
         window.addEventListener("blur", release);
 
         return () => {
+          contextDisposed = true;
           observer.disconnect();
           root.removeEventListener("pointerdown", hold, true);
           window.removeEventListener("pointerup", release);

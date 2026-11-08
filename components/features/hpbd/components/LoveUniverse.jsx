@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
+import useAmbientMotion from "./useAmbientMotion";
 import {
     AnimatePresence,
     motion,
@@ -430,6 +432,7 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
     const [visited, setVisited] = useState([]);
     const reduceMotion = useReducedMotion();
     const sectionRef = useRef(null);
+    const ambientActive = useAmbientMotion(sectionRef);
     const universeRef = useRef(null);
     const [isCompactLayout, setIsCompactLayout] = useState(false);
 
@@ -560,6 +563,7 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
             ref={sectionRef}
             className={`${styles.section} `}
             id="love-universe"
+            data-ambient-active={ambientActive}
         >
             <Reveal>
                 <SectionTitle
@@ -664,7 +668,7 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
                         >
                             <div className={styles.float} data-parallax="media">
                                 <div className={styles.photoFrame}>
-                                    <img src={memory.image} alt={memory.title} loading="lazy" />
+                                    <Image src={memory.image} alt={memory.title} width={348} height={356} sizes="(max-width: 600px) 145px, 174px" />
                                 </div>
 
                                 <div className={styles.photoDate}>{memory.date}</div>
@@ -869,7 +873,7 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
                             </button>
 
                             <div className={styles.modalPhoto}>
-                                <img src={selectedMemory.image} alt={selectedMemory.title} />
+                                <Image src={selectedMemory.image} alt={selectedMemory.title} width={860} height={645} sizes="(max-width: 600px) 90vw, 430px" />
                             </div>
 
                             <span className={styles.modalDate}>

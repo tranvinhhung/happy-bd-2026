@@ -1,3 +1,5 @@
+export const BIRTHDAY_DATE = "2026-12-19T00:00:00+07:00";
+
 export const birthdayData = {
     girlfriendName: "Bé yêu",
 

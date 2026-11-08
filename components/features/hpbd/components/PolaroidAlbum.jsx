@@ -1,5 +1,6 @@
 
 "use client";
+import Image from "next/image";
 
 import {
     memo,
@@ -283,8 +284,11 @@ const PolaroidCard = memo(function PolaroidCard({
                         onTouchEnd={handlePhotoTouchEnd}
                         aria-label={`Nhấp đúp để xem lớn ảnh ${memory.title}`}
                     >
-                        <img
+                        <Image
                             src={memory.image}
+                            width={600}
+                            height={600}
+                            sizes="(max-width: 600px) 180px, 260px"
                             alt={memory.title}
                             loading="lazy"
                             decoding="async"
@@ -669,8 +673,11 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
                                     ease: "easeInOut",
                                 }}
                             />
-                            <img
+                            <Image
                             src={selectedMemory.image}
+                            width={1200}
+                            height={1200}
+                            sizes="(max-width: 600px) 90vw, 600px"
                             alt={selectedMemory.title}
                             />
                         </motion.div>

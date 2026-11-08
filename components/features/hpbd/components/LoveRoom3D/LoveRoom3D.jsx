@@ -15,6 +15,7 @@ import LoveCornerMessage from "./LoveCornerMessage";
 import styles from "../../styles/LoveRoom3D.module.scss";
 import SectionTitle from "../SectionTitle";
 import CoupleActionButtons from "./CoupleActionButtons";
+import { usePageVisible } from "../useAmbientMotion";
 
 const RoomScene = dynamic(() => import("./RoomScene"), {
   ssr: false,
@@ -26,6 +27,7 @@ const RoomScene = dynamic(() => import("./RoomScene"), {
 });
 
 export default function LoveRoom3D() {
+  const pageVisible = usePageVisible();
   const [chapter, setChapter] = useState(0);
   const [activeStory, setActiveStory] = useState(null);
   const [isNight, setIsNight] = useState(true);
@@ -270,7 +272,7 @@ export default function LoveRoom3D() {
       <div ref={sceneWrapperRef} className={styles.sceneWrapper} style={{ position: "relative" }}>
         {isSceneNear ? (
           <RoomScene
-            active={isSceneVisible}
+            active={isSceneVisible && pageVisible}
             hintedObject={hintedChapter === chapter ? currentStory?.id : null}
             isNight={isNight}
             isHugging={isHugging}

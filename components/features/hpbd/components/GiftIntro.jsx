@@ -42,7 +42,8 @@ export default function GiftIntro({ intro, onOpen, onComplete }) {
         timelineRef.current = timeline;
 
         if (reduceMotion) {
-          timeline.to(select(".gift__lid"), { opacity: 0, duration: 0.2 });
+          timeline.to(select(".gift__lid"), { opacity: 0, duration: 0.2 })
+            .to(sectionRef.current, { opacity: 0, duration: 0.15 });
           return;
         }
 
@@ -70,7 +71,8 @@ export default function GiftIntro({ intro, onOpen, onComplete }) {
             scale: 1.2, duration: 1.1, stagger: 0.055,
           }, 0.5)
           .to(hearts, { opacity: 0, scale: 0.7, duration: 0.4, stagger: 0.055 }, 1.15)
-          .to(select(".gift__light"), { opacity: 0, scale: 2.2, duration: 0.7 }, 1.15);
+          .to(select(".gift__light"), { opacity: 0, scale: 2.2, duration: 0.7 }, 1.15)
+          .to(sectionRef.current, { opacity: 0, duration: 0.5 }, 1.9);
       }, sectionRef);
 
       setReady(true);
@@ -105,8 +107,6 @@ export default function GiftIntro({ intro, onOpen, onComplete }) {
     <motion.section
       ref={sectionRef}
       className="intro"
-      exit={{ opacity: 0 }}
-      transition={{ duration: reduceMotion ? 0.15 : 0.6 }}
     >
       <div className="intro__glow" />
       <motion.div

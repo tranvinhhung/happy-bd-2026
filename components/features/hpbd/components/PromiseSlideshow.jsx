@@ -1,7 +1,9 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Image, { getImageProps } from "next/image";
+import useAmbientMotion from "./useAmbientMotion";
 import {
   AnimatePresence,
   motion,
@@ -24,36 +26,41 @@ const images = [
 ];
 
 export default function PromiseSlideshow() {
+  const ref = useRef(null);
+  const active = useAmbientMotion(ref);
   const [currentIndex, setCurrentIndex] = useState(0);
   const reduceMotion = useReducedMotion();
 
   useEffect(() => {
-    // Tải trước các ảnh để tránh nháy khi chuyển.
-    images.forEach(({ src }) => {
-      const image = new Image();
-      image.src = src;
+    if (!active) return;
+    // Preload only the next optimized image, and only while the album is visible.
+    const { props } = getImageProps({
+      ...images[(currentIndex + 1) % images.length],
+      width: 600, height: 800, sizes: "(max-width: 600px) 80vw, 400px",
     });
-  }, []);
+    const image = new window.Image();
+    image.sizes = props.sizes;
+    image.srcset = props.srcSet;
+    image.src = props.src;
+  }, [active, currentIndex]);
 
   useEffect(() => {
-    if (reduceMotion) return;
+    if (!active) return;
 
     const interval = window.setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % images.length);
     }, 3000);
 
     return () => window.clearInterval(interval);
-  }, [reduceMotion]);
+  }, [active]);
 
   return (
-    <div className="promises-slideshow">
+    <div ref={ref} className="promises-slideshow">
       <AnimatePresence initial={false}>
-        <motion.img
+        <motion.div
           key={images[currentIndex].src}
-          src={images[currentIndex].src}
-          alt={images[currentIndex].alt}
           className="promises-slideshow__image"
-          initial={{
+          initial={reduceMotion ? false : {
             opacity: 0,
             scale: 1.06,
           }}
@@ -69,7 +76,15 @@ export default function PromiseSlideshow() {
             duration: 0.45,
             ease: "easeInOut",
           }}
-        />
+        >
+          <Image
+            src={images[currentIndex].src}
+            alt={images[currentIndex].alt}
+            fill
+            sizes="(max-width: 600px) 80vw, 400px"
+            style={{ objectFit: "cover", objectPosition: "center 55%" }}
+          />
+        </motion.div>
       </AnimatePresence>
 
       <div className="promises-slideshow__dots">

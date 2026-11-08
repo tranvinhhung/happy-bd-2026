@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback, useId } from "react";
+import Image from "next/image";
 import {
-  AnimatePresence,
   motion,
   useInView,
   useReducedMotion,
 } from "framer-motion";
-import { birthdayData as data } from "@/components/features/hpbd/utils/data/birthday";
+import { birthdayData as data, BIRTHDAY_DATE } from "@/components/features/hpbd/utils/data/birthday";
+import MusicToggle from "./MusicToggle.jsx";
+import useAmbientMotion from "./useAmbientMotion";
 import GiftIntro from "./GiftIntro.jsx";
 import BirthdayAngel from "./BirthdayAngel.jsx";
 import BirthdaySmoothScroll from "./BirthdaySmoothScroll.jsx";
@@ -28,7 +30,7 @@ import LoveRoom3D from "@/components/features/hpbd/components/LoveRoom3D/LoveRoo
 // import FlyingCupid from "./FlyingCupid.jsx";
 import "./birthday.scss";
 
-const Heart = ({ index }) => (
+const Heart = ({ index, active }) => (
   <motion.span
     className="floating-heart"
     style={{
@@ -39,16 +41,16 @@ const Heart = ({ index }) => (
       opacity: 0,
       scale: 0.5,
     }}
-    animate={{
+    animate={active ? {
       y: -900,
       opacity: [0, 0.8, 0.8, 0],
       scale: [0.5, 1, 0.8],
       rotate: [0, 20, -15],
-    }}
+    } : { y: 100, opacity: 0, scale: 0.5, rotate: 0 }}
     transition={{
       duration: 8 + (index % 4),
       delay: index * 0.7,
-      repeat: Infinity,
+      repeat: active ? Infinity : 0,
       ease: "linear",
     }}
   >
@@ -57,10 +59,12 @@ const Heart = ({ index }) => (
 );
 
 const FloatingHearts = () => {
+  const ref = useRef(null);
+  const active = useAmbientMotion(ref);
   return (
-    <div className="floating-hearts">
+    <div ref={ref} className="floating-hearts" aria-hidden="true">
       {Array.from({ length: 12 }).map((_, index) => (
-        <Heart key={index} index={index} />
+        <Heart key={index} index={index} active={active} />
       ))}
     </div>
   );
@@ -94,25 +98,29 @@ export default function BirthdayExperience() {
   const experienceRef = useRef(null);
   const [started, setStarted] = useState(false);
   const audioRef = useRef(null);
+  const [musicPlaying, setMusicPlaying] = useState(false);
+  const [musicError, setMusicError] = useState(false);
 
-  const [testBirthday] = useState(() =>
-    new Date(Date.now() + 1 * 60 * 1000).toISOString(),
-  );
-
-  const birthday =
-    process.env.NODE_ENV === "development"
-      ? testBirthday
-      : "2026-12-19T00:00:00+07:00";
+  const playMusic = () => {
+    setMusicError(false);
+    audioRef.current?.play().catch((error) => {
+      if (error.name !== "AbortError") setMusicError(true);
+    });
+  };
 
   const openGift = () => {
-    if (audioRef.current && process.env.NODE_ENV !== "development") {
-      audioRef.current.volume =  0.3;
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3;
       audioRef.current.currentTime = 0;
-      audioRef.current.play().catch((error) => {
-        console.warn("Không thể phát nhạc:", error);
-      });
+      playMusic();
     }
 
+  };
+
+  const toggleMusic = () => {
+    if (!audioRef.current) return;
+    if (audioRef.current.paused) playMusic();
+    else audioRef.current.pause();
   };
 
   const startExperience = useCallback(() => setStarted(true), []);
@@ -131,18 +139,22 @@ export default function BirthdayExperience() {
   }, []);
 
   return (
-    <main ref={experienceRef} className="birthday">
+    <main ref={experienceRef} className="birthday" id="birthday-top">
       <BirthdaySmoothScroll enabled={started} />
       <audio
         ref={audioRef}
         src="/audio/beautiful_in_white.mp3"
         preload="none"
         loop
+        onPlay={() => setMusicPlaying(true)}
+        onPause={() => setMusicPlaying(false)}
+        onError={() => { setMusicPlaying(false); setMusicError(true); }}
       />
+
+      {started && <MusicToggle playing={musicPlaying} onToggle={toggleMusic} error={musicError} />}
 
       <FloatingHearts />
 
-      <AnimatePresence mode="wait">
         {!started ? (
           <GiftIntro
             key="intro"
@@ -161,7 +173,7 @@ export default function BirthdayExperience() {
             <Hero />
             
             <SectionConnector variant="letter" />
-            <BirthdayCountdown birthday={birthday} />
+            <BirthdayCountdown birthday={BIRTHDAY_DATE} />
 
             {/* <Memories /> */}
 
@@ -207,7 +219,6 @@ export default function BirthdayExperience() {
             <Ending />
           </motion.div>
         )}
-      </AnimatePresence>
     </main>
   );
 }
@@ -332,7 +343,7 @@ function Hero() {
         <p className="hero__description">{data.hero.description}</p>
 
         <div className="hero__couple">
-          <img src="/images/bg.jpg" alt="Our memory" />
+          <Image src="/images/bg.jpg" alt="Kỷ niệm của chúng mình" width={600} height={380} sizes="(max-width: 600px) 80vw, 300px" />
         </div>
 
         <span className="scroll-text">Cuộn xuống để xem món quà ↓</span>
@@ -594,7 +605,7 @@ function Timeline() {
                 <span className="love-timeline__tape" />
 
                 <div className="love-timeline__image-window">
-                  <img src={image} alt={item.title} loading="lazy" decoding="async" />
+                  <Image src={image} alt={item.title} width={600} height={700} sizes="(max-width: 600px) 42vw, 300px" />
                 </div>
               </div>
 

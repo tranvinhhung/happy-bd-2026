@@ -4,6 +4,10 @@
   padding: 55px 18px;
   background: #f8e1e9;
   overflow: hidden;
+
+  &[data-ambient-active="false"] {
+    .float, .flame, .finaleHeart { animation-play-state: paused; }
+  }
 }
 
 .universe {

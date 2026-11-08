@@ -42,7 +42,7 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         alt: "Happy Birthday, My Love ♡",
-        type: "image/png",
+        type: "image/jpeg",
       },
     ],
   },
@@ -64,7 +64,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
+      lang="vi"
+      data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>

@@ -6,6 +6,7 @@ import { Heart, Sparkles } from "lucide-react";
 import SectionTitle from "./SectionTitle";
 import Reveal from "./Reveal";
 import PromiseSlideshow from "./PromiseSlideshow";
+import useAmbientMotion from "./useAmbientMotion";
 
 // Những lời nhắn phụ xuất hiện khi nhấn vào lời hứa.
 // Có thể chỉnh nội dung theo câu chuyện của hai bạn.
@@ -17,7 +18,7 @@ const promiseMessages = [
   "Mong sau này, tóc bạc rồi, chúng mình vẫn nắm tay nhau.",
 ];
 
-function FloatingHearts() {
+function FloatingHearts({ active }) {
   const hearts = [
     { left: "7%", top: "16%", size: 14, delay: 0 },
     { left: "89%", top: "12%", size: 18, delay: 1.4 },
@@ -37,16 +38,16 @@ function FloatingHearts() {
             top: heart.top,
             fontSize: heart.size,
           }}
-          animate={{
+          animate={active ? {
             y: [0, -22, 0],
             x: [0, 8, 0],
             opacity: [0.15, 0.5, 0.15],
             rotate: [-12, 12, -12],
-          }}
+          } : { y: 0, x: 0, opacity: 0.15, rotate: 0 }}
           transition={{
             duration: 5 + index * 0.7,
             delay: heart.delay,
-            repeat: Infinity,
+            repeat: active ? Infinity : 0,
             ease: "easeInOut",
           }}
         >
@@ -165,6 +166,8 @@ function PromiseCard({
 }
 
 export default function Promises({ data }) {
+  const sectionRef = useRef(null);
+  const active = useAmbientMotion(sectionRef);
   const [activePromise, setActivePromise] = useState(null);
   const [completedPromises, setCompletedPromises] = useState([]);
   const reduceMotion = useReducedMotion();
@@ -183,11 +186,11 @@ export default function Promises({ data }) {
   };
 
   return (
-    <section className="promises-section section-dark" id="our-promises">
+    <section ref={sectionRef} className="promises-section section-dark" id="our-promises">
       <div className="promises-glow promises-glow--left" data-parallax="decoration" />
       <div className="promises-glow promises-glow--right" data-parallax="decoration" />
 
-      <FloatingHearts />
+      <FloatingHearts active={active} />
 
       <div className="promises-inner">
         <Reveal>
@@ -300,10 +303,10 @@ export default function Promises({ data }) {
 
           <motion.div
             className="promises-photo"
-            animate={reduceMotion ? {} : { y: [0, -10, 0] }}
+            animate={active ? { y: [0, -10, 0] } : { y: 0 }}
             transition={{
               duration: 6,
-              repeat: Infinity,
+              repeat: active ? Infinity : 0,
               ease: "easeInOut",
             }}
           >
@@ -313,8 +316,8 @@ export default function Promises({ data }) {
           <motion.span
             className="promises-photo-heart promises-photo-heart--one"
             animate={
-              reduceMotion
-                ? {}
+              !active
+                ? { y: 0, rotate: 0 }
                 : {
                     y: [0, -14, 0],
                     rotate: [-10, 10, -10],
@@ -322,7 +325,7 @@ export default function Promises({ data }) {
             }
             transition={{
               duration: 4,
-              repeat: Infinity,
+              repeat: active ? Infinity : 0,
             }}
           >
             ♡
@@ -331,15 +334,15 @@ export default function Promises({ data }) {
           <motion.span
             className="promises-photo-heart promises-photo-heart--two"
             animate={
-              reduceMotion
-                ? {}
+              !active
+                ? { y: 0 }
                 : {
                     y: [0, 15, 0],
                   }
             }
             transition={{
               duration: 5,
-              repeat: Infinity,
+              repeat: active ? Infinity : 0,
             }}
           >
             ✧
