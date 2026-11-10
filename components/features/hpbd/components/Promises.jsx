@@ -6,7 +6,7 @@ import { Heart, Sparkles } from "lucide-react";
 import SectionTitle from "./SectionTitle";
 import Reveal from "./Reveal";
 import PromiseSlideshow from "./PromiseSlideshow";
-import useAmbientMotion from "./useAmbientMotion";
+import useAmbientMotion from "../hooks/useAmbientMotion";
 
 // Những lời nhắn phụ xuất hiện khi nhấn vào lời hứa.
 // Có thể chỉnh nội dung theo câu chuyện của hai bạn.

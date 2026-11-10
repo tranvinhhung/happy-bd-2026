@@ -9,7 +9,8 @@ import {
 } from "framer-motion";
 import { birthdayData as data, BIRTHDAY_DATE } from "@/components/features/hpbd/utils/data/birthday";
 import MusicToggle from "./MusicToggle.jsx";
-import useAmbientMotion from "./useAmbientMotion";
+import useAmbientMotion from "../hooks/useAmbientMotion";
+import useHeroAnimation, { useHeroPreload } from "../hooks/useHeroAnimation";
 import GiftIntro from "./GiftIntro.jsx";
 import BirthdayAngel from "./BirthdayAngel.jsx";
 import BirthdaySmoothScroll from "./BirthdaySmoothScroll.jsx";
@@ -95,6 +96,7 @@ const Reveal = ({ children, className = "" }) => (
 );
 
 export default function BirthdayExperience() {
+  useHeroPreload();
   const experienceRef = useRef(null);
   const [started, setStarted] = useState(false);
   const audioRef = useRef(null);
@@ -123,7 +125,11 @@ export default function BirthdayExperience() {
     else audioRef.current.pause();
   };
 
-  const startExperience = useCallback(() => setStarted(true), []);
+  const startExperience = useCallback(() => {
+    // A short screen may have scrolled the intro down to reach the gift button.
+    window.scrollTo({ top: 0, behavior: "instant" });
+    setStarted(true);
+  }, []);
 
   const handleMemoryAudioChange = useCallback((isPlaying) => {
     if (!audioRef.current) return;
@@ -163,12 +169,7 @@ export default function BirthdayExperience() {
             onComplete={startExperience}
           />
         ) : (
-          <motion.div
-            key="content"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-          >
+          <div key="content">
             <SectionParallax rootRef={experienceRef} />
             <Hero />
             
@@ -217,7 +218,7 @@ export default function BirthdayExperience() {
 
             <SectionConnector variant="letter" />
             <Ending />
-          </motion.div>
+          </div>
         )}
     </main>
   );
@@ -226,88 +227,7 @@ export default function BirthdayExperience() {
 function Hero() {
   const heroRef = useRef(null);
 
-  useEffect(() => {
-    let disposed = false;
-    let media;
-
-    const setup = async () => {
-      const photo = heroRef.current?.querySelector(".hero__couple img");
-      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
-        import("gsap"),
-        import("gsap/ScrollTrigger"),
-        // Keep font/image loading from changing the layout during the entrance.
-        document.fonts.ready,
-        photo?.decode().catch(() => {}),
-      ]);
-      if (disposed || !heroRef.current) return;
-
-      gsap.registerPlugin(ScrollTrigger);
-      media = gsap.matchMedia();
-      media.add(
-        {
-          motion: "(prefers-reduced-motion: no-preference)",
-          desktop: "(min-width: 768px)",
-        },
-        (context) => {
-          if (!context.conditions.motion) return;
-
-          const select = gsap.utils.selector(heroRef.current);
-          const strength = context.conditions.desktop ? 0.75 : 0.45;
-
-          // Fixed overscan covers the frame while the photo translates; no zoom tween.
-          gsap.set(photo, {
-            scale: context.conditions.desktop ? 1.22 : 1.18,
-            force3D: true,
-          });
-
-          gsap.timeline({ defaults: { ease: "power3.out" } })
-            .from(select(".hero__stars"), { opacity: 0, duration: 1.4 }, 0)
-            .from(select(".hero__date"), { opacity: 0, y: 16, duration: 0.7 }, 0.15)
-            .from(select(".hero__title-char"), {
-              opacity: 0, yPercent: 55, rotation: 6, stagger: 0.045, duration: 0.9,
-            }, 0.3)
-            .from(select(".hero__heart"), {
-              opacity: 0, scale: 0.4, duration: 0.7, ease: "back.out(1.6)",
-            }, 0.8)
-            .from(select(".hero__description"), { opacity: 0, y: 18, duration: 0.8 }, 0.95)
-            .from(select(".hero__couple"), {
-              opacity: 0, y: 24, duration: 1, force3D: true,
-            }, 1.05)
-            .from(select(".scroll-text"), { opacity: 0, duration: 0.8 }, 1.55);
-
-          gsap.timeline({
-            defaults: { ease: "none", duration: 1 },
-            scrollTrigger: {
-              trigger: heroRef.current,
-              start: "top top",
-              end: "bottom top",
-              scrub: 1.2,
-            },
-          })
-            .to(select(".hero__stars"), { y: 160 * strength, force3D: true }, 0)
-            .to(select(".hero__stars span:nth-child(3n)"), { y: 70 * strength }, 0)
-            .to(select(".hero__angel"), { y: 75 * strength, force3D: true }, 0)
-            .to(select(".hero__heart"), { y: -45 * strength, force3D: true }, 0)
-            .fromTo(photo,
-              { y: context.conditions.desktop ? -12 : -8 },
-              { y: context.conditions.desktop ? 12 : 8 }, 0,
-            );
-        },
-        heroRef,
-      );
-
-    };
-
-    setup().catch((error) => {
-      media?.revert();
-      console.warn("Không thể khởi tạo hiệu ứng Hero:", error);
-    });
-
-    return () => {
-      disposed = true;
-      media?.revert();
-    };
-  }, []);
+  useHeroAnimation(heroRef);
 
   return (
     <section ref={heroRef} className="hero section-dark">
@@ -343,7 +263,7 @@ function Hero() {
         <p className="hero__description">{data.hero.description}</p>
 
         <div className="hero__couple">
-          <Image src="/images/bg.jpg" alt="Kỷ niệm của chúng mình" width={600} height={380} sizes="(max-width: 600px) 80vw, 300px" />
+          <Image src="/images/bg.jpg" alt="Kỷ niệm của chúng mình" width={600} height={380} sizes="(max-width: 600px) 80vw, 300px" loading="eager" />
         </div>
 
         <span className="scroll-text">Cuộn xuống để xem món quà ↓</span>

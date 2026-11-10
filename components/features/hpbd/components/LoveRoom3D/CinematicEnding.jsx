@@ -8,6 +8,7 @@ export default function CinematicEnding({
   showMessage,
   onReplay,
   onClose,
+  showHeartIcon = true,
 }) {
   return (
     <AnimatePresence>
@@ -73,7 +74,7 @@ export default function CinematicEnding({
                     "linear-gradient(transparent 35%, rgba(20, 9, 35, 0.8))",
                 }}
               >
-                <motion.div
+                {showHeartIcon && <motion.div
                   animate={{ scale: [1, 1.08, 1] }}
                   transition={{
                     duration: 2,
@@ -82,7 +83,7 @@ export default function CinematicEnding({
                   style={{ fontSize: 42 }}
                 >
                   💗
-                </motion.div>
+                </motion.div>}
 
                 <h2
                   style={{

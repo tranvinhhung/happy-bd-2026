@@ -1,6 +1,7 @@
 
 "use client";
 import Image from "next/image";
+import usePopupImagePreload from "../hooks/usePopupImagePreload";
 
 import {
     memo,
@@ -40,6 +41,12 @@ const createPositions = (items) =>
 const INITIAL_POSITIONS = createPositions(polaroidMemories);
 
 const INITIAL_ORDER = polaroidMemories.map((item) => item.id);
+
+const POPUP_IMAGE = {
+    width: 1200,
+    height: 1200,
+    sizes: "(max-width: 600px) 90vw, 600px",
+};
 
 const SPRING_CONFIG = {
     type: "spring",
@@ -346,6 +353,8 @@ const PolaroidCard = memo(function PolaroidCard({
 
 export default function PolaroidAlbum({ onMemoryAudioChange }) {
     const reduceMotion = useReducedMotion();
+    const sectionRef = useRef(null);
+    usePopupImagePreload(sectionRef, polaroidMemories, POPUP_IMAGE);
 
     const [positions, setPositions] = useState(
         INITIAL_POSITIONS
@@ -501,7 +510,7 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
     // ==================================================
 
     return (
-        <section className="polaroid-album">
+        <section ref={sectionRef} className="polaroid-album">
             <motion.div
                 className="polaroid-album__heading"
                 data-parallax="heading"
@@ -675,9 +684,8 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
                             />
                             <Image
                             src={selectedMemory.image}
-                            width={1200}
-                            height={1200}
-                            sizes="(max-width: 600px) 90vw, 600px"
+                            {...POPUP_IMAGE}
+                            loading="eager"
                             alt={selectedMemory.title}
                             />
                         </motion.div>

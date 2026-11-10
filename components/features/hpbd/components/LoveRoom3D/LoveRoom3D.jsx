@@ -15,7 +15,11 @@ import LoveCornerMessage from "./LoveCornerMessage";
 import styles from "../../styles/LoveRoom3D.module.scss";
 import SectionTitle from "../SectionTitle";
 import CoupleActionButtons from "./CoupleActionButtons";
-import { usePageVisible } from "../useAmbientMotion";
+import { usePageVisible } from "../../hooks/useAmbientMotion";
+import RoomScene2D from "./RoomScene2D";
+import RoomEndingEffects from "./RoomEndingEffects";
+import useRoomMode from "../../hooks/useRoomMode";
+import RoomSceneBoundary from "./RoomSceneBoundary";
 
 const RoomScene = dynamic(() => import("./RoomScene"), {
   ssr: false,
@@ -27,6 +31,7 @@ const RoomScene = dynamic(() => import("./RoomScene"), {
 });
 
 export default function LoveRoom3D() {
+  const [viewMode, setViewMode] = useRoomMode();
   const pageVisible = usePageVisible();
   const [chapter, setChapter] = useState(0);
   const [activeStory, setActiveStory] = useState(null);
@@ -255,6 +260,12 @@ export default function LoveRoom3D() {
         />
       </motion.div>
 
+      <div className={styles.viewModeControls} role="group" aria-label="Chế độ căn phòng">
+        <button type="button" aria-pressed={viewMode === "3d"} onClick={() => setViewMode("3d")}>◈ Phòng 3D</button>
+        <button type="button" aria-pressed={viewMode === "2d"} onClick={() => setViewMode("2d")}>▧ 2D nhẹ</button>
+        <p>Chuyển chế độ vẫn giữ tiến trình khám phá của em ♡</p>
+      </div>
+
       <div className={styles.storyProgress} data-parallax="text">
         {ROOM_STORY.map((item, index) => (
           <div
@@ -269,8 +280,9 @@ export default function LoveRoom3D() {
         ))}
       </div>
 
-      <div ref={sceneWrapperRef} className={styles.sceneWrapper} style={{ position: "relative" }}>
-        {isSceneNear ? (
+      <div ref={sceneWrapperRef} className={styles.sceneWrapper} data-mode={viewMode} style={{ position: "relative" }}>
+        {isSceneNear && viewMode === "3d" ? (
+          <RoomSceneBoundary onUse2D={() => setViewMode("2d")}>
           <RoomScene
             active={isSceneVisible && pageVisible}
             hintedObject={hintedChapter === chapter ? currentStory?.id : null}
@@ -289,6 +301,25 @@ export default function LoveRoom3D() {
             onCornerInteract={handleCornerInteract}
             coupleAction={coupleAction}
             coupleActionVersion={coupleActionVersion}
+          />
+          </RoomSceneBoundary>
+        ) : isSceneNear ? (
+          <RoomScene2D
+            active={isSceneVisible && pageVisible}
+            isNight={isNight}
+            isHugging={isHugging}
+            activeObject={completed ? null : currentStory?.id}
+            hintedObject={hintedChapter === chapter ? currentStory?.id : null}
+            onInteract={handleInteract}
+            onCornerInteract={handleCornerInteract}
+            cakeBlownOut={cakeBlownOut}
+            onBlowCake={handleBlowCake}
+            celebrate={celebrate}
+            coupleAction={coupleAction}
+            coupleActionVersion={coupleActionVersion}
+            cinematicActive={cinematicActive}
+            cinematicProgress={cinematicProgress}
+            blocked={cinematicActive || Boolean(activeStory)}
           />
         ) : (
           <div className={styles.loading}>
@@ -309,7 +340,7 @@ export default function LoveRoom3D() {
 
         {hintedChapter === chapter && !activeStory && (
           <div className={styles.hintMessage} role="status">
-            Camera đang hướng tới vật cần tìm. Chạm vào điểm sáng nhé ♡
+            {viewMode === "2d" ? "Đồ vật cần tìm đang được đánh dấu. Chạm vào đó nhé ♡" : "Camera đang hướng tới vật cần tìm. Chạm vào điểm sáng nhé ♡"}
           </div>
         )}
 
@@ -340,8 +371,17 @@ export default function LoveRoom3D() {
           </button>
         )}
 
+        {cinematicActive && cinematicProgress >= 7 && (
+          <RoomEndingEffects
+            messageVisible={cinematicMessage}
+            active={isSceneVisible && pageVisible}
+            compact={viewMode === "3d"}
+          />
+        )}
+
         <CinematicEnding
           active={cinematicActive}
+          showHeartIcon={false}
           showMessage={cinematicMessage}
           onReplay={startCinematic}
           onClose={closeCinematic}
@@ -354,7 +394,7 @@ export default function LoveRoom3D() {
         />
 
         <div className={styles.sceneHint}>
-          ✧ Kéo để xoay · Chạm vào đồ vật phát sáng
+          {viewMode === "2d" ? "✧ Chạm vào đồ vật có viền sáng để mở kỷ niệm" : "✧ Kéo để xoay · Chạm vào đồ vật phát sáng"}
         </div>
       </div>
 
@@ -401,7 +441,7 @@ export default function LoveRoom3D() {
           {isNight ? "☀ Ban ngày" : "☾ Ban đêm"}
         </button>
 
-        <button
+        {viewMode === "3d" && <button
           type="button"
           onClick={() => {
             setCameraTarget("default");
@@ -409,7 +449,7 @@ export default function LoveRoom3D() {
           }}
         >
           ◇ Toàn cảnh
-        </button>
+        </button>}
       </div>
 
       <AnimatePresence>

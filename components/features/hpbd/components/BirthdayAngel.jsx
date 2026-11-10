@@ -4,7 +4,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import Image from "next/image";
-import useAmbientMotion from "./useAmbientMotion";
+import useAmbientMotion from "../hooks/useAmbientMotion";
 
 const sparkles = [
   { left: "12%", top: "25%", delay: 0 },
@@ -72,6 +72,7 @@ export default function BirthdayAngel() {
             width={360}
             height={360}
             sizes="(max-width: 600px) 155px, 220px"
+            loading="eager"
             alt="Thiên thần nhỏ ôm trái tim"
             draggable={false}
           />

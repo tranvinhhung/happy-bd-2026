@@ -3,7 +3,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image, { getImageProps } from "next/image";
-import useAmbientMotion from "./useAmbientMotion";
+import useAmbientMotion from "../hooks/useAmbientMotion";
 import {
   AnimatePresence,
   motion,

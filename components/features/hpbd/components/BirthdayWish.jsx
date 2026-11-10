@@ -10,7 +10,7 @@ import {
 import { useRef } from "react";
 import styles from "../styles/BirthdayWish.module.scss";
 import SectionTitle from "./SectionTitle";
-import useAmbientMotion from "./useAmbientMotion";
+import useAmbientMotion from "../hooks/useAmbientMotion";
 
 const WISH_MESSAGES = [
   "Mong em luôn rạng rỡ, tự tin và yêu thương chính mình mỗi ngày.",

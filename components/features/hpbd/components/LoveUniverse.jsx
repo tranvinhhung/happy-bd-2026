@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import useAmbientMotion from "./useAmbientMotion";
+import usePopupImagePreload from "../hooks/usePopupImagePreload";
+import useAmbientMotion from "../hooks/useAmbientMotion";
 import {
     AnimatePresence,
     motion,
@@ -13,6 +14,12 @@ import { ArrowLeft, ArrowRight, Heart, Sparkles, X } from "lucide-react";
 import Reveal from "./Reveal.jsx";
 import SectionTitle from "./SectionTitle.jsx";
 import styles from "../styles/LoveUniverse.module.scss";
+
+const POPUP_IMAGE = {
+    width: 860,
+    height: 645,
+    sizes: "(max-width: 600px) 90vw, 430px",
+};
 
 const DEFAULT_MEMORIES = [
     {
@@ -432,6 +439,7 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
     const [visited, setVisited] = useState([]);
     const reduceMotion = useReducedMotion();
     const sectionRef = useRef(null);
+    usePopupImagePreload(sectionRef, memories, POPUP_IMAGE);
     const ambientActive = useAmbientMotion(sectionRef);
     const universeRef = useRef(null);
     const [isCompactLayout, setIsCompactLayout] = useState(false);
@@ -873,7 +881,7 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
                             </button>
 
                             <div className={styles.modalPhoto}>
-                                <Image src={selectedMemory.image} alt={selectedMemory.title} width={860} height={645} sizes="(max-width: 600px) 90vw, 430px" />
+                                <Image src={selectedMemory.image} alt={selectedMemory.title} {...POPUP_IMAGE} loading="eager" />
                             </div>
 
                             <span className={styles.modalDate}>
