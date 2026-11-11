@@ -10,6 +10,7 @@ import {
 import { birthdayData as data, BIRTHDAY_DATE } from "@/components/features/hpbd/utils/data/birthday";
 import MusicToggle from "./MusicToggle.jsx";
 import useAmbientMotion from "../hooks/useAmbientMotion";
+import useJourneyMusic from "../hooks/useJourneyMusic";
 import useHeroAnimation, { useHeroPreload } from "../hooks/useHeroAnimation";
 import GiftIntro from "./GiftIntro.jsx";
 import BirthdayAngel from "./BirthdayAngel.jsx";
@@ -100,6 +101,7 @@ export default function BirthdayExperience() {
   const experienceRef = useRef(null);
   const [started, setStarted] = useState(false);
   const audioRef = useRef(null);
+  const handleJourneyActiveChange = useJourneyMusic(audioRef);
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [musicError, setMusicError] = useState(false);
 
@@ -217,7 +219,7 @@ export default function BirthdayExperience() {
             <LoveRoom3D />
 
             <SectionConnector variant="letter" />
-            <Ending />
+            <Ending onJourneyActiveChange={handleJourneyActiveChange} />
           </div>
         )}
     </main>

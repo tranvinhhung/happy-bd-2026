@@ -63,7 +63,13 @@ export const birthdayData = {
 
         "Anh mong em sẽ luôn cười thật nhiều, luôn hạnh phúc , đừng khóc nhè, và hãy luôn là chính em. Anh sẽ luôn ở bên em, cùng em đi qua mọi thử thách và tạo thêm thật nhiều kỷ niệm đẹp.",
 
+        "Có những lúc dh thấy mình khó tính và hay cáu gắt, làm bé khóc nhiều ,nhưng em vẫn luôn kiên nhẫn và yêu thương dh. Dh thật sự biết ơn vì điều đó và dh cũng xin lỗi em nhé,dh thương bé nhiều.",
+
+        "Cảm ơn em những lúc đã động viên dh ,đã ở bên dh những ngày tháng khó khăn nhất của cuộc đời dh.",
+        
         "Ở tuổi mới, anh chỉ mong em luôn mạnh khỏe, may mắn, thành công và vẫn mãi ở bên dinhhung em nhé ♡",
+
+        "Chúng mình hãy cùng nhau cố gắng em nhé ♡"
     ],
 
     thingsILove: [

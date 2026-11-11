@@ -114,7 +114,7 @@ export default function LoveLetter({ paragraphs }) {
         </div>
 
         <div className="letter__signature" data-parallax="text" data-writing-complete={isWritingComplete}>
-          <span>Yêu em rất nhiều</span>
+          <span>Yêu em rất nhiều ♡</span>
           <strong aria-hidden="true">♡</strong>
         </div>
 

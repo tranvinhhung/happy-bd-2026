@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
+import SecretEnding from "./SecretEnding";
 
 const stars = Array.from({ length: 18 }, (_, index) => ({
   left: `${(index * 37) % 100}%`,
@@ -21,7 +22,7 @@ const floatingHearts = [
   { left: "90%", delay: 4, duration: 9, size: 22 },
 ];
 
-export default function Ending() {
+export default function Ending({ onJourneyActiveChange }) {
   const sectionRef = useRef(null);
   const isNear = useInView(sectionRef, { once: true, margin: "600px 0px" });
   const reduceMotion = useReducedMotion();
@@ -187,6 +188,7 @@ export default function Ending() {
           </motion.div>
         </div>
         <span className="ending__forever">today · tomorrow · always</span>
+        <SecretEnding onActiveChange={onJourneyActiveChange} />
       </div>
     </section>
   );

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <radialGradient id="night"><stop stop-color="#49334f"/><stop offset="1" stop-color="#171423"/></radialGradient>
+    <linearGradient id="thread"><stop stop-color="#f1b1ca"/><stop offset=".5" stop-color="#ffe2bb"/><stop offset="1" stop-color="#c4b4ee"/></linearGradient>
+    <radialGradient id="glow"><stop stop-color="#ffd6e6" stop-opacity=".6"/><stop offset="1" stop-color="#ffd6e6" stop-opacity="0"/></radialGradient>
+  </defs>
+  <path fill="url(#night)" d="M0 0h1600v900H0z"/>
+  <g fill="#ffe8d2" opacity=".6"><circle cx="160" cy="180" r="2"/><circle cx="340" cy="300" r="3"/><circle cx="620" cy="150" r="2"/><circle cx="970" cy="220" r="2"/><circle cx="1360" cy="170" r="3"/><circle cx="1230" cy="640" r="2"/><circle cx="480" cy="700" r="2"/><circle cx="1440" cy="480" r="2"/></g>
+  <circle cx="390" cy="450" r="160" fill="url(#glow)"/><circle cx="1210" cy="450" r="160" fill="url(#glow)"/>
+  <path d="M390 450 Q800 180 1210 450" fill="none" stroke="url(#thread)" stroke-width="3" stroke-dasharray="8 12"/>
+  <g fill="#ffe1ee"><circle cx="390" cy="450" r="10"/><circle cx="1210" cy="450" r="10"/>
+  <path d="M800 318c-16-14-38-30-38-48 0-23 28-29 38-10 10-19 38-13 38 10 0 18-22 34-38 48z"/></g>
+</svg>
