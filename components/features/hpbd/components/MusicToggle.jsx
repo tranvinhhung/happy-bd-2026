@@ -4,8 +4,16 @@ import { useEffect, useId, useRef, useState } from "react";
 import { ArrowUp, Volume2, VolumeX, X } from "lucide-react";
 
 const SIZE = 48;
-const GAP = 10;
-const clampY = (y) => Math.max(GAP, Math.min(y, (window.visualViewport?.height || window.innerHeight) - SIZE - GAP));
+const GAP = 14;
+const BOTTOM_SAFE_GAP = 28;
+const clampY = (y) =>
+  Math.max(
+    GAP,
+    Math.min(
+      y,
+      (window.visualViewport?.height || window.innerHeight) - SIZE - BOTTOM_SAFE_GAP,
+    ),
+  );
 
 export default function MusicToggle({ playing, onToggle, error }) {
   const rootRef = useRef(null);

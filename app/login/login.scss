@@ -3,10 +3,16 @@
   position: relative;
   display: flex;
   min-height: 100svh;
+  min-height: 100dvh;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  padding: 30px 18px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding:
+    max(30px, calc(16px + env(safe-area-inset-top, 0px)))
+    max(18px, env(safe-area-inset-right, 0px))
+    max(30px, calc(16px + env(safe-area-inset-bottom, 0px)))
+    max(18px, env(safe-area-inset-left, 0px));
 
   background:
     radial-gradient(
@@ -162,11 +168,37 @@
 @media (max-width: 600px) {
   .birthday-login {
     &__card {
-      padding: 45px 22px;
+      padding: 40px 22px;
     }
 
     &__heart {
-      font-size: 60px;
+      font-size: 56px;
+    }
+  }
+}
+
+@media (max-height: 700px) {
+  .birthday-login {
+    &__card {
+      padding: 28px 20px;
+    }
+
+    &__heart {
+      margin-bottom: 12px;
+      font-size: 46px;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(38px, 8vw, 52px);
+    }
+
+    &__description {
+      margin-bottom: 20px;
+    }
+
+    &__footer {
+      margin-top: 20px;
     }
   }
 }

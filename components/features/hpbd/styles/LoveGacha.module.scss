@@ -425,7 +425,11 @@
   place-items: center;
   overflow: hidden;
 
-  padding: 20px;
+  padding:
+    max(20px, calc(12px + env(safe-area-inset-top, 0px)))
+    max(20px, env(safe-area-inset-right, 0px))
+    max(20px, calc(12px + env(safe-area-inset-bottom, 0px)))
+    max(20px, env(safe-area-inset-left, 0px));
 
   background: rgba(30, 20, 33, 0.82);
   backdrop-filter: blur(9px);

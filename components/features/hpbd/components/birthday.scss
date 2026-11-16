@@ -9,7 +9,7 @@ $text: #53383c;
 
 .birthday {
   position: relative;
-  min-height: 100vh;
+  min-height: 100svh;
   font-family: "Montserrat", sans-serif;
   background: $paper;
 }
@@ -554,10 +554,15 @@ $text: #53383c;
   position: relative;
   display: flex;
   min-height: 100svh;
+  min-height: 100dvh;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 50px 20px;
+  padding:
+    max(50px, calc(24px + env(safe-area-inset-top, 0px)))
+    max(20px, env(safe-area-inset-right, 0px))
+    max(50px, calc(24px + env(safe-area-inset-bottom, 0px)))
+    max(20px, env(safe-area-inset-left, 0px));
   background:
     radial-gradient(circle at 50% 70%,
       rgba(255, 183, 196, 0.35),
@@ -751,7 +756,11 @@ html.lenis {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 80px 20px;
+  padding:
+    max(80px, calc(36px + env(safe-area-inset-top, 0px)))
+    max(20px, env(safe-area-inset-right, 0px))
+    max(80px, calc(36px + env(safe-area-inset-bottom, 0px)))
+    max(20px, env(safe-area-inset-left, 0px));
   text-align: center;
 
   &__content {
@@ -3079,7 +3088,11 @@ html.lenis {
   justify-content: center;
 
   overflow: hidden;
-  padding: 100px 20px;
+  padding:
+    100px
+    max(20px, env(safe-area-inset-right, 0px))
+    max(100px, calc(48px + env(safe-area-inset-bottom, 0px)))
+    max(20px, env(safe-area-inset-left, 0px));
 
   background:
     radial-gradient(circle at 50% 35%,
@@ -5016,7 +5029,11 @@ html.lenis {
     inset: 0;
     display: grid;
     place-items: center;
-    padding: 20px;
+    padding:
+      max(20px, calc(12px + env(safe-area-inset-top, 0px)))
+      max(20px, env(safe-area-inset-right, 0px))
+      max(20px, calc(12px + env(safe-area-inset-bottom, 0px)))
+      max(20px, env(safe-area-inset-left, 0px));
     background:
       radial-gradient(circle at 18% 18%, rgba(255, 190, 215, 0.2), transparent 22%),
       radial-gradient(circle at 82% 78%, rgba(255, 220, 159, 0.16), transparent 24%),
@@ -5029,8 +5046,9 @@ html.lenis {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(240px, 0.8fr);
     width: min(100%, 850px);
-    max-height: calc(100vh - 40px);
-    overflow: hidden;
+    max-height: calc(100dvh - 40px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    overflow-x: hidden;
     border: 8px solid #fff8f2;
     border-radius: 28px;
     background:
@@ -7009,7 +7027,11 @@ html.lenis {
   .polaroid-album__lightbox {
     align-items: start;
     overflow-y: auto;
-    padding: 12px;
+    padding:
+      max(12px, calc(8px + env(safe-area-inset-top, 0px)))
+      max(12px, env(safe-area-inset-right, 0px))
+      max(12px, calc(8px + env(safe-area-inset-bottom, 0px)))
+      max(12px, env(safe-area-inset-left, 0px));
   }
 
   .polaroid-album__lightbox-content {
@@ -7024,7 +7046,7 @@ html.lenis {
   .polaroid-album__lightbox-content .polaroid-album__lightbox-photo {
     display: block;
     width: 100%;
-    height: min(58vh, 360px);
+    height: min(50dvh, 340px);
     min-height: 0;
     border-radius: 16px 16px 0 0;
   }
@@ -7060,5 +7082,51 @@ html.lenis {
   .polaroid-album__lightbox-close {
     top: 8px;
     right: 8px;
+  }
+}
+
+@media (max-height: 700px) {
+  .intro {
+    padding-top: max(24px, calc(16px + env(safe-area-inset-top, 0px)));
+    padding-bottom: max(24px, calc(16px + env(safe-area-inset-bottom, 0px)));
+
+    &__content {
+      h1 {
+        font-size: clamp(52px, 11vw, 80px);
+      }
+
+      h2 {
+        margin-top: 14px;
+        font-size: 21px;
+      }
+
+      > p {
+        margin: 14px auto 18px;
+      }
+    }
+  }
+
+  .gift {
+    transform: scale(0.88);
+    margin: 10px auto 20px;
+  }
+
+  .hero {
+    padding-top: max(32px, calc(20px + env(safe-area-inset-top, 0px)));
+    padding-bottom: max(32px, calc(20px + env(safe-area-inset-bottom, 0px)));
+
+    h1 {
+      font-size: clamp(54px, 12vw, 90px);
+    }
+
+    &__heart {
+      margin: 8px 0;
+      font-size: 38px;
+    }
+
+    &__couple {
+      height: 155px;
+      margin: 18px auto;
+    }
   }
 }
