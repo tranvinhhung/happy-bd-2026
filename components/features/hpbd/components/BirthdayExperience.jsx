@@ -32,41 +32,138 @@ import LoveRoom3D from "@/components/features/hpbd/components/LoveRoom3D/LoveRoo
 // import FlyingCupid from "./FlyingCupid.jsx";
 import "./birthday.scss";
 
-const Heart = ({ index, active }) => (
-  <motion.span
-    className="floating-heart"
-    style={{
-      left: `${5 + ((index * 17) % 90)}%`,
-    }}
-    initial={{
-      y: 100,
-      opacity: 0,
-      scale: 0.5,
-    }}
-    animate={active ? {
-      y: -900,
-      opacity: [0, 0.8, 0.8, 0],
-      scale: [0.5, 1, 0.8],
-      rotate: [0, 20, -15],
-    } : { y: 100, opacity: 0, scale: 0.5, rotate: 0 }}
-    transition={{
-      duration: 8 + (index % 4),
-      delay: index * 0.7,
-      repeat: active ? Infinity : 0,
-      ease: "linear",
-    }}
-  >
-    ♡
-  </motion.span>
-);
+const FLOATING_HEARTS = [
+  { left: "6%", size: 22, symbol: "♡", variant: "rose", duration: 12.5, initialP: 0.08, swayAmp: 36, swayFreq: 1.6, gustAmp: 14, gustFreq: 3.1, drift: 18, bobAmp: 0.28, baseOpacity: 0.78, twirl: 0 },
+  { left: "13%", size: 16, symbol: "♥", variant: "blush", duration: 14.2, initialP: 0.42, swayAmp: 48, swayFreq: 1.9, gustAmp: 18, gustFreq: 3.7, drift: -24, bobAmp: 0.34, baseOpacity: 0.72, twirl: 1 },
+  { left: "21%", size: 27, symbol: "♡", variant: "peach", duration: 11.4, initialP: 0.74, swayAmp: 30, swayFreq: 1.3, gustAmp: 12, gustFreq: 2.8, drift: 26, bobAmp: 0.24, baseOpacity: 0.75, twirl: 0 },
+  { left: "29%", size: 19, symbol: "❦", variant: "rose", duration: 15.0, initialP: 0.22, swayAmp: 54, swayFreq: 2.1, gustAmp: 20, gustFreq: 4.1, drift: -16, bobAmp: 0.32, baseOpacity: 0.68, twirl: 0 },
+  { left: "37%", size: 24, symbol: "♡", variant: "soft", duration: 13.0, initialP: 0.58, swayAmp: 42, swayFreq: 1.7, gustAmp: 16, gustFreq: 3.3, drift: 22, bobAmp: 0.3, baseOpacity: 0.8, twirl: 0 },
+  { left: "45%", size: 15, symbol: "♥", variant: "blush", duration: 10.6, initialP: 0.86, swayAmp: 28, swayFreq: 1.5, gustAmp: 11, gustFreq: 2.9, drift: -28, bobAmp: 0.26, baseOpacity: 0.7, twirl: -1 },
+  { left: "53%", size: 29, symbol: "♡", variant: "rose", duration: 15.6, initialP: 0.14, swayAmp: 50, swayFreq: 1.4, gustAmp: 22, gustFreq: 3.5, drift: 14, bobAmp: 0.35, baseOpacity: 0.76, twirl: 0 },
+  { left: "61%", size: 18, symbol: "♡", variant: "peach", duration: 11.8, initialP: 0.66, swayAmp: 38, swayFreq: 2.0, gustAmp: 15, gustFreq: 3.9, drift: -20, bobAmp: 0.29, baseOpacity: 0.74, twirl: 0 },
+  { left: "69%", size: 25, symbol: "♥", variant: "blush", duration: 13.8, initialP: 0.34, swayAmp: 44, swayFreq: 1.8, gustAmp: 18, gustFreq: 3.2, drift: 30, bobAmp: 0.31, baseOpacity: 0.82, twirl: 1 },
+  { left: "76%", size: 17, symbol: "♡", variant: "rose", duration: 10.9, initialP: 0.91, swayAmp: 32, swayFreq: 1.5, gustAmp: 13, gustFreq: 3.4, drift: -18, bobAmp: 0.25, baseOpacity: 0.72, twirl: 0 },
+  { left: "83%", size: 26, symbol: "♡", variant: "peach", duration: 14.4, initialP: 0.49, swayAmp: 52, swayFreq: 1.7, gustAmp: 19, gustFreq: 3.8, drift: -26, bobAmp: 0.33, baseOpacity: 0.77, twirl: 0 },
+  { left: "90%", size: 20, symbol: "♥", variant: "blush", duration: 12.2, initialP: 0.03, swayAmp: 34, swayFreq: 1.6, gustAmp: 15, gustFreq: 3.0, drift: -22, bobAmp: 0.27, baseOpacity: 0.75, twirl: -1 },
+  { left: "17%", size: 14, symbol: "✦", variant: "sparkle", duration: 10.2, initialP: 0.79, swayAmp: 26, swayFreq: 2.2, gustAmp: 12, gustFreq: 4.3, drift: 16, bobAmp: 0.22, baseOpacity: 0.85, twirl: 0 },
+  { left: "49%", size: 21, symbol: "♡", variant: "rose", duration: 13.4, initialP: 0.28, swayAmp: 40, swayFreq: 1.8, gustAmp: 17, gustFreq: 3.6, drift: 12, bobAmp: 0.3, baseOpacity: 0.74, twirl: 0 },
+  { left: "73%", size: 15, symbol: "✦", variant: "sparkle", duration: 11.1, initialP: 0.61, swayAmp: 30, swayFreq: 2.1, gustAmp: 14, gustFreq: 4.0, drift: -14, bobAmp: 0.24, baseOpacity: 0.85, twirl: 0 },
+  { left: "93%", size: 22, symbol: "♡", variant: "soft", duration: 12.9, initialP: 0.38, swayAmp: 38, swayFreq: 1.5, gustAmp: 16, gustFreq: 3.2, drift: -28, bobAmp: 0.28, baseOpacity: 0.72, twirl: 0 },
+];
+
+const smoothstep = (edge0, edge1, x) => {
+  const t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0)));
+  return t * t * (3 - 2 * t);
+};
+
+const Heart = ({ config, active, index, reduceMotion }) => {
+  const elementRef = useRef(null);
+  const stateRef = useRef({
+    progress: config.initialP,
+    phase: index * 1.37,
+    time: index * 2.1,
+  });
+
+  useEffect(() => {
+    const el = elementRef.current;
+    if (!el || reduceMotion || !active) {
+      if (el) el.style.opacity = "0";
+      return;
+    }
+
+    let rafId = 0;
+    let lastTime = performance.now();
+
+    const step = (now) => {
+      const dt = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+
+      const state = stateRef.current;
+      state.time += dt;
+
+      // Tốc độ bay lên biến thiên nhẹ theo làn gió (lúc chậm rãi lơ lửng, lúc nâng lên nhanh hơn)
+      const speedFactor = 1 + config.bobAmp * Math.sin(state.time * 1.15 + state.phase);
+      state.progress += (dt / config.duration) * speedFactor;
+
+      if (state.progress >= 1) {
+        state.progress -= 1;
+        state.phase += 1.91; // Đổi pha mỗi chu kỳ để đường bay luôn mới mẻ
+      }
+
+      const p = state.progress;
+      const vh = window.innerHeight || 800;
+      const startY = vh + 40;
+      const endY = -60;
+      const y = startY + (endY - startY) * p;
+
+      const a1 = p * Math.PI * 2 * config.swayFreq + state.phase;
+      const a2 = p * Math.PI * 2 * config.gustFreq + state.phase * 1.63;
+
+      const x =
+        config.drift * p +
+        config.swayAmp * Math.sin(a1) +
+        config.gustAmp * Math.sin(a2);
+
+      // Góc nghiêng tự nhiên theo hướng gió (đạo hàm ngang)
+      const vx =
+        config.swayAmp * Math.cos(a1) * config.swayFreq +
+        config.gustAmp * Math.cos(a2) * config.gustFreq;
+      let rotate = Math.max(-28, Math.min(28, vx * 0.25));
+
+      if (config.twirl !== 0) {
+        rotate += 360 * smoothstep(0.32, 0.72, p) * config.twirl;
+      }
+
+      const fadeIn = smoothstep(0, 0.12, p);
+      const fadeOut = 1 - smoothstep(0.82, 1, p);
+      const shimmer = 0.9 + 0.1 * Math.sin(state.time * 2.1 + state.phase);
+      const opacity = config.baseOpacity * fadeIn * fadeOut * shimmer;
+
+      const scale =
+        0.62 +
+        0.38 * smoothstep(0, 0.18, p) -
+        0.22 * smoothstep(0.84, 1, p) +
+        0.07 * Math.sin(state.time * 2.4 + state.phase);
+
+      el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) rotate(${rotate.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+      el.style.opacity = opacity.toFixed(3);
+
+      rafId = requestAnimationFrame(step);
+    };
+
+    rafId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafId);
+  }, [active, config, reduceMotion]);
+
+  return (
+    <span
+      ref={elementRef}
+      className={`floating-heart floating-heart--${config.variant}`}
+      style={{
+        left: config.left,
+        fontSize: `${config.size}px`,
+        opacity: 0,
+      }}
+    >
+      <span className="floating-heart__inner">{config.symbol}</span>
+    </span>
+  );
+};
 
 const FloatingHearts = () => {
   const ref = useRef(null);
   const active = useAmbientMotion(ref);
+  const reduceMotion = useReducedMotion();
   return (
     <div ref={ref} className="floating-hearts" aria-hidden="true">
-      {Array.from({ length: 12 }).map((_, index) => (
-        <Heart key={index} index={index} active={active} />
+      {FLOATING_HEARTS.map((config, index) => (
+        <Heart
+          key={index}
+          index={index}
+          config={config}
+          active={active}
+          reduceMotion={reduceMotion}
+        />
       ))}
     </div>
   );

@@ -542,10 +542,71 @@ $text: #53383c;
 
 .floating-heart {
   position: absolute;
-  bottom: -80px;
-  color: rgba(235, 130, 151, 0.35);
-  font-family: serif;
-  font-size: 28px;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(235, 130, 151, 0.42);
+  font-family: "Cormorant Garamond", serif;
+  line-height: 1;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 0 8px rgba(255, 168, 194, 0.35));
+
+  &__inner {
+    display: inline-block;
+    animation: floating-heart-beat 2.6s ease-in-out infinite;
+  }
+
+  &--rose {
+    color: rgba(236, 118, 148, 0.48);
+    filter: drop-shadow(0 0 10px rgba(242, 133, 162, 0.42));
+  }
+
+  &--blush {
+    color: rgba(255, 166, 193, 0.52);
+    filter: drop-shadow(0 0 12px rgba(255, 188, 210, 0.48));
+  }
+
+  &--peach {
+    color: rgba(244, 152, 146, 0.46);
+    filter: drop-shadow(0 0 9px rgba(255, 179, 167, 0.38));
+  }
+
+  &--soft {
+    color: rgba(225, 145, 185, 0.44);
+    filter: drop-shadow(0 0 10px rgba(232, 165, 205, 0.38));
+  }
+
+  &--sparkle {
+    color: rgba(255, 216, 175, 0.55);
+    filter: drop-shadow(0 0 10px rgba(255, 222, 173, 0.6));
+  }
+
+  &:nth-child(odd) &__inner {
+    animation-duration: 3.1s;
+    animation-delay: -0.8s;
+  }
+
+  &:nth-child(3n) &__inner {
+    animation-duration: 2.2s;
+    animation-delay: -1.5s;
+  }
+}
+
+@keyframes floating-heart-beat {
+  0%,
+  100% {
+    transform: scale(1) rotate(-4deg);
+  }
+  50% {
+    transform: scale(1.16) rotate(4deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-heart__inner {
+    animation: none;
+  }
 }
 
 /* INTRO */
