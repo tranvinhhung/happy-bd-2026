@@ -6,8 +6,8 @@
 
 .hero__photo-depth {
   transform: perspective(1100px)
-    rotateX(calc(var(--scene-y) * -5deg + var(--scene-scroll) * 2deg))
-    rotateY(calc(var(--scene-x) * 7deg));
+    rotateX(calc(var(--scene-y) * -7deg + var(--scene-scroll) * 2deg))
+    rotateY(calc(var(--scene-x) * 10deg));
   transform-origin: 50% 50%;
 }
 
@@ -25,9 +25,14 @@
   }
 }
 
-.hero__stars { translate: calc(var(--scene-x) * -9px) calc(var(--scene-y) * -6px); }
-.hero__angel { translate: calc(var(--scene-x) * 10px) calc(var(--scene-y) * 6px); }
-.hero__heart { rotate: y calc(var(--scene-x) * 12deg); }
+.hero__star-depth {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform: translate3d(calc(var(--scene-x) * -9px), calc(var(--scene-y) * -6px), 0);
+}
+.hero__angel-depth { transform: translate3d(calc(var(--scene-x) * 10px), calc(var(--scene-y) * 6px), 0); }
+.hero__heart-depth { display: inline-block; transform: perspective(800px) rotateY(calc(var(--scene-x) * 12deg)); }
 
 .polaroid-album__depth {
   position: relative;
@@ -37,8 +42,8 @@
   --card-lift: 0px;
   scale: 1;
   transform: perspective(1000px) translateZ(var(--card-lift))
-    rotateX(calc(var(--scene-y) * -4deg + var(--scene-scroll) * 2deg))
-    rotateY(calc(var(--scene-x) * 5deg));
+    rotateX(calc(var(--scene-y) * -6deg + var(--scene-scroll) * 2deg))
+    rotateY(calc(var(--scene-x) * 8deg));
   transition: transform .5s cubic-bezier(.22, 1, .36, 1), scale .22s ease-out;
 }
 
@@ -85,7 +90,9 @@
   padding: 5px;
   border-radius: inherit;
   background: #fff;
-  rotate: 1 1 0 calc(var(--scene-x) * 4deg + var(--scene-y) * -2deg + var(--scene-scroll) * var(--timeline-side) * 3deg);
+  transform: perspective(900px)
+    rotateX(calc(var(--scene-y) * -5deg + var(--scene-scroll) * var(--timeline-side) * 3deg))
+    rotateY(calc(var(--scene-x) * 9deg));
   translate: 0 0 10px;
   scale: 1;
   transform-origin: center;
@@ -105,7 +112,7 @@
 
 @media (hover: none), (pointer: coarse) {
   .love-timeline .love-timeline__photo-depth {
-    rotate: y calc(var(--scene-scroll) * var(--timeline-side) * 2deg);
+    transform: perspective(1000px) rotateY(calc(var(--scene-scroll) * var(--timeline-side) * 2deg));
     translate: 0 0 4px;
   }
   .love-timeline .love-timeline__photo:active .love-timeline__photo-depth { scale: 1.02; }
@@ -117,8 +124,8 @@
   width: min(700px, 100%);
   margin-inline: auto;
   transform: perspective(1600px)
-    rotateX(calc(var(--scene-y) * -1.1deg + var(--scene-scroll) * .65deg))
-    rotateY(calc(var(--scene-x) * 1.8deg));
+    rotateX(calc(var(--scene-y) * -1.8deg + var(--scene-scroll) * .65deg))
+    rotateY(calc(var(--scene-x) * 3deg));
   transform-origin: center;
 
   &::before, &::after {
@@ -151,7 +158,7 @@
   text-shadow: 0 5px 8px #c86d7d25;
 }
 
-@media (max-width: 1024px), (hover: none), (pointer: coarse) {
+@media (hover: none), (pointer: coarse) {
   // Keep handwriting flat and readable on handheld screens.
   .letter-depth { transform: none; }
   .letter-depth::before {
@@ -162,12 +169,53 @@
   .letter-depth .letter__decor-heart { translate: 0 calc(var(--scene-scroll) * 5px); }
 }
 
+.note-depth-track {
+  --scene-x: 0;
+  --scene-y: 0;
+  --scene-scroll: 0;
+  display: flex;
+  min-width: 0;
+  width: 100%;
+}
+.note-depth {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  transform: perspective(1000px)
+    rotateX(calc(-2deg + var(--scene-y) * -5deg + var(--scene-scroll) * 1.5deg))
+    rotateY(calc(var(--scene-x) * 7deg));
+}
+.things .note {
+  --note-edge: #d69db2;
+  width: 100%;
+  transform-style: preserve-3d;
+  border: 1px solid #fff5efaa;
+  box-shadow: 0 2px 0 var(--note-edge), 0 4px 0 var(--note-edge), 0 7px 0 var(--note-edge), 0 18px 30px #68415026;
+  &--cream { --note-edge: #d6bb82; }
+  &--lavender { --note-edge: #b7a2d1; }
+  &--peach { --note-edge: #d3a18c; }
+  &--mint { --note-edge: #a2c4b0; }
+  &--rose { --note-edge: #cb98a6; }
+  &:hover { box-shadow: 0 2px 0 var(--note-edge), 0 4px 0 var(--note-edge), 0 7px 0 var(--note-edge), 0 28px 40px #68415038; }
+  .note__heart {
+    transform: translateZ(22px);
+    text-shadow: 0 2px 0 #bb708b, 0 5px 7px #9d526a33;
+  }
+  &:hover .note__heart { transform: translateZ(30px) scale(1.25) rotate(8deg); }
+  .note__pin { text-shadow: 0 2px 0 #bd8095, 0 4px 6px #9d526a33; }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .note-depth { transform: perspective(1000px) rotateX(calc(var(--scene-scroll) * 1.5deg)); }
+  .things .note:hover .note__heart { transform: translateZ(22px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero__photo-depth, .polaroid-album__depth { transform: none; transition: none; }
   .polaroid-album__card[data-dragging="true"] .polaroid-album__depth { scale: 1; }
-  .hero__stars, .hero__angel { translate: none; }
-  .hero__heart { rotate: none; }
+  .hero__star-depth, .hero__angel-depth, .hero__heart-depth { transform: none; }
   .love-timeline .love-timeline__photo-depth {
+    transform: none;
     rotate: none;
     translate: none;
     scale: 1;
@@ -175,4 +223,6 @@
   }
   .letter-depth, .letter-depth::before, .letter-depth::after { transform: none; }
   .letter-depth .letter__decor-heart { translate: none; }
+  .note-depth { transform: none; }
+  .things .note .note__heart, .things .note:hover .note__heart { transform: none; }
 }

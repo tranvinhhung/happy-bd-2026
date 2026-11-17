@@ -1,0 +1,146 @@
+.promises-section .promises-list {
+  gap: 24px;
+  padding: 4px 8px 10px 10px;
+}
+
+.promises-section .promise-card {
+  position: relative;
+  min-height: 98px;
+  padding: 25px 28px 25px 70px;
+  gap: 15px;
+  overflow: visible;
+  border: 1px solid #e9d8d8;
+  border-radius: 34px 15px 17px 34px;
+  background: transparent;
+  color: #865e70;
+  backdrop-filter: none;
+  box-shadow:
+    0 2px 0 #d9c4cb,
+    0 5px 0 #bba4b3,
+    0 7px 0 #86748b,
+    0 16px 28px #08061745;
+  transition: box-shadow .3s ease, border-color .3s ease;
+
+  // A recessed hole through the porcelain, where the silk is threaded.
+  &::before {
+    content: "";
+    position: absolute;
+    left: 24px;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    translate: 0 -50%;
+    border: 1px solid #ac8f9d;
+    border-radius: 50%;
+    background: #393047;
+    box-shadow: inset 2px 2px 3px #140f2380, 0 1px 0 #ffffff, -1px -1px 2px #b69da880;
+    pointer-events: none;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: 49px;
+    right: 12px;
+    height: 30%;
+    border-radius: 50% 10px 65% 10px;
+    background: linear-gradient(180deg, #ffffff73, #ffffff00);
+    pointer-events: none;
+  }
+  &:hover, &.is-active {
+    border-color: #e1c2cf;
+    box-shadow: 0 2px 0 #d9c4cb, 0 5px 0 #bba4b3,
+      0 7px 0 #86748b, 0 22px 32px #08061766;
+  }
+  &:focus-visible { outline: 2px solid #f4c5dc; outline-offset: 7px; }
+  .promise-card__number {
+    position: absolute;
+    top: 10px;
+    right: 49px;
+    color: #b49aa6;
+    font-size: 9px;
+    text-shadow: 0 1px 0 #fffaf7;
+  }
+  .promise-card__text { color: #825c70; font-size: 15px; text-shadow: 0 1px 0 #ffffff; }
+  .promise-card__heart, &.is-completed .promise-card__heart {
+    color: #c0839f;
+    filter: drop-shadow(0 -1px 0 #99647b45) drop-shadow(0 1px 0 #fff8f5);
+  }
+  .promise-card__message {
+    color: #a17288;
+    font-size: 18px;
+    line-height: 1.65;
+    text-shadow: 0 1px 0 #fffaf7;
+  }
+  .promise-card__sparkle { color: #be8ba5; opacity: .65; }
+  .promise-card__shine { display: none; }
+}
+
+.promise-card__porcelain-face {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse at 25% 0%, #fffef6, transparent 65%),
+    linear-gradient(120deg, #f8f0e6, #fffaf4 46%, #eadddf);
+  box-shadow: inset 2px 3px 2px #fffef9, inset -5px -4px 7px #c6adb940;
+  mask-image: var(--promise-hole-mask);
+  mask-composite: intersect;
+  pointer-events: none;
+}
+.promises-section .promise-card:hover .promise-card__porcelain-face,
+.promises-section .promise-card.is-active .promise-card__porcelain-face {
+  background:
+    radial-gradient(ellipse at 25% 0%, #fffef6, transparent 65%),
+    linear-gradient(120deg, #fbefe9, #fff9f2 46%, #eddae2);
+}
+.promises-section .promise-card__number,
+.promises-section .promise-card__heart,
+.promises-section .promise-card__content,
+.promises-section .promise-card__sparkle { position: relative; z-index: 1; }
+
+.promise-card__holes {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.promise-card__hole {
+  position: absolute;
+  right: calc(25px - var(--hole-x));
+  top: calc(50% + var(--hole-y));
+  translate: 0 -50%;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #c4aab7;
+  border-radius: 50%;
+  background: radial-gradient(circle, transparent 0 5px, #846b82 5.2px 6.2px, #ead8df 7px, #fff9f2 8.3px);
+  box-shadow: inset 1px 2px 2px #55445966, 0 1px 0 #ffffffa8;
+}
+.promises-section .promise-card__sparkle { margin-right: 31px; }
+
+.promise-card__ribbon {
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  translate: 0 -50%;
+  width: 64px;
+  height: 74px;
+  z-index: 2;
+  filter: drop-shadow(1px 3px 2px #71435d40);
+  pointer-events: none;
+  svg { display: block; width: 100%; height: 100%; }
+}
+
+@media (max-width: 600px) {
+  .promises-section .promises-list { gap: 22px; padding-inline: 8px; }
+  .promises-section .promise-card { padding: 24px 19px 24px 53px; gap: 10px; min-height: 96px; }
+  .promises-section .promise-card::before { left: 18px; }
+  .promise-card__ribbon { left: -15px; width: 62px; }
+  .promises-section .promise-card__text { font-size: 13px; line-height: 1.7; }
+  .promises-section .promise-card__message { font-size: 17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .promises-section .promise-card { transition: none; }
+}

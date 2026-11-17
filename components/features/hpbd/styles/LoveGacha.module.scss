@@ -51,17 +51,22 @@
   font-weight: 400;
 }
 
-// Máy gacha phong cách giấy vintage
+// A shallow 3D cabinet: front, rear shell, side walls and raised controls.
+
+.machineStage {
+  width: min(290px, calc(100% - 20px));
+  margin-inline: auto;
+}
 
 .machineDepth {
   position: relative;
-  isolation: isolate;
+  transform-style: preserve-3d;
   width: min(290px, 100%);
   margin-inline: auto;
   transform: perspective(1200px)
-    rotateX(calc(var(--scene-y) * -3deg + var(--scene-scroll) * 1.5deg))
-    rotateY(calc(var(--scene-x) * 5deg));
-  transition: transform .4s ease;
+    rotateX(calc(-3deg + var(--scene-y) * -7deg + var(--scene-scroll) * 1.5deg))
+    rotateY(calc(-12deg + var(--scene-x) * 12deg));
+  transform-origin: 50% 60%;
 
   &::after {
     content: "";
@@ -76,39 +81,70 @@
     z-index: -1;
     pointer-events: none;
   }
-  &[data-rolling="true"] { transform: perspective(1200px) rotateX(0) rotateY(0); }
+  &[data-rolling="true"] { transform: perspective(1200px) rotateX(-3deg) rotateY(-12deg); }
 }
 
-@media (max-width: 1024px), (hover: none), (pointer: coarse) {
-  .machineDepth { transform: perspective(1200px) rotateX(calc(var(--scene-scroll) * 1deg)); }
+@media (hover: none), (pointer: coarse) {
+  .machineDepth { transform: perspective(1200px) rotateX(calc(-3deg + var(--scene-scroll) * 1deg)) rotateY(-10deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .machineDepth, .machineDepth[data-rolling="true"] { transform: none; transition: none; }
+  .machineDepth, .machineDepth[data-rolling="true"] { transform: perspective(1200px) rotateX(-3deg) rotateY(-12deg); transition: none; }
 }
 
 .machine {
   position: relative;
-  width: 290px;
+  width: 100%;
   margin: 0 auto 35px;
-  filter: drop-shadow(0 15px 18px rgba(100, 65, 70, 0.12));
+  transform-style: preserve-3d;
+}
+
+.machineBack {
+  position: absolute;
+  inset: 0;
+  transform: translateZ(-38px);
+  border: 4px solid #ad7487;
+  border-radius: 145px 145px 12px 12px;
+  background: linear-gradient(#e8c2d099 0 50%, #bc8293 52%, #94596e);
+  box-shadow: 10px 24px 32px #64414630;
+  pointer-events: none;
+}
+
+.glassDepth {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 225px;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  i {
+    position: absolute;
+    inset: 0;
+    border: 6px solid #c89aaf99;
+    border-bottom: 8px solid #b27a8e;
+    border-radius: 145px 145px 15px 15px;
+    background: linear-gradient(100deg, #fff1f522, #c796b344);
+    transform: translateZ(calc(var(--depth) * -1));
+  }
 }
 
 .glass {
   position: relative;
   height: 225px;
   overflow: hidden;
-  border: 5px solid #d9aaa9;
+  border: 5px solid #e5bbc4;
   border-bottom: 0;
   border-radius: 145px 145px 15px 15px;
   background:
+    radial-gradient(ellipse at 28% 18%, #ffffffcc, transparent 38%),
+    radial-gradient(ellipse at 85% 75%, #b17e9b55, transparent 60%),
     radial-gradient(
       circle at 45% 20%,
       rgba(255, 255, 255, 0.8),
       transparent 60%
     ),
-    #fff0e7;
-  box-shadow: inset 8px 0 18px #fff9f2aa, inset -12px -5px 24px #b17a8b20, 4px 0 0 #c18f94;
+    #f6e3e9;
+  transform: translateZ(7px);
+  box-shadow: inset 10px 0 25px #fff9f2bb, inset -16px -12px 28px #9a69894d, inset 0 -8px 12px #c693ab66;
 
   &::after {
     content: "";
@@ -118,7 +154,7 @@
     width: 45px;
     height: 90px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.4);
+    background: linear-gradient(100deg, #fff0, #ffffffcc 40%, #ffffff33);
     transform: rotate(-20deg);
     pointer-events: none;
   }
@@ -160,12 +196,34 @@
   height: 185px;
   padding: 18px;
   border: 5px solid #d9aaa9;
-  border-radius: 8px;
-  background: linear-gradient(110deg, #ffedf0, #ffe5e7 60%, #edc7d0);
-  box-shadow: 4px 0 0 #c18f94, inset 0 2px 0 #fff5f3, inset -5px 0 12px #ba7d8d15;
+  border-radius: 10px;
+  transform-style: preserve-3d;
+  background: linear-gradient(105deg, #fff1f1, #f5c8d4 55%, #d99db4);
+  box-shadow: inset 0 4px 0 #fff6f0, inset -6px -5px 14px #b7799155;
+  &::before, &::after {
+    content: "";
+    position: absolute;
+    top: -5px;
+    bottom: -5px;
+    width: 38px;
+    transform-origin: left center;
+    transform: rotateY(90deg);
+    background: linear-gradient(90deg, #c68a9f, #9b5f79);
+    border-block: 5px solid #b77c92;
+    pointer-events: none;
+  }
+  &::before { left: calc(100% + 5px); }
+  &::after { left: -5px; background: linear-gradient(90deg, #d6a0b1, #ad7189); }
 }
 
 .machineLabel {
+  position: relative;
+  padding: 4px;
+  border: 1px solid #d19caf;
+  border-radius: 7px;
+  background: linear-gradient(#fff5ed, #f7dce0);
+  box-shadow: 0 3px 0 #c28b9e, 0 5px 7px #76515626, inset 0 1px #fff;
+  transform: translateZ(6px);
   color: #765156;
   font-family: "Cormorant Garamond", serif;
   font-size: 27px;
@@ -191,10 +249,11 @@
   height: 65px;
   border: 5px solid #d5a1a5;
   border-radius: 50%;
-  background: #fff0e7;
+  background: radial-gradient(circle at 30% 25%, #fffaf3, #f4d8d9 60%, #d5a1b1);
   color: #b87e8b;
   font-size: 34px;
-  box-shadow: 0 3px 0 #b7838d, 0 7px 10px #64414629, inset 0 3px 6px #fff8f4;
+  transform: translateZ(20px);
+  box-shadow: 0 2px 0 #c99bac, 0 5px 0 #b78396, 0 8px 0 #a67086, 3px 13px 13px #6441464d, inset 0 3px 6px #fff8f4;
 }
 
 .slot {
@@ -207,19 +266,33 @@
   height: 50px;
   border: 3px solid #d5a1a5;
   border-radius: 8px;
-  background: #fff0e7;
-  color: #765156;
+  background: linear-gradient(#442b42, #795066 75%, #ae7c8f);
+  color: #fce3ed;
   font-size: 12px;
   letter-spacing: 2px;
-  box-shadow: inset 0 5px 10px #76515630, 0 1px 0 #fff8f4;
+  box-shadow: inset 0 7px 12px #160c24aa, 0 2px 0 #fff4ef, 0 -2px 0 #b68098;
 }
 
 .machineBase {
+  position: relative;
+  transform-style: preserve-3d;
   height: 24px;
   margin: 0 10px;
   border-radius: 0 0 12px 12px;
-  background: #d9aaa9;
-  box-shadow: 0 4px 0 #bb8a90, 3px 4px 0 #bb8a90;
+  background: linear-gradient(#dba5b8, #ad738b);
+  box-shadow: 0 3px 0 #885368, 0 8px 10px #64414638;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 38px;
+    background: linear-gradient(#ddb0bf, #b88196);
+    transform-origin: top;
+    transform: rotateX(-90deg);
+    pointer-events: none;
+  }
 }
 
 // Nút quay
@@ -834,6 +907,93 @@
   .letterClose {
     transition: none;
   }
+}
+
+.capsuleShell {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 2px solid #fff1f7cc;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 29% 19%, #fffdf5b3, transparent 33%),
+    linear-gradient(180deg, #f6b3ce 0%, #e48ab2 47%, #b6659633 49%, #ffeff3 51%, #ebcedd 100%);
+  box-shadow: inset -9px -11px 20px #733b6759, inset 4px 5px 12px #ffffff80;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at 35% 28%, transparent 40%, #6c345a66 100%);
+    pointer-events: none;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    width: 8%;
+    height: 30%;
+    right: 13%;
+    top: 20%;
+    border-radius: 50%;
+    background: #fff7fd33;
+    transform: rotate(-20deg);
+    pointer-events: none;
+  }
+}
+.capsuleSeam {
+  position: absolute;
+  left: -6%;
+  top: 43%;
+  width: 112%;
+  height: 16%;
+  border: 2px solid #9b578566;
+  border-radius: 50%;
+  background: linear-gradient(transparent 50%, #9c5a7d22);
+  box-shadow: 0 2px 1px #fff1f580;
+  transform: rotate(-12deg);
+}
+.capsuleShine {
+  position: absolute;
+  top: 11%;
+  left: 19%;
+  width: 24%;
+  height: 32%;
+  border-radius: 50%;
+  background: linear-gradient(120deg, #ffffffcc, #ffffff00);
+  transform: rotate(30deg);
+}
+.capsuleShell .capsuleEmblem {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  inset: 17% 20% 27%;
+  color: #9e557b;
+  text-shadow: 0 1px 0 #ffe1ec;
+  transform: rotate(-12deg);
+}
+.fallingCapsule, .floatingCapsule, .burstCapsule {
+  border: 0;
+  background: transparent;
+}
+.floatingCapsule::after { display: none; }
+.floatingCapsule > .capsuleShell { position: absolute; inset: 0; filter: none; }
+.fallingCapsule {
+  box-shadow: 4px 10px 16px #40233b4d, 0 0 16px #efacc830;
+  pointer-events: none;
+}
+.fallingShadow {
+  position: absolute;
+  bottom: -51px;
+  right: 11px;
+  width: 76px;
+  height: 18px;
+  border-radius: 50%;
+  background: #533044;
+  filter: blur(6px);
+  pointer-events: none;
 }
 
 .manageButton {

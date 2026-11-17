@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Component, useState } from "react";
+import dynamic from "next/dynamic";
 import {
   AnimatePresence,
   motion,
@@ -11,6 +12,7 @@ import { useRef } from "react";
 import styles from "../styles/BirthdayWish.module.scss";
 import SectionTitle from "./SectionTitle";
 import useAmbientMotion from "../hooks/useAmbientMotion";
+import useSceneDepth from "../hooks/useSceneDepth";
 
 const WISH_MESSAGES = [
   "Mong em luôn rạng rỡ, tự tin và yêu thương chính mình mỗi ngày.",
@@ -109,9 +111,11 @@ function WishCard({ wish, index, active, onClick, reducedMotion }) {
       onClick={onClick}
       aria-expanded={active}
     >
-      <span className={styles.cardHeart}>{active ? "♥" : "♡"}</span>
+      <span className={styles.envelopeFold} aria-hidden="true" />
+      <span className={styles.cardHeart} aria-hidden="true">♥</span>
 
       <span className={styles.cardContent}>
+        <span className={styles.letterIndex}>LỜI CHÚC {String(index + 1).padStart(2, "0")}</span>
         <span className={styles.cardTitle}>{wish}</span>
 
         <AnimatePresence initial={false}>
@@ -139,14 +143,16 @@ function WishCard({ wish, index, active, onClick, reducedMotion }) {
               }}
               transition={{ duration: 0.35 }}
             >
-              <span className={styles.cardDivider}>✦ ♡ ✦</span>
-              {message}
+              <span className={styles.letterPaper}>
+                <span className={styles.cardDivider} aria-hidden="true">✦ ♡ ✦</span>
+                {message}
+              </span>
             </motion.span>
           )}
         </AnimatePresence>
       </span>
 
-      <span className={styles.cardDecoration}>{active ? "✦" : "✧"}</span>
+      <span className={styles.cardDecoration} aria-hidden="true">{active ? "−" : "+"}</span>
 
       <AnimatePresence>
         {active && !reducedMotion && (
@@ -183,7 +189,41 @@ function WishCard({ wish, index, active, onClick, reducedMotion }) {
   );
 }
 
+const Cake3D = dynamic(() => import("./BirthdayCake3D"), {
+  ssr: false,
+  loading: () => <span aria-hidden="true" style={{ alignSelf: "center", color: "#d985a2", fontSize: 50 }}>♡</span>,
+});
+
+class CakeBoundary extends Component {
+  state = { failed: false };
+  static getDerivedStateFromError() { return { failed: true }; }
+  render() { return this.state.failed ? this.props.fallback : this.props.children; }
+}
+
 function BirthdayCake({ reducedMotion, active }) {
+  const ref = useRef(null);
+  const near = useInView(ref, { once: true, margin: "600px 0px" });
+  const fallback = <BirthdayCakeFallback reducedMotion={reducedMotion} active={active} />;
+  return (
+    <motion.div
+      ref={ref}
+      className={`${styles.cakeScene} ${styles.webglScene}`}
+      data-parallax="media"
+      initial={reducedMotion ? false : { opacity: 0, y: 35 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.8 }}
+    >
+      {near && <CakeBoundary fallback={fallback}>
+        <Cake3D active={active} reducedMotion={reducedMotion} fallback={fallback} />
+      </CakeBoundary>}
+    </motion.div>
+  );
+}
+
+function BirthdayCakeFallback({ reducedMotion, active }) {
+  const cakeRef = useRef(null);
+  useSceneDepth(cakeRef);
   return (
     <motion.div
       className={styles.cakeScene} data-parallax="media"
@@ -199,6 +239,7 @@ function BirthdayCake({ reducedMotion, active }) {
         ease: [0.22, 1, 0.36, 1],
       }}
     >
+      <div ref={cakeRef} className={styles.cakeStage}>
       <motion.div
         className={styles.cakeFloat}
         animate={active ? { y: [0, -8, 0] } : { y: 0 }}
@@ -208,6 +249,7 @@ function BirthdayCake({ reducedMotion, active }) {
           ease: "easeInOut",
         }}
       >
+        <div className={styles.cakeDepth}>
         <div className={styles.cakeAura} />
 
         <div className={styles.candle}>
@@ -246,7 +288,9 @@ function BirthdayCake({ reducedMotion, active }) {
         <span className={`${styles.cakeFlower} ${styles.flowerRight}`}>✿</span>
         <span className={`${styles.cakeStar} ${styles.starLeft}`}>✧</span>
         <span className={`${styles.cakeStar} ${styles.starRight}`}>♡</span>
+        </div>
       </motion.div>
+      </div>
     </motion.div>
   );
 }
@@ -379,7 +423,7 @@ export default function BirthdayWish({ data = [] }) {
               transition={{ duration: 0.65 }}
               role="status"
             >
-              ♡ Và trong tất cả những lời chúc ấy,
+              <span className={styles.stoneLead}>♡ Và trong tất cả những lời chúc ấy,</span>
               <strong> anh mong tình yêu tụi mình ngày càng bền chặt, và tụi mình luôn có nhau.</strong>
             </motion.div>
           )}

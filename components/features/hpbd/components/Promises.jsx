@@ -7,6 +7,7 @@ import SectionTitle from "./SectionTitle";
 import Reveal from "./Reveal";
 import PromiseSlideshow from "./PromiseSlideshow";
 import useAmbientMotion from "../hooks/useAmbientMotion";
+import "../styles/PromisePorcelain.scss";
 
 // Những lời nhắn phụ xuất hiện khi nhấn vào lời hứa.
 // Có thể chỉnh nội dung theo câu chuyện của hai bạn.
@@ -66,6 +67,19 @@ function PromiseCard({
   onClick,
   reduceMotion,
 }) {
+  const holeCount = index + 1;
+  const holePositions = Array.from({ length: holeCount }, (_, holeIndex) => {
+    const angle = (holeIndex / holeCount) * Math.PI * 2 - (holeCount === 2 ? 0 : Math.PI / 2);
+    const radius = holeCount === 1 ? 0 : 16;
+    return {
+      x: Number((Math.cos(angle) * radius).toFixed(3)),
+      y: Number((Math.sin(angle) * radius).toFixed(3)),
+    };
+  });
+  const holeMask = holePositions.map(({ x, y }) =>
+    `radial-gradient(circle 5px at calc(100% - 34px + ${x}px) calc(50% + ${y}px), transparent 98%, #000 100%)`,
+  ).join(", ");
+
   return (
     <motion.button
       type="button"
@@ -74,6 +88,7 @@ function PromiseCard({
         isActive ? "is-active" : "",
         isCompleted ? "is-completed" : "",
       ].join(" ")}
+      style={{ "--promise-hole-mask": holeMask }}
       initial={
         reduceMotion
           ? false
@@ -102,6 +117,24 @@ function PromiseCard({
       onClick={onClick}
       aria-expanded={isActive}
     >
+      <span className="promise-card__porcelain-face" aria-hidden="true" />
+      <span className="promise-card__ribbon" aria-hidden="true">
+        <svg viewBox="0 0 80 92" fill="none">
+          <defs>
+            <linearGradient id={`promise-silk-${index}`} x1="10" y1="10" x2="65" y2="75" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#985b78" /><stop offset=".28" stopColor="#f3c3d3" /><stop offset=".5" stopColor="#c787a4" /><stop offset=".72" stopColor="#f9d8e2" /><stop offset="1" stopColor="#a96d8b" />
+            </linearGradient>
+          </defs>
+          <path d="M43 40C21 31 11 17 16 10C25-1 41 20 43 40Z" fill={`url(#promise-silk-${index})`} stroke="#b17691" strokeWidth=".8" />
+          <path d="M42 40C39 17 52 4 58 13C65 23 53 36 42 40Z" fill={`url(#promise-silk-${index})`} stroke="#b17691" strokeWidth=".8" />
+          <path d="M40 40C29 52 24 70 13 80L27 77L31 87C37 69 45 57 46 43Z" fill={`url(#promise-silk-${index})`} />
+          <path d="M44 40C51 53 57 63 62 68L52 68L49 77C45 66 39 52 40 43Z" fill={`url(#promise-silk-${index})`} />
+          <path d="M44 39C58 38 62 46 53 49C48 50 48 44 49 43" stroke="#9e6582" strokeWidth="4" strokeLinecap="round" />
+          <path d="M44 39C57 38 59 44 54 46" stroke="#f1c4d5" strokeWidth="2" strokeLinecap="round" />
+          <ellipse cx="42" cy="40" rx="7" ry="5" transform="rotate(-15 42 40)" fill={`url(#promise-silk-${index})`} />
+          <path d="M21 12C27 15 35 25 38 33M36 52L25 74" stroke="#fff1f4" strokeOpacity=".6" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      </span>
       <span className="promise-card__number">
         {String(index + 1).padStart(2, "0")}
       </span>
@@ -161,6 +194,15 @@ function PromiseCard({
       </motion.span>
 
       <span className="promise-card__shine" />
+      <span className="promise-card__holes" aria-hidden="true">
+        {holePositions.map(({ x, y }, holeIndex) => (
+          <span
+            key={holeIndex}
+            className="promise-card__hole"
+            style={{ "--hole-x": `${x}px`, "--hole-y": `${y}px` }}
+          />
+        ))}
+      </span>
     </motion.button>
   );
 }

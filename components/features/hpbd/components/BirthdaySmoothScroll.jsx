@@ -31,9 +31,13 @@ export default function BirthdaySmoothScroll({ enabled }) {
         allowNestedScroll: true,
         // Nested textareas scroll natively only when they have overflowing content;
         // allowNestedScroll handles that without disabling smooth page scrolling.
-        // Scratching uses pointer events, so its canvas also allows wheel scrolling.
-        prevent: (node) => node.matches(
-          "canvas:not([aria-hidden='true']):not(.scratch-reveal__canvas), select, [role='dialog'], [aria-modal='true'], .polaroid-album__lightbox",
+        // Decorative 3D scenes opt into page scrolling through their wrapper.
+        // Drag/scratch gestures still use pointer events independently of wheel.
+        prevent: (node) => (
+          node.matches("canvas:not([aria-hidden='true']):not(.scratch-reveal__canvas)") &&
+          !node.closest("[data-scroll-through='true']")
+        ) || node.matches(
+          "select, [role='dialog'], [aria-modal='true'], .polaroid-album__lightbox",
         ),
       });
 

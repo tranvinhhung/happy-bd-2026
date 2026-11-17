@@ -171,10 +171,12 @@ const FloatingHearts = () => {
   );
 };
 
-const Reveal = ({ children, className = "" }) => (
+const Reveal = ({ children, className = "" }) => {
+  const reduceMotion = useReducedMotion();
+  return (
   <motion.div
     className={className}
-    initial={{
+    initial={reduceMotion ? false : {
       opacity: 0,
       y: 40,
     }}
@@ -193,7 +195,8 @@ const Reveal = ({ children, className = "" }) => (
   >
     {children}
   </motion.div>
-);
+  );
+};
 
 export default function BirthdayExperience() {
   useHeroPreload();
@@ -333,16 +336,20 @@ function Hero() {
 
   return (
     <section ref={heroRef} className="hero section-dark">
-      <div className="hero__stars" aria-hidden="true">
+      <div className="hero__star-depth" aria-hidden="true">
+      <div className="hero__stars">
         {stars.map((star, index) => (
           <span key={index} style={{ left: star.left, top: star.top }} />
         ))}
+      </div>
       </div>
 
       <div className="hero__content">
         {/* ANGEL */}
         <div className="hero__angel">
+          <div className="hero__angel-depth">
           <BirthdayAngel />
+          </div>
         </div>
         {/* <FlyingCupid /> */}
 
@@ -360,7 +367,7 @@ function Hero() {
           ))}
         </h1>
 
-        <div className="hero__heart">♡</div>
+        <div className="hero__heart"><span className="hero__heart-depth">♡</span></div>
 
         <p className="hero__description">{data.hero.description}</p>
 
@@ -681,6 +688,17 @@ function Timeline() {
   );
 }
 
+function NoteDepth({ children }) {
+  const ref = useRef(null);
+  useSceneDepth(ref);
+
+  return (
+    <div ref={ref} className="note-depth-track">
+      <div className="note-depth">{children}</div>
+    </div>
+  );
+}
+
 function ThingsILove() {
   const sectionRef = useRef(null);
   const isNear = useInView(sectionRef, { once: true, margin: "600px 0px" });
@@ -729,10 +747,10 @@ function ThingsILove() {
             scrollTrigger: { trigger: row[0], start: "top 88%", toggleActions: "play none none none" },
           })
             .fromTo(row, {
-              opacity: 0, y: columns === 1 ? 30 : 44, scale: 0.96,
+              opacity: 0, y: columns === 1 ? 30 : 44, z: -65, transformPerspective: 1000, scale: 0.96,
               rotation: (itemIndex) => (index + itemIndex) % 2 ? 5 : -5,
             }, {
-              opacity: 1, y: 0, scale: 1, rotation: 0,
+              opacity: 1, y: 0, z: 0, scale: 1, rotation: 0,
               duration: 0.85, stagger: 0.16,
             })
             .from(tape, { opacity: 0, scaleX: 0.5, duration: 0.4, stagger: 0.16 }, 0.35)
@@ -786,6 +804,7 @@ function ThingsILove() {
 
           return (
             <div className="note-reveal" key={`${item}-${index}`} data-parallax="media">
+              <NoteDepth>
               <motion.div
                 className={`note note--${color}`}
                 style={{
@@ -827,6 +846,7 @@ function ThingsILove() {
 
                 <span className="note__bottom">a little thing I love</span>
               </motion.div>
+              </NoteDepth>
             </div>
           );
         })}

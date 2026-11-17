@@ -72,9 +72,20 @@ const collectionReveal = {
   }),
 };
 
+function CapsuleShell() {
+  return (
+    <span className={styles.capsuleShell} aria-hidden="true">
+      <i className={styles.capsuleSeam} />
+      <i className={styles.capsuleShine} />
+      <span className={styles.capsuleEmblem}>♥</span>
+    </span>
+  );
+}
+
 export default function LoveGacha() {
   const sectionRef = useRef(null);
-  useSceneDepth(sectionRef);
+  const machineRef = useRef(null);
+  useSceneDepth(sectionRef, { pointerRef: machineRef });
   // idle -> rolling -> floating -> bursting -> letter
   const [phase, setPhase] = useState("idle");
   const [currentPrize, setCurrentPrize] = useState(null);
@@ -308,6 +319,8 @@ export default function LoveGacha() {
         </motion.div>
 
         <motion.div
+          ref={machineRef}
+          className={styles.machineStage}
           variants={machineReveal}
           initial="hidden"
           whileInView="visible"
@@ -329,6 +342,10 @@ export default function LoveGacha() {
               repeat: isRolling ? 2 : 0,
             }}
           >
+            <div className={styles.machineBack} aria-hidden="true" />
+            <div className={styles.glassDepth} aria-hidden="true">
+              {[8, 16, 24, 32].map((depth) => <i key={depth} style={{ "--depth": `${depth}px` }} />)}
+            </div>
             <div className={styles.glass}>
               {capsuleColors.map((color, index) => (
                 <motion.div
@@ -385,29 +402,43 @@ export default function LoveGacha() {
             <AnimatePresence>
               {isRolling && (
                 <motion.div
+                  key="falling-capsule"
                   className={styles.fallingCapsule}
                   initial={{
                     opacity: 0,
-                    y: -25,
-                    scale: 0.5,
-                    rotate: -30,
+                    y: -12,
+                    z: -18,
+                    scale: 0.55,
+                    rotate: -28,
                   }}
                   animate={{
-                    opacity: [0, 1, 1],
-                    y: [-25, 20, 75],
-                    scale: [0.5, 0.8, 1],
-                    rotate: [-30, 90, 160],
+                    opacity: [0, 1, 1, 1],
+                    x: [0, 6, 14, 18],
+                    y: [-12, 8, 84, 70],
+                    z: [-18, 46, 60, 60],
+                    scale: [0.55, 0.82, 1.02, 1],
+                    rotate: [-28, 10, 35, 24],
                   }}
                   exit={{ opacity: 0 }}
                   transition={{
                     duration: 1.15,
                     delay: 0.35,
-                    ease: "easeIn",
+                    times: [0, 0.3, 0.8, 1],
+                    ease: ["easeOut", "easeIn", "easeOut"],
                   }}
                 >
-                  <span>♥</span>
+                  <CapsuleShell />
                 </motion.div>
               )}
+              {isRolling && <motion.div
+                key="falling-shadow"
+                className={styles.fallingShadow}
+                initial={{ opacity: 0, scale: 0.4 }}
+                animate={{ opacity: [0, 0.15, 0.4, 0.3], scale: [0.4, 0.65, 1.1, 1] }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1.15, delay: 0.35, times: [0, 0.3, 0.8, 1] }}
+                aria-hidden="true"
+              />}
             </AnimatePresence>
           </motion.div>
           </div>
@@ -534,7 +565,7 @@ export default function LoveGacha() {
                       ease: "easeInOut",
                     }}
                   >
-                    <span>♥</span>
+                    <CapsuleShell />
                   </motion.button>
 
                   <p className={styles.openHint}>
@@ -561,7 +592,7 @@ export default function LoveGacha() {
                     }}
                     transition={{ duration: 0.75 }}
                   >
-                    ♥
+                    <CapsuleShell />
                   </motion.div>
 
                   <motion.div
