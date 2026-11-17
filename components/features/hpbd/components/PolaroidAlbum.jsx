@@ -2,6 +2,7 @@
 "use client";
 import Image from "next/image";
 import usePopupImagePreload from "../hooks/usePopupImagePreload";
+import useSceneDepth from "../hooks/useSceneDepth";
 
 import {
     memo,
@@ -86,6 +87,7 @@ const PolaroidCard = memo(function PolaroidCard({
     layoutVersion,
 }) {
     const scale = isMobile ? 0.58 : 1;
+    const [isDragging, setIsDragging] = useState(false);
 
     // MotionValues là nguồn dữ liệu duy nhất
     // điều khiển vị trí kéo của card.
@@ -155,6 +157,7 @@ const PolaroidCard = memo(function PolaroidCard({
 
     const handleDragStart = () => {
         stopAnimations();
+        setIsDragging(true);
 
         dragStartRef.current = {
             x: x.get(),
@@ -165,6 +168,7 @@ const PolaroidCard = memo(function PolaroidCard({
     };
 
     const handleDragEnd = () => {
+        setIsDragging(false);
         // Lấy trực tiếp tọa độ thực tế sau drag.
         // Không cộng info.offset để tránh sai lệch.
         const nextPosition = {
@@ -209,6 +213,7 @@ const PolaroidCard = memo(function PolaroidCard({
 
     return (
         <motion.div
+            data-dragging={isDragging}
             className={`polaroid-album__card ${isActive ? "is-active" : ""
                 }`}
             initial={
@@ -262,12 +267,13 @@ const PolaroidCard = memo(function PolaroidCard({
             dragElastic={0.12}
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
+            onPointerCancel={() => setIsDragging(false)}
             onPointerDown={onActivate}
             whileDrag={{
-                scale: scale * 1.06,
                 cursor: "grabbing",
             }}
         >
+            <div className="polaroid-album__depth">
             <motion.div
                 className="polaroid-album__card-inner"
                 animate={{
@@ -343,6 +349,7 @@ const PolaroidCard = memo(function PolaroidCard({
                     </button>
                 </div>
             </motion.div>
+            </div>
         </motion.div>
     );
 });
@@ -354,6 +361,7 @@ const PolaroidCard = memo(function PolaroidCard({
 export default function PolaroidAlbum({ onMemoryAudioChange }) {
     const reduceMotion = useReducedMotion();
     const sectionRef = useRef(null);
+    useSceneDepth(sectionRef);
     usePopupImagePreload(sectionRef, polaroidMemories, POPUP_IMAGE);
 
     const [positions, setPositions] = useState(

@@ -3,9 +3,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 import HandwritingLetter from "./HandwritingLetter.jsx";
+import useSceneDepth from "../hooks/useSceneDepth";
 
 export default function LoveLetter({ paragraphs }) {
   const sectionRef = useRef(null);
+  useSceneDepth(sectionRef);
   const signatureTimelineRef = useRef(null);
   const completedRef = useRef(false);
   const [canWrite, setCanWrite] = useState(false);
@@ -99,6 +101,7 @@ export default function LoveLetter({ paragraphs }) {
 
   return (
     <section ref={sectionRef} className="letter-section">
+      <div className="letter-depth">
       <div className="letter" data-parallax="media">
         <div className="letter__ribbon" aria-hidden="true" />
         <span className="letter__small">A letter for you</span>
@@ -121,6 +124,7 @@ export default function LoveLetter({ paragraphs }) {
         <span className="letter__decor-heart letter__decor-heart--1" aria-hidden="true">♡</span>
         <span className="letter__decor-heart letter__decor-heart--2" aria-hidden="true">♡</span>
         <span className="letter__decor-heart letter__decor-heart--3" aria-hidden="true">♡</span>
+      </div>
       </div>
     </section>
   );

@@ -1,4 +1,7 @@
 .section {
+  --scene-x: 0;
+  --scene-y: 0;
+  --scene-scroll: 0;
   position: relative;
   padding: 100px 20px;
   overflow: hidden;
@@ -50,6 +53,40 @@
 
 // Máy gacha phong cách giấy vintage
 
+.machineDepth {
+  position: relative;
+  isolation: isolate;
+  width: min(290px, 100%);
+  margin-inline: auto;
+  transform: perspective(1200px)
+    rotateX(calc(var(--scene-y) * -3deg + var(--scene-scroll) * 1.5deg))
+    rotateY(calc(var(--scene-x) * 5deg));
+  transition: transform .4s ease;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    bottom: -12px;
+    height: 22px;
+    border-radius: 50%;
+    background: #6441462b;
+    filter: blur(10px);
+    z-index: -1;
+    pointer-events: none;
+  }
+  &[data-rolling="true"] { transform: perspective(1200px) rotateX(0) rotateY(0); }
+}
+
+@media (max-width: 1024px), (hover: none), (pointer: coarse) {
+  .machineDepth { transform: perspective(1200px) rotateX(calc(var(--scene-scroll) * 1deg)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .machineDepth, .machineDepth[data-rolling="true"] { transform: none; transition: none; }
+}
+
 .machine {
   position: relative;
   width: 290px;
@@ -71,6 +108,7 @@
       transparent 60%
     ),
     #fff0e7;
+  box-shadow: inset 8px 0 18px #fff9f2aa, inset -12px -5px 24px #b17a8b20, 4px 0 0 #c18f94;
 
   &::after {
     content: "";
@@ -98,7 +136,16 @@
   border-radius: 50%;
   color: #a56875;
   font-size: 22px;
-  box-shadow: 0 5px 10px rgba(100, 65, 70, 0.12);
+  box-shadow: inset -6px -7px 10px #9b52692e, inset 3px 4px 7px #ffffff7a, 0 7px 10px #64414629;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 8% 12% 12% 8%;
+    border-radius: inherit;
+    background: radial-gradient(ellipse at 27% 23%, #ffffffb0, #ffffff00 46%);
+    pointer-events: none;
+  }
 
   &:nth-child(1) { left: 12px; bottom: 12px; }
   &:nth-child(2) { left: 72px; bottom: 12px; }
@@ -114,7 +161,8 @@
   padding: 18px;
   border: 5px solid #d9aaa9;
   border-radius: 8px;
-  background: #ffe5e7;
+  background: linear-gradient(110deg, #ffedf0, #ffe5e7 60%, #edc7d0);
+  box-shadow: 4px 0 0 #c18f94, inset 0 2px 0 #fff5f3, inset -5px 0 12px #ba7d8d15;
 }
 
 .machineLabel {
@@ -146,7 +194,7 @@
   background: #fff0e7;
   color: #b87e8b;
   font-size: 34px;
-  box-shadow: 0 4px 8px rgba(100, 65, 70, 0.12);
+  box-shadow: 0 3px 0 #b7838d, 0 7px 10px #64414629, inset 0 3px 6px #fff8f4;
 }
 
 .slot {
@@ -163,6 +211,7 @@
   color: #765156;
   font-size: 12px;
   letter-spacing: 2px;
+  box-shadow: inset 0 5px 10px #76515630, 0 1px 0 #fff8f4;
 }
 
 .machineBase {
@@ -170,6 +219,7 @@
   margin: 0 10px;
   border-radius: 0 0 12px 12px;
   background: #d9aaa9;
+  box-shadow: 0 4px 0 #bb8a90, 3px 4px 0 #bb8a90;
 }
 
 // Nút quay
@@ -225,7 +275,7 @@
   background: #fff0e7;
   color: #765156;
   font-size: 27px;
-  box-shadow: 0 8px 16px rgba(100, 65, 70, 0.1);
+  box-shadow: 0 3px 0 #dec3bc, 0 10px 18px #64414620;
   transform: rotate(-3deg);
 
   &:nth-child(even) {

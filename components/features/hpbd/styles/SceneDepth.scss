@@ -1,0 +1,178 @@
+.hero, .polaroid-album, .love-timeline, .letter-section {
+  --scene-x: 0;
+  --scene-y: 0;
+  --scene-scroll: 0;
+}
+
+.hero__photo-depth {
+  transform: perspective(1100px)
+    rotateX(calc(var(--scene-y) * -5deg + var(--scene-scroll) * 2deg))
+    rotateY(calc(var(--scene-x) * 7deg));
+  transform-origin: 50% 50%;
+}
+
+.hero .hero__couple {
+  box-shadow: 0 2px 0 #e0c9d4, 0 6px 0 #8c7180, 0 28px 65px #0008, 0 0 45px #e7a1c31c;
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(115deg, #ffe9f326, transparent 55%);
+    opacity: calc(.3 + var(--scene-x) * .2);
+    pointer-events: none;
+  }
+}
+
+.hero__stars { translate: calc(var(--scene-x) * -9px) calc(var(--scene-y) * -6px); }
+.hero__angel { translate: calc(var(--scene-x) * 10px) calc(var(--scene-y) * 6px); }
+.hero__heart { rotate: y calc(var(--scene-x) * 12deg); }
+
+.polaroid-album__depth {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  --card-lift: 0px;
+  scale: 1;
+  transform: perspective(1000px) translateZ(var(--card-lift))
+    rotateX(calc(var(--scene-y) * -4deg + var(--scene-scroll) * 2deg))
+    rotateY(calc(var(--scene-x) * 5deg));
+  transition: transform .5s cubic-bezier(.22, 1, .36, 1), scale .22s ease-out;
+}
+
+.polaroid-album__card.is-active .polaroid-album__depth { --card-lift: 14px; }
+.polaroid-album__front, .polaroid-album__back {
+  border: 1px solid #f9e8de;
+  box-shadow: 0 3px 0 #d7c2b7, 0 5px 0 #ad9287, 0 20px 38px #25152440;
+}
+.polaroid-album__card-inner { transform: translateZ(0); }
+
+@media (hover: hover) and (pointer: fine) {
+  .polaroid-album__card:hover .polaroid-album__depth,
+  .polaroid-album__card:focus-within .polaroid-album__depth { --card-lift: 28px; }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .hero__photo-depth { transform: perspective(1000px) rotateX(calc(var(--scene-scroll) * 2deg)); }
+  .polaroid-album__depth { transform: perspective(1000px) translateZ(var(--card-lift)) rotateX(calc(var(--scene-scroll) * 1.5deg)); }
+  .polaroid-album__card:active .polaroid-album__depth { --card-lift: 20px; }
+}
+
+.polaroid-album__card[data-dragging="true"] .polaroid-album__depth {
+  --card-lift: 38px;
+  scale: 1.1;
+}
+
+// Independent rotate/translate leave the existing GSAP reveal transform intact.
+// Perspective stays on each grid row, so the SVG journey keeps its geometry.
+.love-timeline__item {
+  perspective: 1100px;
+  --timeline-side: 1;
+}
+.love-timeline__item--right { --timeline-side: -1; }
+.love-timeline .love-timeline__photo,
+.love-timeline .love-timeline__item.is-reached .love-timeline__photo {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.love-timeline__photo-depth {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 5px;
+  border-radius: inherit;
+  background: #fff;
+  rotate: 1 1 0 calc(var(--scene-x) * 4deg + var(--scene-y) * -2deg + var(--scene-scroll) * var(--timeline-side) * 3deg);
+  translate: 0 0 10px;
+  scale: 1;
+  transform-origin: center;
+  box-shadow: 0 3px 0 #e4cdc4, 0 6px 0 #c3a69c, 0 22px 38px #824a542b;
+  transition: translate .45s ease, scale .45s ease, box-shadow .45s ease;
+}
+.love-timeline .love-timeline__item.is-reached .love-timeline__photo-depth {
+  box-shadow: 0 3px 0 #e4cdc4, 0 6px 0 #c3a69c, 0 24px 42px #824a5438, 0 0 0 3px #dd829966;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .love-timeline .love-timeline__photo:hover .love-timeline__photo-depth {
+    translate: 0 -5px 24px;
+    scale: 1.025;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .love-timeline .love-timeline__photo-depth {
+    rotate: y calc(var(--scene-scroll) * var(--timeline-side) * 2deg);
+    translate: 0 0 4px;
+  }
+  .love-timeline .love-timeline__photo:active .love-timeline__photo-depth { scale: 1.02; }
+}
+
+.letter-depth {
+  position: relative;
+  isolation: isolate;
+  width: min(700px, 100%);
+  margin-inline: auto;
+  transform: perspective(1600px)
+    rotateX(calc(var(--scene-y) * -1.1deg + var(--scene-scroll) * .65deg))
+    rotateY(calc(var(--scene-x) * 1.8deg));
+  transform-origin: center;
+
+  &::before, &::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    z-index: -1;
+    border: 1px solid #d9a5a080;
+    box-shadow: 0 12px 30px #70394415;
+  }
+  &::before {
+    inset: 14px -5px -12px 5px;
+    background: linear-gradient(32deg, #e7b5b1 49.8%, #f1cebf 50%);
+    transform: rotate(calc(1.3deg + var(--scene-scroll) * .4deg));
+  }
+  &::after {
+    inset: 7px 3px -6px -3px;
+    background: #f6e5d5;
+    transform: rotate(-.7deg);
+  }
+}
+.letter-depth > .letter {
+  box-shadow: 0 3px 0 #ddc6b4, 0 7px 12px #70394414, 0 30px 65px #70394438;
+}
+.letter-depth .letter__ribbon {
+  box-shadow: 0 5px 10px #70394424;
+}
+.letter-depth .letter__decor-heart {
+  translate: calc(var(--scene-x) * 5px) calc(var(--scene-y) * 4px);
+  text-shadow: 0 5px 8px #c86d7d25;
+}
+
+@media (max-width: 1024px), (hover: none), (pointer: coarse) {
+  // Keep handwriting flat and readable on handheld screens.
+  .letter-depth { transform: none; }
+  .letter-depth::before {
+    inset-inline: 2px;
+    transform: rotate(calc(.35deg + var(--scene-scroll) * .25deg));
+  }
+  .letter-depth::after { inset-inline: 2px; transform: rotate(-.3deg); }
+  .letter-depth .letter__decor-heart { translate: 0 calc(var(--scene-scroll) * 5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__photo-depth, .polaroid-album__depth { transform: none; transition: none; }
+  .polaroid-album__card[data-dragging="true"] .polaroid-album__depth { scale: 1; }
+  .hero__stars, .hero__angel { translate: none; }
+  .hero__heart { rotate: none; }
+  .love-timeline .love-timeline__photo-depth {
+    rotate: none;
+    translate: none;
+    scale: 1;
+    transition: none;
+  }
+  .letter-depth, .letter-depth::before, .letter-depth::after { transform: none; }
+  .letter-depth .letter__decor-heart { translate: none; }
+}

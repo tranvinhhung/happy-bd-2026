@@ -5,9 +5,11 @@ import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { journey } from "../utils/data/journey";
 import styles from "../styles/SecretEnding.module.scss";
+import useSceneDepth from "../hooks/useSceneDepth";
 
 function JourneyDialog({ onClose }) {
   const dialogRef = useRef(null);
+  useSceneDepth(dialogRef, { scroll: false });
   const videoRef = useRef(null);
   const [phase, setPhase] = useState("intro");
   const [ready, setReady] = useState(false);
@@ -70,6 +72,7 @@ function JourneyDialog({ onClose }) {
           {Array.from({ length: 16 }, (_, index) => <i key={index} style={{ left: `${(index * 37 + 9) % 100}%`, top: `${(index * 23 + 7) % 100}%`, animationDelay: `${index * -0.3}s` }} />)}
         </div>
         <h2 id="journey-title" className={styles.srOnly}>{journey.title}</h2>
+        <div className={styles.orbit} aria-hidden="true" />
 
         {/* Keep one video element mounted so replay preserves its buffer. */}
         <div

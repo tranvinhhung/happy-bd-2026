@@ -10,6 +10,7 @@ import {
 import { birthdayData as data, BIRTHDAY_DATE } from "@/components/features/hpbd/utils/data/birthday";
 import MusicToggle from "./MusicToggle.jsx";
 import useAmbientMotion from "../hooks/useAmbientMotion";
+import useSceneDepth from "../hooks/useSceneDepth";
 import useJourneyMusic from "../hooks/useJourneyMusic";
 import useHeroAnimation, { useHeroPreload } from "../hooks/useHeroAnimation";
 import GiftIntro from "./GiftIntro.jsx";
@@ -31,6 +32,7 @@ import NewBirthdayWish from "./BirthdayWish.jsx";
 import LoveRoom3D from "@/components/features/hpbd/components/LoveRoom3D/LoveRoom3D";
 // import FlyingCupid from "./FlyingCupid.jsx";
 import "./birthday.scss";
+import "../styles/SceneDepth.scss";
 
 const FLOATING_HEARTS = [
   { left: "6%", size: 22, symbol: "♡", variant: "rose", duration: 12.5, initialP: 0.08, swayAmp: 36, swayFreq: 1.6, gustAmp: 14, gustFreq: 3.1, drift: 18, bobAmp: 0.28, baseOpacity: 0.78, twirl: 0 },
@@ -325,6 +327,7 @@ export default function BirthdayExperience() {
 
 function Hero() {
   const heroRef = useRef(null);
+  useSceneDepth(heroRef);
 
   useHeroAnimation(heroRef);
 
@@ -361,8 +364,10 @@ function Hero() {
 
         <p className="hero__description">{data.hero.description}</p>
 
+        <div className="hero__photo-depth">
         <div className="hero__couple">
           <Image src="/images/bg.jpg" alt="Kỷ niệm của chúng mình" width={600} height={380} sizes="(max-width: 600px) 80vw, 300px" loading="eager" />
+        </div>
         </div>
 
         <span className="scroll-text">Cuộn xuống để xem món quà ↓</span>
@@ -426,6 +431,7 @@ const LOVE_TIMELINE_PATH = "M50 0 C25 70,25 120,50 175 C75 230,75 280,50 350 C25
 
 function Timeline() {
   const sectionRef = useRef(null);
+  useSceneDepth(sectionRef);
   const isNear = useInView(sectionRef, { once: true, margin: "600px 0px" });
 
   useEffect(() => {
@@ -621,10 +627,12 @@ function Timeline() {
               <div
                 className="love-timeline__photo"
               >
+                <div className="love-timeline__photo-depth">
                 <span className="love-timeline__tape" />
 
                 <div className="love-timeline__image-window">
                   <Image src={image} alt={item.title} width={600} height={700} sizes="(max-width: 600px) 42vw, 300px" />
+                </div>
                 </div>
               </div>
 

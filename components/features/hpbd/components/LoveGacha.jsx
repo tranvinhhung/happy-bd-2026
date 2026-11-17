@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import GachaManager from "./GachaManager";
 import GachaJackpot from "./GachaJackpot";
 import styles from "../styles/LoveGacha.module.scss";
+import useSceneDepth from "../hooks/useSceneDepth";
 
 const capsuleColors = [
   "#f7a8c4",
@@ -72,6 +73,8 @@ const collectionReveal = {
 };
 
 export default function LoveGacha() {
+  const sectionRef = useRef(null);
+  useSceneDepth(sectionRef);
   // idle -> rolling -> floating -> bursting -> letter
   const [phase, setPhase] = useState("idle");
   const [currentPrize, setCurrentPrize] = useState(null);
@@ -238,7 +241,7 @@ export default function LoveGacha() {
   }
 
   return (
-    <section className={styles.section}>
+    <section ref={sectionRef} className={styles.section} data-gacha-phase={phase}>
       <div className={styles.container}>
         <motion.div
           className={styles.heading} data-parallax="heading"
@@ -310,6 +313,7 @@ export default function LoveGacha() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
+          <div className={styles.machineDepth} data-rolling={isRolling}>
           <motion.div
             className={styles.machine} data-parallax="media"
             animate={
@@ -406,6 +410,7 @@ export default function LoveGacha() {
               )}
             </AnimatePresence>
           </motion.div>
+          </div>
         </motion.div>
 
         <motion.button

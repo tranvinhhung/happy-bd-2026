@@ -1,0 +1,89 @@
+.intro {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 40px 22px 60px;
+  background: radial-gradient(ellipse at 50% 50%, #55334f 0%, #211a30 55%, #14121e 100%);
+  color: #ffe5ef;
+  animation: introFade var(--intro-duration) linear both;
+  &[data-active="false"], &[data-active="false"] * { animation-play-state: paused !important; }
+}
+.eyebrow { font-size: 10px; letter-spacing: 4px; opacity: .65; text-align: center; }
+.words {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 820px);
+  gap: 8px;
+  perspective: 1000px;
+  animation: loveGlow var(--glow-duration) var(--glow-delay) ease-in-out both;
+}
+.word {
+  flex: var(--word-width) 1 0;
+  min-width: 0;
+  transform: rotateX(8deg) rotateY(-9deg);
+  filter: drop-shadow(5px 12px 10px #0b071a80);
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  text { font-size: 120px; font-weight: 900; font-family: inherit; }
+}
+.extrusion { fill: #f7b5d30a; stroke: #e0a6cb55; stroke-width: 1.1; }
+.glass { fill: #fff1f708; stroke: #ffe7f2aa; stroke-width: 1.5; }
+.rim { fill: none; stroke: #fff0f9b3; stroke-width: .8; animation: rimGlow var(--glow-duration) var(--glow-delay) ease-in-out both; }
+.water {
+  transform: translateY(165px);
+  animation: fillWater var(--fill-duration) var(--fill-delay) linear both;
+}
+.wave { animation: wave .65s linear infinite; }
+.bubble { fill: #fff4f9a0; animation: bubble 1.8s ease-in infinite; }
+.reflection { width: min(70%, 550px); height: 12px; background: #ec92bf40; border-radius: 50%; filter: blur(18px); }
+.skip { position: absolute; bottom: 12px; right: 16px; min-height: 44px; padding: 8px 12px; border: 0; background: transparent; color: #e0bdd3; font: inherit; font-size: 12px; cursor: pointer; opacity: .7;
+  &:focus-visible { outline: 2px solid #ffd5e8; border-radius: 12px; }
+}
+@keyframes fillWater {
+  0% { transform: translate(0, 165px); }
+  12% { transform: translate(-1px, 138px); }
+  18% { transform: translate(1.5px, 141px); }
+  32% { transform: translate(0, 101px); }
+  38% { transform: translate(-2px, 104px); }
+  52% { transform: translate(1.5px, 60px); }
+  58% { transform: translate(-1px, 63px); }
+  76% { transform: translate(1px, 8px); }
+  82% { transform: translate(-1px, 11px); }
+  100% { transform: translate(0, -20px); }
+}
+@keyframes wave {
+  0% { transform: translateX(0) scaleY(.85); }
+  25% { transform: translateX(-20px) scaleY(1.2); }
+  50% { transform: translateX(-40px) scaleY(.9); }
+  75% { transform: translateX(-60px) scaleY(1.25); }
+  100% { transform: translateX(-80px) scaleY(.85); }
+}
+@keyframes bubble { from { opacity: 0; transform: translateY(30px); } 25% { opacity: .6; } to { opacity: 0; transform: translateY(-65px); } }
+@keyframes introFade { 0% { opacity: 0; } 7%, 93% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes loveGlow {
+  0%, 100% { filter: brightness(1) drop-shadow(0 0 0 #ffb8d900); }
+  40% { filter: brightness(1.55) drop-shadow(0 0 12px #fff0f5b3) drop-shadow(0 0 28px #f58fbda6); }
+}
+@keyframes rimGlow {
+  0%, 100% { fill: #ffffff00; stroke: #fff0f9b3; stroke-width: .8; }
+  40% { fill: #fff5fb33; stroke: #ffffff; stroke-width: 1.8; }
+}
+@media (max-width: 600px) {
+  .intro { gap: 16px; padding: 34px 22px 48px; }
+  .words { flex-wrap: wrap; max-width: 340px; gap: 0 8px; }
+  .word { flex: none; &:nth-child(1) { width: 60%; } &:nth-child(2) { width: 28%; } &:nth-child(3) { width: 72%; } }
+  .eyebrow { font-size: 9px; letter-spacing: 2.5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro { animation: none; }
+  .word { transform: none; }
+  .water { animation: none; transform: translateY(-20px); }
+  .wave, .bubble { animation: none; }
+  .words, .rim { animation: none; }
+}

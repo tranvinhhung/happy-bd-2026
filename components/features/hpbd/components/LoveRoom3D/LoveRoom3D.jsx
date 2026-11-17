@@ -20,6 +20,7 @@ import RoomScene2D from "./RoomScene2D";
 import RoomEndingEffects from "./RoomEndingEffects";
 import useRoomMode from "../../hooks/useRoomMode";
 import RoomSceneBoundary from "./RoomSceneBoundary";
+import FallInLoveIntro from "./FallInLoveIntro";
 
 const RoomScene = dynamic(() => import("./RoomScene"), {
   ssr: false,
@@ -50,6 +51,7 @@ export default function LoveRoom3D() {
 
   // Cinematic
   const [cinematicActive, setCinematicActive] = useState(false);
+  const [cinematicIntro, setCinematicIntro] = useState(false);
   const [cinematicProgress, setCinematicProgress] = useState(0);
   const [cinematicMessage, setCinematicMessage] = useState(false);
 
@@ -102,7 +104,17 @@ export default function LoveRoom3D() {
     setCinematicActive(true);
     setCinematicProgress(0);
     setCinematicMessage(false);
+    setCinematicIntro(true);
+    setIsHugging(false);
+    setCoupleAction("idle");
+  }, [clearCinematicTimers]);
 
+  const beginCinematic = useCallback(() => {
+    clearCinematicTimers();
+    setCinematicIntro(false);
+    setCoupleAction(null);
+    setCameraTarget("couple");
+    setCameraVersion((value) => value + 1);
     const startTime = performance.now();
 
     cinematicIntervalRef.current = setInterval(() => {
@@ -125,6 +137,7 @@ export default function LoveRoom3D() {
     clearCinematicTimers();
 
     setCinematicActive(false);
+    setCinematicIntro(false);
     setCinematicMessage(false);
     setCinematicProgress(0);
     setCoupleAction(null);
@@ -179,9 +192,6 @@ export default function LoveRoom3D() {
     if (chapter === ROOM_STORY.length - 1) {
       setActiveStory(null);
       setIsNight(true);
-      setIsHugging(true);
-      setCameraTarget("couple");
-      setCameraVersion((value) => value + 1);
       setCompleted(true);
       startCinematic();
       return;
@@ -295,7 +305,7 @@ export default function LoveRoom3D() {
             celebrate={celebrate}
             cakeBlownOut={cakeBlownOut}
             onBlowCake={handleBlowCake}
-            cinematicActive={cinematicActive}
+            cinematicActive={cinematicActive && !cinematicIntro}
             cinematicProgress={cinematicProgress}
             cinematicResetKey={cinematicResetKey}
             onCornerInteract={handleCornerInteract}
@@ -317,7 +327,7 @@ export default function LoveRoom3D() {
             celebrate={celebrate}
             coupleAction={coupleAction}
             coupleActionVersion={coupleActionVersion}
-            cinematicActive={cinematicActive}
+            cinematicActive={cinematicActive && !cinematicIntro}
             cinematicProgress={cinematicProgress}
             blocked={cinematicActive || Boolean(activeStory)}
           />
@@ -371,6 +381,14 @@ export default function LoveRoom3D() {
           </button>
         )}
 
+        {cinematicIntro && (
+          <FallInLoveIntro
+            key={cinematicResetKey}
+            active={isSceneVisible && pageVisible}
+            onComplete={beginCinematic}
+          />
+        )}
+
         {cinematicActive && cinematicProgress >= 7 && (
           <RoomEndingEffects
             messageVisible={cinematicMessage}
@@ -380,7 +398,7 @@ export default function LoveRoom3D() {
         )}
 
         <CinematicEnding
-          active={cinematicActive}
+          active={cinematicActive && !cinematicIntro}
           showHeartIcon={false}
           showMessage={cinematicMessage}
           onReplay={startCinematic}
@@ -414,7 +432,7 @@ export default function LoveRoom3D() {
             <h3>{currentStory.title}</h3>
             <p>{currentStory.instruction}</p>
           </motion.div>
-        ) : (
+        ) : !cinematicIntro && (
           <motion.div
             key="ending"
             className={styles.storyEnding}
