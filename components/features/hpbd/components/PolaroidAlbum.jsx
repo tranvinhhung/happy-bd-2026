@@ -380,6 +380,8 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
     const [layoutVersion, setLayoutVersion] = useState(0);
     const [selectedMemory, setSelectedMemory] = useState(null);
     const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+    const [isAudioFallback, setIsAudioFallback] = useState(false);
+    const [audioError, setAudioError] = useState(false);
     const audioRef = useRef(null);
 
     // ==================================================
@@ -479,11 +481,19 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
         };
     }, [onMemoryAudioChange]);
 
+    useEffect(() => {
+        if (!selectedMemory || !audioRef.current) return;
+        audioRef.current.load();
+        setAudioError(false);
+        setIsAudioFallback(false);
+    }, [selectedMemory]);
+
     const openMemory = useCallback((memory) => {
         setSelectedMemory(memory);
         setIsAudioPlaying(false);
+        setIsAudioFallback(false);
+        setAudioError(false);
         audioRef.current?.pause();
-        audioRef.current?.load();
         onMemoryAudioChange?.(false);
     }, [onMemoryAudioChange]);
 
@@ -500,6 +510,7 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
         if (isAudioPlaying) {
             audioRef.current.pause();
             setIsAudioPlaying(false);
+            setAudioError(false);
             onMemoryAudioChange?.(false);
             return;
         }
@@ -507,9 +518,14 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
         try {
             await audioRef.current.play();
             setIsAudioPlaying(true);
+            setAudioError(false);
+            setIsAudioFallback(audioRef.current.currentSrc.endsWith("/audio/beautiful_in_white.mp3"));
             onMemoryAudioChange?.(true);
         } catch (error) {
-            console.warn("Không thể phát âm thanh kỷ niệm:", error);
+            setIsAudioPlaying(false);
+            setAudioError(true);
+            onMemoryAudioChange?.(false);
+            console.warn("Không thể phát âm thanh kỷ niệm:", error.name, error.message);
         }
     };
 
@@ -770,18 +786,38 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
                                 }}
                             >
                                 {isAudioPlaying
-                                    ? "Tạm dừng âm thanh ♫"
+                                    ? isAudioFallback ? "Tạm dừng nhạc nền ♫" : "Tạm dừng âm thanh ♫"
                                     : "Nghe âm thanh kỷ niệm ♫"}
                             </motion.button>
+                            {isAudioFallback && isAudioPlaying && (
+                                <p className="polaroid-album__audio-status" role="status">
+                                    Định dạng ghi âm không tương thích; đang phát nhạc nền thay thế.
+                                </p>
+                            )}
+                            {audioError && (
+                                <p className="polaroid-album__audio-status" role="status">
+                                    Chưa phát được âm thanh. Em thử bấm nghe lại nhé.
+                                </p>
+                            )}
                             <audio
                                 ref={audioRef}
-                                src={selectedMemory.audio || "/audio/beautiful_in_white.mp3"}
                                 loop={false}
                                 preload="auto"
                                 controls={false}
-                                autoPlay={isAudioPlaying}
-                                onEnded={() => setIsAudioPlaying(false)}
-                            />
+                                onEnded={() => {
+                                    setIsAudioPlaying(false);
+                                    setIsAudioFallback(false);
+                                    onMemoryAudioChange?.(false);
+                                }}
+                                onError={() => {
+                                    setIsAudioPlaying(false);
+                                    setAudioError(true);
+                                    onMemoryAudioChange?.(false);
+                                }}
+                            >
+                                {selectedMemory.audio && <source src={selectedMemory.audio} type="audio/mp4" />}
+                                <source src="/audio/beautiful_in_white.mp3" type="audio/mpeg" />
+                            </audio>
                         </div>
                     </motion.div>
                     </motion.div>
