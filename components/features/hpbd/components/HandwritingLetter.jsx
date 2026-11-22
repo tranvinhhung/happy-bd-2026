@@ -309,7 +309,18 @@ export default function HandwritingLetter({
         style={{ visibility: enabled ? undefined : "hidden" }}
         aria-hidden="true"
       >
-        ✒️
+        <svg
+          className={styles.penIcon}
+          viewBox="0 0 32 32"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path d="m5 26 2-6L21 6l6 6-13 14-6 2Z" fill="#f5b5c8" stroke="#8e4f69" strokeWidth="1.5" strokeLinejoin="round" />
+          <path d="m7 20 6 6M19 8l6 6" fill="none" stroke="#fff0f4" strokeWidth="1.5" />
+          <path d="m5 26 2-6 6 6-6 2Z" fill="#d49a73" stroke="#8e4f69" strokeWidth="1.2" strokeLinejoin="round" />
+          <path d="m21 6 3-3 6 6-3 3Z" fill="#f8dce5" stroke="#8e4f69" strokeWidth="1.5" strokeLinejoin="round" />
+          <path d="m27 12 3-3" stroke="#fff" strokeWidth="1.2" />
+        </svg>
       </span>
     </div>
   );
