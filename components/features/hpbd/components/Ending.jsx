@@ -58,6 +58,17 @@ export default function Ending({ onJourneyActiveChange }) {
           .from(select(".ending-heart"), { opacity: 0, scale: 0.6, y: 16, duration: 0.95 })
           .from(select(".ending__eyebrow"), { opacity: 0, y: 14, duration: 0.65 }, 0.35)
           .from(select(".ending__title-line"), { opacity: 0, y: 28, duration: 0.85, stagger: 0.22 }, 0.65)
+          .fromTo(select(".ending__title-stroke"),
+            {
+              strokeDasharray: (index, target) => target.getComputedTextLength(),
+              strokeDashoffset: (index, target) => target.getComputedTextLength(),
+            },
+            { strokeDashoffset: 0, duration: 1.05, stagger: 0.3, ease: "power2.inOut" },
+            0.72)
+          .fromTo(select(".ending__title-front"),
+            { opacity: 0 },
+            { opacity: 1, duration: 0.45, stagger: 0.3, ease: "power1.out" },
+            1.25)
           .from(select(".ending__divider"), { opacity: 0, scaleX: 0, duration: 0.7 }, 1.6)
           .from(select(".ending__description"), { opacity: 0, y: 16, duration: 0.7 }, 1.9)
           .from(select(".ending__love-reveal"), { opacity: 0, y: 20, duration: 0.8 }, 2.1)
@@ -173,7 +184,14 @@ export default function Ending({ onJourneyActiveChange }) {
         <span className="ending__eyebrow">AND FINALLY...</span>
         <h2 data-parallax="heading">
           {["Cảm ơn em", "vì đã xuất hiện", "trong cuộc đời anh"].map((line) => (
-            <span key={line} className="ending__title-line">{line}</span>
+            <span key={line} className="ending__title-line">
+              <span className="ending__title-face">
+                <svg className="ending__title-outline" aria-hidden="true">
+                  <text className="ending__title-stroke" x="50%" y="84%" textAnchor="middle">{line}</text>
+                </svg>
+                <span className="ending__title-front">{line}</span>
+              </span>
+            </span>
           ))}
         </h2>
         <div className="ending__divider" aria-hidden="true"><span>♡</span></div>
