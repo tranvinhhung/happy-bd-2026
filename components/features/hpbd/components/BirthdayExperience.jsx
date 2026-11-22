@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback, useId } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import {
   motion,
@@ -200,12 +201,99 @@ const Reveal = ({ children, className = "" }) => {
 
 export default function BirthdayExperience() {
   useHeroPreload();
+  const reduceMotion = useReducedMotion();
   const experienceRef = useRef(null);
   const [started, setStarted] = useState(false);
   const audioRef = useRef(null);
   const handleJourneyActiveChange = useJourneyMusic(audioRef);
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [musicError, setMusicError] = useState(false);
+  const [cursorPortalRoot, setCursorPortalRoot] = useState(null);
+  const cursorElementRef = useRef(null);
+  const cursorIconRef = useRef(null);
+  const cursorVisibleRef = useRef(false);
+  const cursorModeRef = useRef("sparkle");
+  const cursorFrameRef = useRef(0);
+  const pendingCursorRef = useRef(null);
+  useEffect(() => () => {
+    if (cursorFrameRef.current) {
+      cancelAnimationFrame(cursorFrameRef.current);
+    }
+    delete document.body.dataset.birthdayCursorActive;
+  }, []);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCursorPortalRoot(document.body);
+  }, []);
+
+  const hideCustomCursor = () => {
+    pendingCursorRef.current = null;
+    if (cursorFrameRef.current) {
+      cancelAnimationFrame(cursorFrameRef.current);
+      cursorFrameRef.current = 0;
+    }
+    if (cursorVisibleRef.current) {
+      cursorVisibleRef.current = false;
+      if (cursorElementRef.current) cursorElementRef.current.style.visibility = "hidden";
+      if (experienceRef.current) experienceRef.current.dataset.cursorActive = "false";
+      document.body.dataset.birthdayCursorActive = "false";
+    }
+  };
+
+  const handlePagePointerMove = (event) => {
+    if (event.pointerType !== "mouse" || reduceMotion) {
+      hideCustomCursor();
+      return;
+    }
+    const target = event.target instanceof Element ? event.target : null;
+    const nativeCursorTarget = target?.closest(
+      "input, textarea, select, [contenteditable='true'], canvas, [data-native-cursor='true']",
+    );
+    if (nativeCursorTarget) {
+      hideCustomCursor();
+      return;
+    }
+
+    pendingCursorRef.current = { x: event.clientX, y: event.clientY, target };
+    if (cursorFrameRef.current) return;
+    cursorFrameRef.current = requestAnimationFrame(() => {
+      cursorFrameRef.current = 0;
+      const pending = pendingCursorRef.current;
+      if (!pending) return;
+      const mode = pending.target?.closest("[data-dragging='true']")
+        ? "drag"
+        : pending.target?.closest(".polaroid-album__photo")
+          ? "zoom"
+          : pending.target?.closest(".polaroid-album__card")
+            ? "drag"
+            : pending.target?.closest("button, a, [role='button']")
+              ? "heart"
+              : "sparkle";
+
+      const cursorElement = cursorElementRef.current;
+      if (cursorElement) {
+        cursorElement.style.transform = `translate3d(${pending.x}px, ${pending.y}px, 0)`;
+        cursorElement.style.visibility = "visible";
+      }
+      if (!cursorVisibleRef.current) {
+        cursorVisibleRef.current = true;
+        if (experienceRef.current) experienceRef.current.dataset.cursorActive = "true";
+        document.body.dataset.birthdayCursorActive = "true";
+      }
+      if (cursorModeRef.current !== mode) {
+        cursorModeRef.current = mode;
+        if (cursorElementRef.current) cursorElementRef.current.dataset.mode = mode;
+        if (cursorIconRef.current) {
+          cursorIconRef.current.textContent =
+            mode === "zoom" ? "⌕" : mode === "drag" ? "✋" : mode === "heart" ? "♡" : "✦";
+        }
+      }
+    });
+  };
+
+  const handlePagePointerLeave = (event) => {
+    if (!event.pointerType || event.pointerType === "mouse") hideCustomCursor();
+  };
 
   const playMusic = () => {
     setMusicError(false);
@@ -249,8 +337,27 @@ export default function BirthdayExperience() {
   }, []);
 
   return (
-    <main ref={experienceRef} className="birthday" id="birthday-top">
+    <main
+      ref={experienceRef}
+      className="birthday"
+      id="birthday-top"
+      data-cursor-active="false"
+      onPointerMove={handlePagePointerMove}
+      onPointerLeave={handlePagePointerLeave}
+    >
       <BirthdaySmoothScroll enabled={started} />
+      {cursorPortalRoot && !reduceMotion && createPortal(
+        <div
+          ref={cursorElementRef}
+          className="birthday__custom-cursor"
+          data-mode="sparkle"
+          style={{ visibility: "hidden" }}
+          aria-hidden="true"
+        >
+          <span ref={cursorIconRef} className="birthday__custom-cursor-icon">✦</span>
+        </div>,
+        cursorPortalRoot,
+      )}
       <audio
         ref={audioRef}
         src="/audio/beautiful_in_white.mp3"

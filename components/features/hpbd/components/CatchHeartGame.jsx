@@ -365,7 +365,11 @@ export default function CatchHeartGame() {
     );
 
     return (
-        <section className="catch-heart-game">
+        <section
+            className="catch-heart-game"
+            data-native-cursor={status === "playing" ? "true" : undefined}
+            data-game-active={status === "playing"}
+        >
             <div className="catch-heart-game__ambient" data-parallax="decoration" />
 
             <motion.div

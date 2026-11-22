@@ -14,6 +14,46 @@ $text: #53383c;
   background: $paper;
 }
 
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .birthday[data-cursor-active="true"],
+  .birthday[data-cursor-active="true"] *,
+  body[data-birthday-cursor-active="true"] .birthday,
+  body[data-birthday-cursor-active="true"] .birthday * { cursor: none !important; }
+}
+
+.birthday__custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid rgba(255, 228, 238, .9);
+  border-radius: 999px;
+  background: radial-gradient(circle at 31% 23%, #fffefa, #ffe5ee 44%, #d98baa 100%);
+  color: #9e5574;
+  box-shadow: 0 3px 14px rgba(95, 45, 76, .28), inset 0 1px 2px #fff;
+  pointer-events: none;
+  translate: -50% -50%;
+  will-change: transform;
+  backface-visibility: hidden;
+  transition: border-color .12s ease-out;
+
+  &[data-mode="zoom"], &[data-mode="drag"] { border-color: #fff; }
+}
+.birthday__custom-cursor-icon {
+  font: 22px/1 Georgia, serif;
+  transition: transform .12s ease-out;
+}
+.birthday__custom-cursor[data-mode="zoom"] .birthday__custom-cursor-icon { transform: scale(1.08); }
+.birthday__custom-cursor[data-mode="drag"] .birthday__custom-cursor-icon { transform: scale(1.08) rotate(-8deg); }
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .birthday__custom-cursor { display: none !important; }
+}
+
 // Independent translation keeps GSAP entrances, hover and drag transforms intact.
 .birthday [data-parallax] {
   --section-parallax-y: 0px;
@@ -6801,6 +6841,10 @@ html.lenis {
       #20263b;
 
     box-shadow: 0 20px 70px rgba(0, 0, 0, 0.15);
+  }
+
+  &[data-game-active="true"] &__arena {
+    cursor: pointer;
   }
 
   &__decorations {
