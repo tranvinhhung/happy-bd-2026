@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import usePopupImagePreload from "../hooks/usePopupImagePreload";
 import useAmbientMotion from "../hooks/useAmbientMotion";
+import useSceneDepth from "../hooks/useSceneDepth";
 import {
     AnimatePresence,
     motion,
@@ -442,6 +443,7 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
     usePopupImagePreload(sectionRef, memories, POPUP_IMAGE);
     const ambientActive = useAmbientMotion(sectionRef);
     const universeRef = useRef(null);
+    useSceneDepth(sectionRef, { pointerRef: universeRef });
     const [isCompactLayout, setIsCompactLayout] = useState(false);
 
     useEffect(() => {
@@ -661,20 +663,22 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
                             onClick={() => openMemory(index)}
                             aria-label={`Xem kỷ niệm ${memory.title}`}
                         >
-                            <div className={styles.float} data-parallax="media">
-                                <div className={styles.photoFrame}>
-                                    <Image src={memory.image} alt={memory.title} width={348} height={356} sizes="(max-width: 600px) 145px, 174px" />
-                                </div>
+                            <div className={styles.memoryDepth}>
+                                <div className={styles.float} data-parallax="media">
+                                    <div className={styles.photoFrame}>
+                                        <Image src={memory.image} alt={memory.title} width={348} height={356} sizes="(max-width: 600px) 145px, 174px" />
+                                    </div>
 
-                                <div className={styles.photoDate}>{memory.date}</div>
+                                    <div className={styles.photoDate}>{memory.date}</div>
 
-                                <div className={styles.photoCaption}>
-                                    {memory.caption || memory.title}
-                                </div>
+                                    <div className={styles.photoCaption}>
+                                        {memory.caption || memory.title}
+                                    </div>
 
-                                <div className={styles.memoryNumber}>
-                                    <Heart size={11} fill="currentColor" />
-                                    <span>{index + 1}</span>
+                                    <div className={styles.memoryNumber}>
+                                        <Heart size={11} fill="currentColor" />
+                                        <span>{index + 1}</span>
+                                    </div>
                                 </div>
                             </div>
                         </motion.button>

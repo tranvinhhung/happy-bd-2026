@@ -30,6 +30,15 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  transform: perspective(1000px)
+    translate3d(
+      calc(var(--scene-x, 0) * -12px),
+      calc(var(--scene-y, 0) * -9px + var(--scene-scroll, 0) * 5px),
+      0
+    )
+    rotateX(calc(var(--scene-y, 0) * -1.5deg + var(--scene-scroll, 0) * 0.4deg))
+    rotateY(calc(var(--scene-x, 0) * 2deg));
+  will-change: transform;
 
   canvas {
     display: block;
@@ -202,6 +211,14 @@
     content: "";
     pointer-events: none;
   }
+}
+
+.memoryDepth {
+  transform: perspective(850px)
+    rotateX(calc(var(--scene-y, 0) * -4deg + var(--scene-scroll, 0) * 0.8deg))
+    rotateY(calc(var(--scene-x, 0) * 6deg));
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .photoFrame {
