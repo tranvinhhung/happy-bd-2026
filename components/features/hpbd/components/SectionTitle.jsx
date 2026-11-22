@@ -1,11 +1,11 @@
 export default function SectionTitle({ small, title, subtitle, light = false }) {
   return (
-    <header className={`section-title ${light ? "section-title--light" : ""}`} data-parallax="heading">
-      <span>{small}</span>
+    <header className={`section-title ${light ? "section-title--light" : ""}`}>
+      <span data-parallax="decoration">{small}</span>
 
-      <h2>{title}</h2>
+      <h2 data-parallax="heading">{title}</h2>
 
-      <p>{subtitle}</p>
+      <p  data-parallax="text">{subtitle}</p>
     </header>
   );
 }

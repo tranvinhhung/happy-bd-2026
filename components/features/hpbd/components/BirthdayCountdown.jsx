@@ -164,7 +164,6 @@ export default function BirthdayCountdown({
             <div className="birthday-countdown__container">
                 <motion.div
                     className="birthday-countdown__heading"
-                    data-parallax="heading"
                     initial={{
                         opacity: 0,
                         y: 55,
@@ -183,17 +182,18 @@ export default function BirthdayCountdown({
                         ease: [0.22, 1, 0.36, 1],
                     }}
                 >
-                    <span className="birthday-countdown__eyebrow">
+                    
+                    <span className="birthday-countdown__eyebrow" data-parallax="decoration">
                         A SPECIAL DAY IS COMING
                     </span>
 
-                    <h2>
+                    <h2 data-parallax="heading">
                         Counting Down
                         <br />
                         <em>to Your Birthday ♡</em>
                     </h2>
 
-                    <p>
+                    <p  data-parallax="text">
                         Mỗi giây trôi qua là một chút gần hơn
                         <br />
                         đến ngày đặc biệt của em.

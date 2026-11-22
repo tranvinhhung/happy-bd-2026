@@ -361,7 +361,8 @@ const PolaroidCard = memo(function PolaroidCard({
 export default function PolaroidAlbum({ onMemoryAudioChange }) {
     const reduceMotion = useReducedMotion();
     const sectionRef = useRef(null);
-    useSceneDepth(sectionRef);
+    const albumRef = useRef(null);
+    useSceneDepth(albumRef);
     usePopupImagePreload(sectionRef, polaroidMemories, POPUP_IMAGE);
 
     const [positions, setPositions] = useState(
@@ -534,10 +535,9 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
     // ==================================================
 
     return (
-        <section ref={sectionRef} className="polaroid-album">
+        <section ref={sectionRef}  className="polaroid-album">
             <motion.div
                 className="polaroid-album__heading"
-                data-parallax="heading"
                 initial={
                     reduceMotion
                         ? false
@@ -556,24 +556,24 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
                     ease: [0.22, 1, 0.36, 1],
                 }}
             >
-                <span className="polaroid-album__eyebrow">
+                <span className="polaroid-album__eyebrow" data-parallax="decoration">
                     OUR LITTLE MEMORIES
                 </span>
 
-                <h2>
+                <h2 data-parallax="heading">
                     Những mảnh ghép
                     <br />
                     <em>kỷ niệm ♡</em>
                 </h2>
 
-                <p>
+                <p data-parallax="text">
                     Mỗi tấm ảnh là một câu chuyện nhỏ.
                     <br />
                     Chạm, kéo và lật ảnh để khám phá nhé!
                 </p>
             </motion.div>
 
-            <div className="polaroid-album__workspace">
+            <div className="polaroid-album__workspace" ref={albumRef}>
                 <div className="polaroid-album__decoration polaroid-album__decoration--one">
                     ✦
                 </div>

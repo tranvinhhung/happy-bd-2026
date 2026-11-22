@@ -290,23 +290,23 @@ export default function ScratchReveal() {
     <section className="scratch-reveal">
       <div className="scratch-reveal__inner">
         <motion.div
-          className="scratch-reveal__heading" data-parallax="heading"
+          className="scratch-reveal__heading"
           initial={reduceMotion ? false : { opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.7 }}
         >
-          <span className="scratch-reveal__eyebrow">
+          <span className="scratch-reveal__eyebrow" data-parallax="decoration">
             A LITTLE SURPRISE
           </span>
 
-          <h2>
+          <h2 data-parallax="heading">
             Một điều <em>bí mật</em>
             <br />
             dành cho em ♡
           </h2>
 
-          <p>
+          <p data-parallax="text">
             Có một lời nhắn nhỏ đang chờ em khám phá.
             <br />
             Dùng ngón tay cào nhẹ tấm thiệp em nhé!

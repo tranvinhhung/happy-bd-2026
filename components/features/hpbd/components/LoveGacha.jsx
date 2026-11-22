@@ -255,7 +255,7 @@ export default function LoveGacha() {
     <section ref={sectionRef} className={styles.section} data-gacha-phase={phase}>
       <div className={styles.container}>
         <motion.div
-          className={styles.heading} data-parallax="heading"
+          className={styles.heading}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -264,13 +264,13 @@ export default function LoveGacha() {
             ease: [0.22, 1, 0.36, 1],
           }}
         >
-          <span>THE LOVE GACHA</span>
+          <span data-parallax="decoration">THE LOVE GACHA</span>
 
-          <h2>
+          <h2 data-parallax="heading">
             Một chút <em>bất ngờ</em> cho em
           </h2>
 
-          <p>
+          <p data-parallax="text">
             Chiếc máy nhỏ này có những điều bí mật đăng sau. Cùng khám phá em
             nhé!
           </p>

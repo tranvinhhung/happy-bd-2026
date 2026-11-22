@@ -238,7 +238,7 @@ export default function LoveRoom3D() {
   return (
     <section ref={sectionRef} className={styles.section} id="our-little-world">
       <motion.div
-        className={styles.heading} data-parallax="heading"
+        className={styles.heading}
         initial={
           reduceMotion
             ? false

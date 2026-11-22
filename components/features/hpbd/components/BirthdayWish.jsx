@@ -326,7 +326,7 @@ export default function BirthdayWish({ data = [] }) {
 
       <div className={styles.container}>
         <motion.div
-          className={styles.heading} data-parallax="heading"
+          className={styles.heading}
           initial={
             reducedMotion
               ? false

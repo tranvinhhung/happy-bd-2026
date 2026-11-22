@@ -924,37 +924,47 @@ html.lenis {
   margin-bottom: 60px;
   text-align: center;
 
-  >span {
+  > span {
+    display: block;
+    margin-bottom: 8px;
     color: $rose;
+    font-family: "Montserrat", sans-serif;
     font-size: 10px;
+    font-weight: 500;
     letter-spacing: 4px;
     text-transform: uppercase;
   }
 
-  h2 {
-    margin-top: 5px;
+  > h2 {
+    margin: 0;
     color: $text;
     font-family: "Cormorant Garamond", serif;
-    font-size: clamp(50px, 8vw, 75px);
+    font-size: clamp(46px, 7.5vw, 76px);
     font-style: italic;
     font-weight: 500;
-    line-height: 0.9;
+    line-height: 0.98;
   }
 
-  p {
-    margin-top: 10px;
+  > p {
+    max-width: 42rem;
+    margin: 12px auto 0;
     color: $rose;
     font-family: "Cormorant Garamond", serif;
-    font-size: 24px;
+    font-size: clamp(20px, 2.5vw, 25px);
     font-style: italic;
+    line-height: 1.45;
   }
 
   &--light {
-    h2 {
+    > span {
+      color: #ffd9e6;
+    }
+
+    > h2 {
       color: white;
     }
 
-    p {
+    > p {
       color: #ffc1cd;
     }
   }
@@ -1815,6 +1825,11 @@ html.lenis {
       text-align: center;
     }
   }
+}
+
+.things__intro-parallax,
+.things__footer-parallax {
+  display: flow-root;
 }
 
 .notes {
@@ -3698,8 +3713,22 @@ html.lenis {
   .section-title {
     margin-bottom: 45px;
 
-    h2 {
-      font-size: 52px;
+    > span {
+      margin-bottom: 7px;
+      font-size: 9px;
+      letter-spacing: 3px;
+    }
+
+    > h2 {
+      font-size: clamp(38px, 11vw, 52px);
+      line-height: 1;
+    }
+
+    > p {
+      max-width: 34rem;
+      margin-top: 10px;
+      font-size: clamp(18px, 5vw, 22px);
+      line-height: 1.4;
     }
   }
 
@@ -3953,6 +3982,7 @@ html.lenis {
 
   &__glow {
     position: absolute;
+    z-index: 0;
 
     border-radius: 50%;
 
@@ -3992,6 +4022,9 @@ html.lenis {
     z-index: 2;
 
     pointer-events: none;
+    translate: calc(var(--scene-x, 0) * -22px)
+      calc(var(--scene-y, 0) * -16px + var(--scene-scroll, 0) * 8px);
+    will-change: translate;
 
     span {
       position: absolute;
@@ -4020,6 +4053,9 @@ html.lenis {
     overflow: hidden;
 
     pointer-events: none;
+    translate: calc(var(--scene-x, 0) * 14px)
+      calc(var(--scene-y, 0) * 10px + var(--scene-scroll, 0) * 6px);
+    will-change: translate;
 
     span {
       position: absolute;
@@ -4227,9 +4263,16 @@ html.lenis {
 
   /* Main heart */
 
-  &__main {
+  &__depth {
     position: relative;
     z-index: 3;
+    rotate: y calc(var(--scene-x, 0) * 14deg + var(--scene-scroll, 0) * 1.2deg);
+    transform-origin: center;
+    will-change: rotate;
+  }
+
+  &__main {
+    position: relative;
 
     color: #f4a2b3;
 
@@ -4952,7 +4995,6 @@ html.lenis {
   &__workspace {
     position: relative;
     width: 100%;
-    max-width: 850px;
     height: 630px;
     margin: 10px auto 0;
   }
@@ -5477,7 +5519,6 @@ html.lenis {
   &__workspace {
     position: relative;
     width: 100%;
-    max-width: 850px;
     height: 630px;
     margin: 10px auto 0;
   }
@@ -5814,6 +5855,11 @@ html.lenis {
     line-height: 1;
     text-shadow: 0 0 25px rgba(255, 229, 173, 0.4);
     pointer-events: none;
+    transform: perspective(700px)
+      rotateX(calc(var(--scene-y, 0) * -5deg + var(--scene-scroll, 0) * 1deg))
+      rotateY(calc(var(--scene-x, 0) * 7deg));
+    transform-origin: center;
+    will-change: transform;
   }
 
   &__decorative-star {
@@ -5822,6 +5868,9 @@ html.lenis {
     background: #ffe8c8;
     box-shadow: 0 0 7px rgba(255, 226, 180, 0.6);
     pointer-events: none;
+    translate: calc(var(--scene-x, 0) * 5px)
+      calc(var(--scene-y, 0) * 4px + var(--scene-scroll, 0) * 2px);
+    will-change: translate;
   }
 
   &__wish-star {
@@ -5839,6 +5888,9 @@ html.lenis {
     color: #ffe2a8;
     cursor: pointer;
     transform: translate(-50%, -50%);
+    translate: calc(var(--scene-x, 0) * 6px)
+      calc(var(--scene-y, 0) * 5px + var(--scene-scroll, 0) * 2px);
+    will-change: translate;
 
     span {
       font-size: 30px;

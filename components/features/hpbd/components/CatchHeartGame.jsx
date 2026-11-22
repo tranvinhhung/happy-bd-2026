@@ -373,7 +373,7 @@ export default function CatchHeartGame() {
             <div className="catch-heart-game__ambient" data-parallax="decoration" />
 
             <motion.div
-                className="catch-heart-game__heading" data-parallax="heading"
+                className="catch-heart-game__heading"
                 initial={
                     reduceMotion
                         ? false
@@ -386,15 +386,15 @@ export default function CatchHeartGame() {
                     ease: [0.22, 1, 0.36, 1],
                 }}
             >
-                <span className="catch-heart-game__eyebrow">
+                <span className="catch-heart-game__eyebrow" data-parallax="decoration">
                     A LITTLE GAME FOR YOU
                 </span>
 
-                <h2>
+                <h2 data-parallax="heading">
                     Catch My <em>Heart ♡</em>
                 </h2>
 
-                <p>
+                <p data-parallax="text">
                     Bắt những trái tim đang bay để mở khóa
                     <br />
                     một lời nhắn bí mật dành riêng cho em.

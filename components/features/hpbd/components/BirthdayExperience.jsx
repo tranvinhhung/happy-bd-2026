@@ -34,6 +34,7 @@ import LoveRoom3D from "@/components/features/hpbd/components/LoveRoom3D/LoveRoo
 // import FlyingCupid from "./FlyingCupid.jsx";
 import "./birthday.scss";
 import "../styles/SceneDepth.scss";
+import SectionTitle from "./SectionTitle.jsx";
 
 const FLOATING_HEARTS = [
   { left: "6%", size: 22, symbol: "♡", variant: "rose", duration: 12.5, initialP: 0.08, swayAmp: 36, swayFreq: 1.6, gustAmp: 14, gustFreq: 3.1, drift: 18, bobAmp: 0.28, baseOpacity: 0.78, twirl: 0 },
@@ -800,7 +801,7 @@ function NoteDepth({ children }) {
   useSceneDepth(ref);
 
   return (
-    <div ref={ref} className="note-depth-track">
+    <div ref={ref} className="note-depth-track" data-parallax="media">
       <div className="note-depth">{children}</div>
     </div>
   );
@@ -899,9 +900,11 @@ function ThingsILove() {
         />
       </Reveal>
 
-      <p className="things__intro" data-parallax="text">
+      <div className="things__intro-parallax" data-parallax="text">
+        <p className="things__intro">
         Có rất nhiều điều nhỏ ở em khiến anh yêu em nhiều hơn mỗi ngày...
       </p>
+      </div>
 
       <div className="notes">
         {data.thingsILove.map((item, index) => {
@@ -910,7 +913,7 @@ function ThingsILove() {
           const color = noteColors[index % noteColors.length];
 
           return (
-            <div className="note-reveal" key={`${item}-${index}`} data-parallax="media">
+            <div className="note-reveal" key={`${item}-${index}`}>
               <NoteDepth>
               <motion.div
                 className={`note note--${color}`}
@@ -959,120 +962,13 @@ function ThingsILove() {
         })}
       </div>
 
-      <div className="things__footer" data-parallax="text">
+      <div className="things__footer-parallax" data-parallax="text">
+        <div className="things__footer">
         <span>♡</span>
         <p>Và còn hàng nghìn điều khác nữa...</p>
         <span>♡</span>
       </div>
-    </section>
-  );
-}
-
-function Promises() {
-  return (
-    <section className="promises section-dark">
-      <Reveal>
-        <SectionTitle
-          small="Our Future"
-          title="Những lời hứa"
-          subtitle="cho tương lai ♡"
-          light
-        />
-      </Reveal>
-
-      <div className="promise-list">
-        {data.promises.map((promise, index) => (
-          <motion.div
-            className="promise"
-            key={promise}
-            initial={{
-              opacity: 0,
-              x: index % 2 ? 50 : -50,
-            }}
-            whileInView={{
-              opacity: 1,
-              x: 0,
-            }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.6,
-              delay: index * 0.1,
-            }}
-          >
-            <span>♡</span>
-            {promise}
-          </motion.div>
-        ))}
       </div>
-
-      <Reveal className="promise-image">
-        <img src="/images/promises/promise-01.jpg" alt="Together" />
-      </Reveal>
-    </section>
-  );
-}
-
-function BirthdayWish() {
-  return (
-    <section className="wish">
-      <Reveal>
-        <span className="eyebrow">Make a wish</span>
-
-        <h2>
-          Chúc em
-          <br />
-          tuổi mới ♡
-        </h2>
-      </Reveal>
-
-      <div className="wish-list">
-        {data.wishes.map((wish, index) => (
-          <motion.div
-            key={wish}
-            initial={{
-              opacity: 0,
-              scale: 0.8,
-            }}
-            whileInView={{
-              opacity: 1,
-              scale: 1,
-            }}
-            viewport={{ once: true }}
-            transition={{
-              delay: index * 0.1,
-            }}
-          >
-            {wish}
-          </motion.div>
-        ))}
-      </div>
-
-      <Reveal className="cake">
-        <div className="cake__candle">
-          <motion.span
-            className="cake__flame"
-            animate={{
-              scale: [1, 1.15, 0.9, 1],
-              rotate: [-3, 4, -2],
-            }}
-            transition={{
-              duration: 0.8,
-              repeat: Infinity,
-            }}
-          />
-        </div>
-
-        <div className="cake__top">
-          <span>♡</span>
-          <span>♡</span>
-          <span>♡</span>
-        </div>
-
-        <div className="cake__body">
-          <div className="cake__cream" />
-          Happy Birthday
-        </div>
-      </Reveal>
     </section>
   );
 }
@@ -1083,18 +979,6 @@ const stars = Array.from({ length: 18 }, (_, index) => ({
   duration: 2 + (index % 4),
   delay: index * 0.15,
 }));
-
-function SectionTitle({ small, title, subtitle, light = false }) {
-  return (
-    <header className={`section-title ${light ? "section-title--light" : ""}`} data-parallax="heading">
-      <span>{small}</span>
-
-      <h2>{title}</h2>
-
-      <p>{subtitle}</p>
-    </header>
-  );
-}
 
 function SectionConnector({ variant = "flower" }) {
   const connectorRef = useRef(null);

@@ -7,6 +7,7 @@ import {
     useReducedMotion,
     useInView,
 } from "framer-motion";
+import useSceneDepth from "../hooks/useSceneDepth";
 
 const MAX_WISH_LENGTH = 200;
 const MAX_VISIBLE_WISHES = 12;
@@ -59,6 +60,7 @@ export default function MakeAWish() {
     const reduceMotion = useReducedMotion();
 
     const skyRef = useRef(null);
+    useSceneDepth(skyRef);
     const timerRef = useRef(null);
     const mountedRef = useRef(true);
     const isSkyVisible = useInView(skyRef, {
@@ -264,21 +266,23 @@ export default function MakeAWish() {
 
             <div className="make-wish__container">
                 <motion.div
-                    className="make-wish__heading" data-parallax="heading"
+                    className="make-wish__heading"
                     initial={reduceMotion ? false : { opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.65 }}
                 >
-                    <span className="make-wish__eyebrow">MAKE A LITTLE WISH</span>
+                    <span className="make-wish__eyebrow" data-parallax="decoration">
+                        MAKE A LITTLE WISH
+                    </span>
 
-                    <h2>
+                    <h2 data-parallax="heading">
                         Gửi một điều ước
                         <br />
                         <em>lên những vì sao ♡</em>
                     </h2>
 
-                    <p>
+                    <p data-parallax="text">
                         Hãy nghĩ về một điều em thật sự mong muốn.
                         <br />
                         Rồi gửi điều ước ấy lên bầu trời em nhé!

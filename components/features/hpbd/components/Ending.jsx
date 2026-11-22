@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
+import useSceneDepth from "../hooks/useSceneDepth";
 import SecretEnding from "./SecretEnding";
 
 const stars = Array.from({ length: 18 }, (_, index) => ({
@@ -24,6 +25,7 @@ const floatingHearts = [
 
 export default function Ending({ onJourneyActiveChange }) {
   const sectionRef = useRef(null);
+  useSceneDepth(sectionRef);
   const isNear = useInView(sectionRef, { once: true, margin: "600px 0px" });
   const reduceMotion = useReducedMotion();
 
@@ -158,7 +160,7 @@ export default function Ending({ onJourneyActiveChange }) {
       <div className="ending__glow ending__glow--1" aria-hidden="true" />
       <div className="ending__glow ending__glow--2" aria-hidden="true" />
 
-      <div className="ending__stars" data-parallax="decoration" aria-hidden="true">
+      <div className="ending__stars" aria-hidden="true">
         {stars.map((star, index) => (
           <span key={index} style={{ left: star.left, top: star.top, opacity: 0.2 }} />
         ))}
@@ -173,7 +175,9 @@ export default function Ending({ onJourneyActiveChange }) {
         <div className="ending-heart" data-parallax="media" aria-hidden="true">
           <div className="ending-heart__glow" style={{ opacity: 0.3 }} />
           {[0, 1].map((index) => <div key={index} className="ending-heart__ring" style={{ opacity: 0 }} />)}
-          <div className="ending-heart__main">♡</div>
+          <div className="ending-heart__depth">
+            <div className="ending-heart__main">♡</div>
+          </div>
           <div className="ending-heart__orbit">
             <span className="ending-heart__mini ending-heart__mini--1">♥</span>
             <span className="ending-heart__mini ending-heart__mini--2">♡</span>
