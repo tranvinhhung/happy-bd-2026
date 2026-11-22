@@ -99,7 +99,7 @@ const DEFAULT_MEMORIES = [
 const memoryVariants = {
     hidden: {
         opacity: 0,
-        y: 65,
+        y: 0,
         scale: 0.94,
     },
     visible: ({ index, compact }) => ({
@@ -646,25 +646,12 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
                             custom={{ index, compact: isCompactLayout }}
                             variants={memoryVariants}
                             initial={reduceMotion ? false : "hidden"}
-                            animate={
-                                isCompactLayout
-                                    ? undefined
-                                    : isSectionInView
-                                      ? "visible"
-                                      : "hidden"
-                            }
-                            whileInView={
-                                isCompactLayout ? "visible" : undefined
-                            }
-                            viewport={
-                                isCompactLayout
-                                    ? {
-                                          once: true,
-                                          amount: 0.2,
-                                          margin: "0px 0px -10% 0px",
-                                      }
-                                    : undefined
-                            }
+                            whileInView={reduceMotion ? undefined : "visible"}
+                            viewport={{
+                                once: true,
+                                amount: 0.2,
+                                margin: "0px 0px -10% 0px",
+                            }}
                             style={{
                                 left: `${memory.x}%`,
                                 top: `${memory.y}%`,
