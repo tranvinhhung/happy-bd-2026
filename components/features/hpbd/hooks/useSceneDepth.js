@@ -29,18 +29,19 @@ export default function useSceneDepth(rootRef, { scroll = true, pointerRef = nul
 
     media.add("(prefers-reduced-motion: no-preference)", () => {
       const pointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-      const moveX = gsap.quickTo(root, "--scene-x", { duration: 0.55, ease: "power3.out" });
-      const moveY = gsap.quickTo(root, "--scene-y", { duration: 0.55, ease: "power3.out" });
+      const moveDuration = pointer.matches ? 0.55 : 0.22;
+      const moveX = gsap.quickTo(root, "--scene-x", { duration: moveDuration, ease: "power3.out" });
+      const moveY = gsap.quickTo(root, "--scene-y", { duration: moveDuration, ease: "power3.out" });
       const reset = () => { moveX(0); moveY(0); };
       let orientationBaseline = null;
       const supportsOrientation = "DeviceOrientationEvent" in window;
       const orient = (event) => {
         if (pointer.matches || document.hidden || event.gamma == null || event.beta == null) return;
         if (!orientationBaseline) orientationBaseline = { gamma: event.gamma, beta: event.beta };
-        // Center on the phone's starting position and map a comfortable tilt
-        // range to the same -1..1 values used by desktop pointer movement.
-        moveX(Math.max(-1, Math.min(1, (event.gamma - orientationBaseline.gamma) / 25)));
-        moveY(Math.max(-1, Math.min(1, (event.beta - orientationBaseline.beta) / 25)));
+        // Center on the phone's starting position. A 12-degree tilt now
+        // reaches full depth, with a quicker tween so it feels responsive.
+        moveX(Math.max(-1, Math.min(1, (event.gamma - orientationBaseline.gamma) / 12)));
+        moveY(Math.max(-1, Math.min(1, (event.beta - orientationBaseline.beta) / 12)));
       };
       const enableOrientation = () => {
         if (!supportsOrientation || pointer.matches || document.hidden) return;
@@ -69,7 +70,7 @@ export default function useSceneDepth(rootRef, { scroll = true, pointerRef = nul
       pointerRoot.addEventListener("pointerleave", reset);
       pointerRoot.addEventListener("pointerdown", reset, { passive: true });
       pointerRoot.addEventListener("pointerdown", enableOrientation, { passive: true });
-      if (supportsOrientation && !pointer.matches && !window.DeviceOrientationEvent.requestPermission) {
+      if (supportsOrientation && !pointer.matches && typeof window.DeviceOrientationEvent?.requestPermission !== "function") {
         window.addEventListener("deviceorientation", orient, { passive: true });
       }
       pointer.addEventListener("change", reset);
