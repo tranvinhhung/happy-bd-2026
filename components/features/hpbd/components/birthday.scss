@@ -3367,6 +3367,8 @@ html.lenis {
   &__title-face {
     position: relative;
     display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
   }
 
   &__title-outline {
@@ -3387,7 +3389,7 @@ html.lenis {
     stroke-linejoin: round;
     paint-order: stroke;
     font-family: "Cormorant Garamond", serif;
-    font-size: 88px;
+    font-size: 1em;
     font-style: italic;
     font-weight: 500;
     filter: drop-shadow(0 0 3px rgba(255, 207, 221, .35));
@@ -3404,10 +3406,6 @@ html.lenis {
     -webkit-text-fill-color: transparent;
     -webkit-text-stroke: .4px rgba(255, 231, 237, .48);
     text-shadow: 0 0 14px rgba(255, 148, 169, .1);
-  }
-
-  @media (max-width: 600px) {
-    &__title-stroke { font-size: 54px; }
   }
 
   /* DIVIDER */
@@ -3511,6 +3509,16 @@ html.lenis {
 
     text-transform: uppercase;
   }
+}
+
+/* Keep the outlined and filled ending title in sync across screen sizes. */
+.ending h2 {
+  font-size: clamp(30px, 7.2vw, 72px);
+  line-height: 1.05;
+}
+
+.ending__title-line {
+  padding-inline: 4px;
 }
 
 /* =========================================
@@ -4617,6 +4625,17 @@ html.lenis {
     &__heart {
       margin: 10px 0;
     }
+  }
+}
+
+@media (max-width: 460px) {
+  .ending h2 {
+    font-size: clamp(27px, 7vw, 32px);
+    line-height: 1.08;
+  }
+
+  .ending__title-line {
+    padding-inline: 0;
   }
 }
 
