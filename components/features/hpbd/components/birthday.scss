@@ -4790,6 +4790,12 @@ html.lenis {
     align-items: center;
     justify-content: center;
     padding: 18px 25px;
+    filter: blur(6px);
+    transition: filter 0.55s ease;
+
+    &.is-revealed {
+      filter: blur(0px);
+    }
   }
 
   &__secret-label {

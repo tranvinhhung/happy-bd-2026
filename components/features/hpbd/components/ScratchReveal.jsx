@@ -324,7 +324,7 @@ export default function ScratchReveal() {
             ref={surfaceRef}
             className="scratch-reveal__surface"
           >
-            <div className="scratch-reveal__secret">
+            <div className={`scratch-reveal__secret ${revealed ? "is-revealed" : ""}`}>
               <span className="scratch-reveal__secret-label">
                 YOU ARE MY FAVORITE GIFT
               </span>
