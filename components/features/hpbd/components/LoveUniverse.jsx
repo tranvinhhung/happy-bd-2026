@@ -8,7 +8,10 @@ import useSceneDepth from "../hooks/useSceneDepth";
 import {
     AnimatePresence,
     motion,
+    useMotionValue,
     useReducedMotion,
+    useSpring,
+    useTransform,
     useInView,
 } from "framer-motion";
 import { ArrowLeft, ArrowRight, Heart, Sparkles, X } from "lucide-react";
@@ -142,13 +145,20 @@ function glow(ctx, x, y, radius, color) {
     ctx.fill();
 }
  
-function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
+function UniverseCanvas({ memories, finale, allVisited, revealStarted, layoutRef }) {
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
     const starsRef = useRef([]);
     const memoryPointsRef = useRef([]);
     const visibleRef = useRef(false);
+    const revealStartTimeRef = useRef(null);
     const reduceMotion = useReducedMotion();
+
+    useEffect(() => {
+        if (revealStarted && revealStartTimeRef.current === null) {
+            revealStartTimeRef.current = performance.now();
+        }
+    }, [revealStarted]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -281,19 +291,37 @@ function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
 
             ctx.globalAlpha = 1;
 
-            // Những đường nối kỷ niệm.
+            // Những đường nối kỷ niệm (vẽ nối lần lượt theo từng card xuất hiện).
             ctx.save();
-            ctx.lineWidth = finale ? 2.2 : 1.2;
-            ctx.strokeStyle = finale
+            const isConnected = finale || allVisited;
+            ctx.lineWidth = isConnected ? 2.2 : 1.2;
+            ctx.strokeStyle = isConnected
                 ? "rgba(255, 191, 225, 0.9)"
-                : "rgba(255, 188, 216, 0.35)";
-            ctx.setLineDash(finale ? [] : [3, 8]);
+                : "rgba(255, 188, 216, 0.42)";
+            ctx.setLineDash(isConnected ? [] : [3, 8]);
 
-            const visibleConnections = revealComplete ? memories.length - 1 : 0;
+            const totalSegments = Math.max(0, memories.length - 1);
+            const revealElapsed =
+                revealStarted && revealStartTimeRef.current !== null
+                    ? (time - revealStartTimeRef.current) / 1000
+                    : 0;
 
-            for (let i = 0; i < visibleConnections; i++) {
+            for (let i = 0; i < totalSegments; i++) {
                 const from = memoryPointsRef.current[i];
                 const to = memoryPointsRef.current[i + 1];
+                if (!from || !to) continue;
+
+                let segT = 0;
+                if (reduceMotion) {
+                    segT = revealStarted ? 1 : 0;
+                } else if (revealStarted) {
+                    const segStart = 0.42 + i * 0.22;
+                    const rawT = Math.max(0, Math.min(1, (revealElapsed - segStart) / 0.48));
+                    // Ease in-out quad mượt mà
+                    segT = rawT < 0.5 ? 2 * rawT * rawT : 1 - Math.pow(-2 * rawT + 2, 2) / 2;
+                }
+
+                if (segT <= 0.001) continue;
 
                 const x1 = from.x;
                 const y1 = from.y;
@@ -303,10 +331,31 @@ function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
                 const midX = (x1 + x2) / 2;
                 const midY = (y1 + y2) / 2 - 40;
 
-                ctx.beginPath();
-                ctx.moveTo(x1, y1);
-                ctx.quadraticCurveTo(midX, midY, x2, y2);
-                ctx.stroke();
+                if (segT >= 0.999) {
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.quadraticCurveTo(midX, midY, x2, y2);
+                    ctx.stroke();
+                } else {
+                    // Thuật toán De Casteljau vẽ đúng phần đường cong Bézier tại tiến độ segT
+                    const q0x = x1 + (midX - x1) * segT;
+                    const q0y = y1 + (midY - y1) * segT;
+                    const q1x = midX + (x2 - midX) * segT;
+                    const q1y = midY + (y2 - midY) * segT;
+                    const bx = q0x + (q1x - q0x) * segT;
+                    const by = q0y + (q1y - q0y) * segT;
+
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.quadraticCurveTo(q0x, q0y, bx, by);
+                    ctx.stroke();
+
+                    // Điểm sáng nhỏ dẫn đầu nét vẽ
+                    ctx.fillStyle = "rgba(255, 224, 240, 0.92)";
+                    ctx.beginPath();
+                    ctx.arc(bx, by, 2.4, 0, Math.PI * 2);
+                    ctx.fill();
+                }
             }
 
             ctx.restore();
@@ -367,7 +416,13 @@ function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
         const tick = (time) => {
             if (!running) return;
 
-            if (time - lastFrame >= 1000 / 30) {
+            const isAnimatingLines =
+                revealStarted &&
+                revealStartTimeRef.current !== null &&
+                time - revealStartTimeRef.current < 2400;
+            const frameInterval = isAnimatingLines ? 1000 / 60 : 1000 / 30;
+
+            if (time - lastFrame >= frameInterval) {
                 draw(time);
                 lastFrame = time;
             }
@@ -425,7 +480,7 @@ function UniverseCanvas({ memories, finale, revealComplete, layoutRef }) {
 
             document.removeEventListener("visibilitychange", syncAnimation);
         };
-    }, [layoutRef, memories, finale, reduceMotion, revealComplete]);
+    }, [layoutRef, memories, finale, allVisited, reduceMotion, revealStarted]);
 
     return (
         <div ref={containerRef} className={styles.canvasLayer}>
@@ -461,28 +516,71 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
         amount: 0.12,
     });
 
-    const [revealComplete, setRevealComplete] = useState(false);
-
-    useEffect(() => {
-        if (!isSectionInView) return;
-
-        if (reduceMotion) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setRevealComplete(true);
-            return;
-        }
-
-        const timer = window.setTimeout(() => {
-            setRevealComplete(true);
-        }, 1800);
-
-        return () => window.clearTimeout(timer);
-    }, [isSectionInView, reduceMotion]);
-
     const selectedMemory =
         selectedIndex === null ? null : memories[selectedIndex];
 
     const memoryCount = memories.length;
+    const allVisited = memoryCount > 0 && visited.length === memoryCount;
+    const hasPlayedFinaleRef = useRef(false);
+    const finaleTimersRef = useRef([]);
+
+    const clearFinaleTimers = useCallback(() => {
+        finaleTimersRef.current.forEach((id) => window.clearTimeout(id));
+        finaleTimersRef.current = [];
+    }, []);
+
+    useEffect(() => clearFinaleTimers, [clearFinaleTimers]);
+
+    const startFinale = useCallback(
+        (immediate = false) => {
+            clearFinaleTimers();
+            setSelectedIndex(null);
+
+            if (immediate) {
+                setFinale(true);
+            } else {
+                const startId = window.setTimeout(() => {
+                    setFinale(true);
+                }, 1000);
+                finaleTimersRef.current.push(startId);
+            }
+
+            const endId = window.setTimeout(
+                () => {
+                    setFinale(false);
+                },
+                immediate ? 5500 : 6500,
+            );
+            finaleTimersRef.current.push(endId);
+        },
+        [clearFinaleTimers],
+    );
+
+    const modalPointerX = useMotionValue(0);
+    const modalPointerY = useMotionValue(0);
+    const modalTiltY = useSpring(useTransform(modalPointerX, [-0.5, 0.5], [-6, 6]), {
+        stiffness: 180,
+        damping: 22,
+    });
+    const modalTiltX = useSpring(useTransform(modalPointerY, [-0.5, 0.5], [6, -6]), {
+        stiffness: 180,
+        damping: 22,
+    });
+
+    const handleModalPointerMove = useCallback(
+        (event) => {
+            if (reduceMotion || event.pointerType !== "mouse") return;
+            const rect = event.currentTarget.getBoundingClientRect();
+            modalPointerX.set((event.clientX - rect.left) / rect.width - 0.5);
+            modalPointerY.set((event.clientY - rect.top) / rect.height - 0.5);
+        },
+        [reduceMotion, modalPointerX, modalPointerY],
+    );
+
+    const resetModalTilt = useCallback(() => {
+        modalPointerX.set(0);
+        modalPointerY.set(0);
+    }, [modalPointerX, modalPointerY]);
 
     const progress = useMemo(() => {
         if (!memoryCount) return 0;
@@ -505,12 +603,13 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
     );
 
     const closeMemory = useCallback(() => {
+        resetModalTilt();
         setSelectedIndex(null);
-        if (visited.length === memoryCount) {
-            // eslint-disable-next-line react-hooks/immutability
-            startFinale();
+        if (allVisited && !hasPlayedFinaleRef.current) {
+            hasPlayedFinaleRef.current = true;
+            startFinale(false);
         }
-    }, [memoryCount, visited.length]);
+    }, [allVisited, resetModalTilt, startFinale]);
 
     const navigateMemory = useCallback(
         (direction) => {
@@ -557,17 +656,6 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
         };
     }, [selectedIndex, closeMemory, navigateMemory]);
 
-    const startFinale = () => {
-        setSelectedIndex(null);
-        window.setTimeout(() => {
-            setFinale(true);
-        }, 1000);
-
-        window.setTimeout(() => {
-            setFinale(false);
-        }, 6500);
-    };
-
     return (
         <section
             ref={sectionRef}
@@ -586,7 +674,8 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
                 <UniverseCanvas
                     memories={memories}
                     finale={finale}
-                    revealComplete={revealComplete}
+                    allVisited={allVisited}
+                    revealStarted={isSectionInView}
                     layoutRef={universeRef}
                 />
 
@@ -741,18 +830,6 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
                 </div>
 
                 <div className={styles.bottomActions}>
-                    {/* <motion.button
-                        type="button"
-                        className={styles.exploreButton}
-                        onClick={startFinale}
-                        whileHover={{ scale: 1.04 }}
-                        whileTap={{ scale: 0.96 }}
-                    >
-                        <Sparkles size={18} />
-                        <span>Khám phá vũ trụ của chúng ta</span>
-                        <ArrowRight size={17} />
-                    </motion.button> */}
-
                     <span className={styles.instruction}>
                         Chạm vào những vì sao để xem kỷ niệm ✦
                     </span>
@@ -766,6 +843,19 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
                         </div>
                     </div>
                 </div>
+
+                {allVisited && (
+                    <motion.button
+                        type="button"
+                        className={styles.exploreButton}
+                        onClick={() => startFinale(true)}
+                        whileHover={reduceMotion ? undefined : { scale: 1.04 }}
+                        whileTap={reduceMotion ? undefined : { scale: 0.96 }}
+                    >
+                        <Sparkles size={16} />
+                        <span>Xem lại ♡</span>
+                    </motion.button>
+                )}
 
                 <AnimatePresence>
                     {finale && (
@@ -820,89 +910,130 @@ export default function LoveUniverse({ memories = DEFAULT_MEMORIES }) {
             </div>
 
             <AnimatePresence mode="wait">
-                {selectedMemory && (
-                    <motion.div
-                        className={styles.modalBackdrop}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={closeMemory}
-                    >
+                {selectedMemory && (() => {
+                    const restRotateZ = Math.max(
+                        -3.2,
+                        Math.min(3.2, (selectedMemory.rotate || (selectedIndex % 2 === 0 ? -6 : 6)) * 0.28),
+                    );
+                    const initRotateZ = restRotateZ * 2.2 + (selectedIndex % 2 === 0 ? -3.5 : 3.5);
+                    const initRotateY = selectedIndex % 2 === 0 ? -10 : 10;
+
+                    return (
                         <motion.div
-                            key={selectedMemory.id}
-                            className={styles.modalCard}
-                            role="dialog"
-                            aria-modal="true"
-                            aria-label={selectedMemory.title}
-                            initial={{
-                                opacity: 0,
-                                y: 60,
-                                rotate: -8,
-                                scale: 0.8,
-                            }}
-                            animate={{
-                                opacity: 1,
-                                y: 0,
-                                rotate: -2,
-                                scale: 1,
-                            }}
-                            exit={{
-                                opacity: 0,
-                                y: 35,
-                                scale: 0.85,
-                            }}
-                            transition={
-                                reduceMotion
-                                    ? { duration: 0 }
-                                    : {
-                                        type: "spring",
-                                        stiffness: 170,
-                                        damping: 19,
-                                    }
-                            }
-                            onClick={(event) => event.stopPropagation()}
+                            className={styles.modalBackdrop}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={closeMemory}
                         >
-                            <button
-                                type="button"
-                                className={styles.closeButton}
-                                onClick={closeMemory}
-                                aria-label="Đóng"
+                            <div className={styles.modalStage}>
+                                <motion.div
+                                    key={selectedMemory.id}
+                                    className={styles.modalCard3D}
+                                    onPointerMove={handleModalPointerMove}
+                                    onPointerLeave={resetModalTilt}
+                                    style={
+                                        reduceMotion
+                                            ? undefined
+                                            : {
+                                                rotateX: modalTiltX,
+                                                rotateY: modalTiltY,
+                                            }
+                                    }
+                                    initial={
+                                        reduceMotion
+                                            ? { opacity: 0 }
+                                            : {
+                                                opacity: 0,
+                                                y: 55,
+                                                rotateX: 20,
+                                                rotateY: initRotateY,
+                                                rotateZ: initRotateZ,
+                                                scale: 0.84,
+                                            }
+                                    }
+                                    animate={{
+                                        opacity: 1,
+                                        y: 0,
+                                        rotateX: 0,
+                                        rotateY: 0,
+                                        rotateZ: restRotateZ,
+                                        scale: 1,
+                                    }}
+                                    exit={
+                                        reduceMotion
+                                            ? { opacity: 0 }
+                                            : {
+                                                opacity: 0,
+                                                y: 35,
+                                                rotateX: -12,
+                                                rotateZ: -restRotateZ,
+                                                scale: 0.88,
+                                            }
+                                    }
+                                transition={
+                                    reduceMotion
+                                        ? { duration: 0 }
+                                        : {
+                                            type: "spring",
+                                            stiffness: 165,
+                                            damping: 20,
+                                        }
+                                }
+                                onClick={(event) => event.stopPropagation()}
                             >
-                                <X size={20} />
-                            </button>
+                                <div className={styles.modalBackSheet} aria-hidden="true" />
+                                <div
+                                    className={styles.modalCard}
+                                    role="dialog"
+                                    aria-modal="true"
+                                    aria-label={selectedMemory.title}
+                                >
+                                    <div className={styles.modalTape} aria-hidden="true" />
+                                    <button
+                                        type="button"
+                                        className={styles.closeButton}
+                                        onClick={closeMemory}
+                                        aria-label="Đóng"
+                                    >
+                                        <X size={20} />
+                                    </button>
 
-                            <div className={styles.modalPhoto}>
-                                <Image src={selectedMemory.image} alt={selectedMemory.title} {...POPUP_IMAGE} loading="eager" />
-                            </div>
+                                    <div className={styles.modalPhoto}>
+                                        <Image src={selectedMemory.image} alt={selectedMemory.title} {...POPUP_IMAGE} loading="eager" />
+                                    </div>
 
-                            <span className={styles.modalDate}>
-                                ✦ {selectedMemory.date} ✦
-                            </span>
+                                    <span className={styles.modalDate}>
+                                        ✦ {selectedMemory.date} ✦
+                                    </span>
 
-                            <h3>{selectedMemory.title}</h3>
+                                    <h3>{selectedMemory.title}</h3>
 
-                            <p>{selectedMemory.message}</p>
+                                    <p>{selectedMemory.message}</p>
 
-                            <div className={styles.modalSignature}>With all my love ♡</div>
+                                    <div className={styles.modalSignature}>With all my love ♡</div>
 
-                            <div className={styles.modalNavigation}>
-                                <button type="button" onClick={() => navigateMemory(-1)}>
-                                    <ArrowLeft size={16} />
-                                    Trước
-                                </button>
+                                    <div className={styles.modalNavigation}>
+                                        <button type="button" onClick={() => navigateMemory(-1)}>
+                                            <ArrowLeft size={16} />
+                                            Trước
+                                        </button>
 
-                                <span>
-                                    {selectedIndex + 1} / {memoryCount}
-                                </span>
+                                        <span>
+                                            {selectedIndex + 1} / {memoryCount}
+                                        </span>
 
-                                <button type="button" onClick={() => navigateMemory(1)}>
-                                    Tiếp
-                                    <ArrowRight size={16} />
-                                </button>
-                            </div>
-                        </motion.div>
+                                        <button type="button" onClick={() => navigateMemory(1)}>
+                                            Tiếp
+                                            <ArrowRight size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </div>
                     </motion.div>
-                )}
+                    );
+                })()}
             </AnimatePresence>
         </section>
     );
