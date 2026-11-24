@@ -6,6 +6,7 @@ import { Heart, Sparkles } from "lucide-react";
 import SectionTitle from "./SectionTitle";
 import Reveal from "./Reveal";
 import PromiseSlideshow from "./PromiseSlideshow";
+import PromiseButterfly3D from "./PromiseButterfly3D";
 import useAmbientMotion from "../hooks/useAmbientMotion";
 import "../styles/PromisePorcelain.scss";
 
@@ -212,12 +213,21 @@ export default function Promises({ data }) {
   const active = useAmbientMotion(sectionRef);
   const [activePromise, setActivePromise] = useState(null);
   const [completedPromises, setCompletedPromises] = useState([]);
+  const [butterflyOpen, setButterflyOpen] = useState(false);
+  const hasPlayedFinaleRef = useRef(false);
   const reduceMotion = useReducedMotion();
 
   const promises = data?.promises || [];
 
   const allCompleted =
     promises.length > 0 && completedPromises.length === promises.length;
+
+  useEffect(() => {
+    if (allCompleted && !hasPlayedFinaleRef.current) {
+      hasPlayedFinaleRef.current = true;
+      setButterflyOpen(true);
+    }
+  }, [allCompleted]);
 
   const handlePromiseClick = (index) => {
     setActivePromise((current) => (current === index ? null : index));
@@ -316,9 +326,34 @@ export default function Promises({ data }) {
                 <strong> Anh luôn chọn em. ♡</strong>
               </span>
               <Sparkles size={18} />
+              <button
+                type="button"
+                className="promises-replay-btn"
+                onClick={() => setButterflyOpen(true)}
+                aria-label="Xem lại hiệu ứng bướm 3D"
+                style={{
+                  marginLeft: 6,
+                  minHeight: 36,
+                  padding: "7px 14px",
+                  borderRadius: 999,
+                  border: "1px solid rgba(255, 200, 224, 0.35)",
+                  background: "rgba(255, 190, 220, 0.14)",
+                  color: "#ffd9e9",
+                  fontSize: 12,
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                🦋 Xem lại
+              </button>
             </motion.div>
           )}
         </AnimatePresence>
+
+        <PromiseButterfly3D
+          open={butterflyOpen}
+          onClose={() => setButterflyOpen(false)}
+        />
 
         <motion.div
           className="promises-photo-area" data-parallax="media"
