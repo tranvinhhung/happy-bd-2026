@@ -6,7 +6,10 @@ import {
   AnimatePresence,
   motion,
   useInView,
+  useMotionValue,
   useReducedMotion,
+  useSpring,
+  useTransform,
 } from "framer-motion";
 
 import { ROOM_STORY } from "./roomStory";
@@ -60,6 +63,31 @@ export default function LoveRoom3D() {
   const sectionRef = useRef(null);
   const sceneWrapperRef = useRef(null);
   const reduceMotion = useReducedMotion();
+  const modalPointerX = useMotionValue(0);
+  const modalPointerY = useMotionValue(0);
+  const modalTiltY = useSpring(useTransform(modalPointerX, [-0.5, 0.5], [-6, 6]), {
+    stiffness: 180,
+    damping: 22,
+  });
+  const modalTiltX = useSpring(useTransform(modalPointerY, [-0.5, 0.5], [6, -6]), {
+    stiffness: 180,
+    damping: 22,
+  });
+
+  const handleModalPointerMove = useCallback(
+    (event) => {
+      if (reduceMotion || event.pointerType !== "mouse") return;
+      const rect = event.currentTarget.getBoundingClientRect();
+      modalPointerX.set((event.clientX - rect.left) / rect.width - 0.5);
+      modalPointerY.set((event.clientY - rect.top) / rect.height - 0.5);
+    },
+    [reduceMotion, modalPointerX, modalPointerY],
+  );
+
+  const resetModalTilt = useCallback(() => {
+    modalPointerX.set(0);
+    modalPointerY.set(0);
+  }, [modalPointerX, modalPointerY]);
 
   const currentStory = ROOM_STORY[chapter];
 
@@ -188,6 +216,7 @@ export default function LoveRoom3D() {
   };
 
   const continueStory = () => {
+    resetModalTilt();
     setHintedChapter(null);
     if (chapter === ROOM_STORY.length - 1) {
       setActiveStory(null);
@@ -478,48 +507,88 @@ export default function LoveRoom3D() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <motion.div
-              className={styles.modal}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="room-story-title"
-              initial={{
-                opacity: 0,
-                scale: 0.92,
-                y: 30,
-              }}
-              animate={{
-                opacity: 1,
-                scale: 1,
-                y: 0,
-              }}
-              exit={{
-                opacity: 0,
-                scale: 0.95,
-                y: 15,
-              }}
-              transition={{ duration: 0.45 }}
-            >
-              <div className={styles.modalEmoji}>{activeStory.emoji}</div>
-
-              <span className={styles.modalChapter}>
-                MẢNH KỶ NIỆM {chapter + 1}
-              </span>
-
-              <h3 id="room-story-title">{activeStory.title}</h3>
-
-              <p>{activeStory.message}</p>
-
-              <button
-                type="button"
-                className={styles.continueButton}
-                onClick={continueStory}
+            <div className={styles.modalStage}>
+              <motion.div
+                key={activeStory.id}
+                className={styles.modalCard3D}
+                onPointerMove={handleModalPointerMove}
+                onPointerLeave={resetModalTilt}
+                style={
+                  reduceMotion
+                    ? undefined
+                    : {
+                        rotateX: modalTiltX,
+                        rotateY: modalTiltY,
+                      }
+                }
+                initial={
+                  reduceMotion
+                    ? { opacity: 0 }
+                    : {
+                        opacity: 0,
+                        scale: 0.86,
+                        y: 40,
+                        rotateX: 18,
+                        rotateY: -8,
+                      }
+                }
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  y: 0,
+                  rotateX: 0,
+                  rotateY: 0,
+                }}
+                exit={
+                  reduceMotion
+                    ? { opacity: 0 }
+                    : {
+                        opacity: 0,
+                        scale: 0.92,
+                        y: 18,
+                        rotateX: -10,
+                      }
+                }
+                transition={
+                  reduceMotion
+                    ? { duration: 0 }
+                    : {
+                        type: "spring",
+                        stiffness: 165,
+                        damping: 20,
+                      }
+                }
               >
-                {chapter === ROOM_STORY.length - 1
-                  ? "♡ Xem điều bất ngờ cuối cùng"
-                  : "Tiếp tục khám phá →"}
-              </button>
-            </motion.div>
+                <div className={styles.modalBackSheet} aria-hidden="true" />
+                <div
+                  className={styles.modal}
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="room-story-title"
+                >
+                  <div className={styles.modalTape} aria-hidden="true" />
+                  <div className={styles.modalEmoji}>{activeStory.emoji}</div>
+
+                  <span className={styles.modalChapter}>
+                    MẢNH KỶ NIỆM {chapter + 1}
+                  </span>
+
+                  <h3 id="room-story-title">{activeStory.title}</h3>
+
+                  <p>{activeStory.message}</p>
+
+                  <button
+                    type="button"
+                    className={styles.continueButton}
+                    onClick={continueStory}
+                  >
+                    {chapter === ROOM_STORY.length - 1
+                      ? "♡ Xem điều bất ngờ cuối cùng"
+                      : "Tiếp tục khám phá →"}
+                  </button>
+                </div>
+              </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
