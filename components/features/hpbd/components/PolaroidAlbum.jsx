@@ -19,6 +19,8 @@ import {
     motion,
     useMotionValue,
     useReducedMotion,
+    useSpring,
+    useTransform,
 } from "framer-motion";
 
 import { polaroidMemories } from "../utils/data/polaroid";
@@ -498,12 +500,39 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
         onMemoryAudioChange?.(false);
     }, [onMemoryAudioChange]);
 
+    const lightboxPointerX = useMotionValue(0);
+    const lightboxPointerY = useMotionValue(0);
+    const lightboxTiltY = useSpring(useTransform(lightboxPointerX, [-0.5, 0.5], [-4.5, 4.5]), {
+        stiffness: 180,
+        damping: 22,
+    });
+    const lightboxTiltX = useSpring(useTransform(lightboxPointerY, [-0.5, 0.5], [4.5, -4.5]), {
+        stiffness: 180,
+        damping: 22,
+    });
+
+    const handleLightboxPointerMove = useCallback(
+        (event) => {
+            if (reduceMotion || event.pointerType !== "mouse") return;
+            const rect = event.currentTarget.getBoundingClientRect();
+            lightboxPointerX.set((event.clientX - rect.left) / rect.width - 0.5);
+            lightboxPointerY.set((event.clientY - rect.top) / rect.height - 0.5);
+        },
+        [reduceMotion, lightboxPointerX, lightboxPointerY],
+    );
+
+    const resetLightboxTilt = useCallback(() => {
+        lightboxPointerX.set(0);
+        lightboxPointerY.set(0);
+    }, [lightboxPointerX, lightboxPointerY]);
+
     const closeMemory = useCallback(() => {
+        resetLightboxTilt();
         audioRef.current?.pause();
         setIsAudioPlaying(false);
         setSelectedMemory(null);
         onMemoryAudioChange?.(false);
-    }, [onMemoryAudioChange]);
+    }, [onMemoryAudioChange, resetLightboxTilt]);
 
     const toggleMemoryAudio = async () => {
         if (!audioRef.current) return;
@@ -644,19 +673,60 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.25 }}
                     >
+                    <div className="polaroid-album__lightbox-stage">
                     <motion.div
+                        className="polaroid-album__lightbox-card3d"
+                        onPointerMove={handleLightboxPointerMove}
+                        onPointerLeave={resetLightboxTilt}
+                        style={
+                            reduceMotion
+                                ? undefined
+                                : {
+                                      rotateX: lightboxTiltX,
+                                      rotateY: lightboxTiltY,
+                                  }
+                        }
+                        initial={
+                            reduceMotion
+                                ? { opacity: 0 }
+                                : {
+                                      opacity: 0,
+                                      scale: 0.88,
+                                      y: 36,
+                                      rotateX: 16,
+                                      rotateY: -6,
+                                  }
+                        }
+                        animate={{
+                            opacity: 1,
+                            scale: 1,
+                            y: 0,
+                            rotateX: 0,
+                            rotateY: 0,
+                        }}
+                        exit={
+                            reduceMotion
+                                ? { opacity: 0 }
+                                : {
+                                      opacity: 0,
+                                      scale: 0.92,
+                                      y: 20,
+                                      rotateX: -10,
+                                  }
+                        }
+                        transition={{
+                            type: "spring",
+                            stiffness: 165,
+                            damping: 20,
+                        }}
+                        onClick={(event) => event.stopPropagation()}
+                    >
+                    <div className="polaroid-album__lightbox-backsheet" aria-hidden="true" />
+                    <div
                         className="polaroid-album__lightbox-content"
                         role="dialog"
                         aria-modal="true"
                         aria-labelledby="memory-title"
-                        onClick={(event) => event.stopPropagation()}
-                        initial={{ opacity: 0, scale: 0.86, y: 24 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.92, y: 12 }}
-                        transition={{
-                            duration: 0.35,
-                            ease: [0.22, 1, 0.36, 1],
-                        }}
                     >
                         <button
                             type="button"
@@ -673,18 +743,16 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
                                     ? false
                                     : {
                                           opacity: 0,
-                                          scale: 1.14,
-                                          filter: "blur(10px)",
+                                          scale: 1.08,
                                       }
                             }
                             animate={{
                                 opacity: 1,
                                 scale: 1,
-                                filter: "blur(0px)",
                             }}
                             transition={{
-                                duration: 1.15,
-                                delay: 0.12,
+                                duration: 0.85,
+                                delay: 0.08,
                                 ease: [0.16, 1, 0.3, 1],
                             }}
                         >
@@ -819,7 +887,9 @@ export default function PolaroidAlbum({ onMemoryAudioChange }) {
                                 <source src="/audio/beautiful_in_white.mp3" type="audio/mpeg" />
                             </audio>
                         </div>
+                    </div>
                     </motion.div>
+                    </div>
                     </motion.div>
                 )}
             </AnimatePresence>

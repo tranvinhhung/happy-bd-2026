@@ -5245,17 +5245,42 @@ html.lenis {
       max(20px, calc(12px + env(safe-area-inset-bottom, 0px)))
       max(20px, env(safe-area-inset-left, 0px));
     background:
-      radial-gradient(circle at 18% 18%, rgba(255, 190, 215, 0.2), transparent 22%),
-      radial-gradient(circle at 82% 78%, rgba(255, 220, 159, 0.16), transparent 24%),
-      rgba(24, 15, 39, 0.88);
-    backdrop-filter: blur(14px);
+      radial-gradient(circle at 18% 18%, rgba(255, 190, 215, 0.16), transparent 28%),
+      radial-gradient(circle at 82% 78%, rgba(255, 220, 159, 0.12), transparent 30%),
+      rgba(20, 12, 34, 0.94);
+  }
+
+  &__lightbox-stage {
+    position: relative;
+    width: min(100%, 850px);
+    perspective: 1300px;
+  }
+
+  &__lightbox-card3d {
+    position: relative;
+    width: 100%;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    will-change: transform;
+  }
+
+  &__lightbox-backsheet {
+    position: absolute;
+    inset: 8px -6px -8px 6px;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: linear-gradient(145deg, #f8dce4, #ecc8d4);
+    box-shadow: 0 14px 30px rgba(10, 4, 20, 0.35);
+    transform: translateZ(-18px) rotate(-1.5deg);
+    pointer-events: none;
   }
 
   &__lightbox-content {
     position: relative;
+    z-index: 2;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(240px, 0.8fr);
-    width: min(100%, 850px);
+    width: 100%;
     max-height: calc(100dvh - 40px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
     overflow-y: auto;
     overflow-x: hidden;
@@ -5266,8 +5291,9 @@ html.lenis {
       linear-gradient(145deg, #fffaf5, #ffe9ef);
     color: #82566a;
     box-shadow:
-      0 25px 90px rgba(0, 0, 0, 0.4),
-      0 0 0 1px rgba(255, 210, 224, 0.5);
+      0 6px 0 #ead0d8,
+      0 11px 0 rgba(212, 174, 188, 0.48),
+      0 24px 48px rgba(10, 4, 20, 0.44);
 
     &::before,
     &::after {
@@ -5325,10 +5351,9 @@ html.lenis {
       background: linear-gradient(
         105deg,
         transparent,
-        rgba(255, 255, 255, 0.55),
+        rgba(255, 255, 255, 0.5),
         transparent
       );
-      filter: blur(7px);
       transform: skewX(-18deg);
     }
   }
@@ -7247,6 +7272,20 @@ html.lenis {
   }
 }
 
+@media (max-width: 900px) {
+  .polaroid-album__lightbox-stage {
+    width: min(100%, 700px);
+  }
+
+  .polaroid-album__lightbox-backsheet {
+    inset: 6px -4px -6px 4px;
+  }
+
+  .polaroid-album__lightbox-content {
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.85fr);
+  }
+}
+
 @media (max-width: 600px) {
   .polaroid-album__lightbox {
     align-items: start;
@@ -7258,11 +7297,21 @@ html.lenis {
       max(12px, env(safe-area-inset-left, 0px));
   }
 
+  .polaroid-album__lightbox-stage {
+    width: min(100%, calc(100vw - 24px));
+    margin: auto 0;
+  }
+
+  .polaroid-album__lightbox-backsheet {
+    inset: 5px -3px -5px 3px;
+    border-radius: 22px;
+    transform: translateZ(-10px) rotate(-1.2deg);
+  }
+
   .polaroid-album__lightbox-content {
     display: block;
     width: 100%;
     max-height: none;
-    margin: auto 0;
     border-width: 5px;
     border-radius: 22px;
   }
