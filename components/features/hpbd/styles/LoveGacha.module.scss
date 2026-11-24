@@ -554,25 +554,40 @@
     max(20px, calc(12px + env(safe-area-inset-bottom, 0px)))
     max(20px, env(safe-area-inset-left, 0px));
 
-  background: rgba(30, 20, 33, 0.82);
-  backdrop-filter: blur(9px);
+  background: radial-gradient(
+    circle at 50% 45%,
+    rgba(62, 32, 58, 0.92) 0%,
+    rgba(24, 15, 30, 0.96) 68%,
+    rgba(14, 9, 20, 0.98) 100%
+  );
 }
 
 .overlayGlow {
   position: absolute;
-  inset: 0;
+  left: 50%;
+  top: 50%;
+  width: min(540px, 92vw);
+  height: min(540px, 92vw);
+  margin-left: calc(min(540px, 92vw) / -2);
+  margin-top: calc(min(540px, 92vw) / -2);
+  border-radius: 50%;
   pointer-events: none;
 
-  background:
-    radial-gradient(
-      circle at 50% 48%,
-      rgba(255, 214, 228, 0.36) 0%,
-      rgba(244, 151, 190, 0.18) 20%,
-      rgba(231, 134, 177, 0.06) 42%,
-      transparent 70%
-    );
+  background: radial-gradient(
+    circle,
+    rgba(255, 214, 228, 0.32) 0%,
+    rgba(244, 151, 190, 0.14) 35%,
+    transparent 70%
+  );
 
-  animation: gachaGlowPulse 3s ease-in-out infinite;
+  will-change: transform, opacity;
+  animation: gachaGlowPulse 3.4s ease-in-out infinite;
+}
+
+.overlay[data-phase="letter"] .overlayGlow {
+  animation: none;
+  opacity: 0.65;
+  transform: scale(1);
 }
 
 @keyframes gachaGlowPulse {
@@ -630,11 +645,11 @@
   font-size: 70px;
 
   box-shadow:
-    0 25px 55px rgba(0, 0, 0, 0.22),
-    0 0 40px rgba(255, 190, 217, 0.6),
-    0 0 100px rgba(255, 185, 213, 0.3),
-    inset 0 0 25px rgba(255, 255, 255, 0.4);
+    0 18px 38px rgba(0, 0, 0, 0.28),
+    0 0 28px rgba(255, 190, 217, 0.45),
+    inset 0 0 18px rgba(255, 255, 255, 0.38);
 
+  will-change: transform;
   cursor: pointer;
   transition: filter 0.2s;
 
@@ -760,39 +775,73 @@
   pointer-events: none;
 }
 
-/* Lá thư xuất hiện sau vụ nổ */
+/* Lá thư 2.5D xuất hiện sau vụ nổ */
+
+.letterStage {
+  position: relative;
+  z-index: 5;
+  width: min(100%, 500px);
+  perspective: 1200px;
+}
+
+.letterCard3D {
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.letterBackSheet {
+  position: absolute;
+  inset: 8px -6px -8px 6px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #f9dfe4, #eed0d7);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 14px 32px rgba(18, 8, 22, 0.3);
+  transform: translateZ(-18px) rotate(-2.4deg);
+  pointer-events: none;
+}
 
 .letterScene {
   position: relative;
-  z-index: 5;
+  z-index: 2;
 
-  width: min(100%, 500px);
-  max-height: 85dvh;
+  width: 100%;
+  max-height: calc(85dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
   overflow-y: auto;
+  overflow-x: hidden;
 
-  padding: 55px 40px 42px;
+  padding: 58px 40px 44px;
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: 10px;
 
   background:
+    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.9), transparent 45%),
     repeating-linear-gradient(
       0deg,
       transparent,
       transparent 35px,
-      rgba(180, 120, 125, 0.035) 36px
+      rgba(180, 120, 125, 0.04) 36px
     ),
-    #fff0e7;
+    linear-gradient(160deg, #fffaf6 0%, #fff0e7 60%, #ffe6ea 100%);
 
   color: #765156;
   text-align: center;
 
+  // Tạo độ dày mép giấy nổi khối 2.5D (tối ưu GPU shadow)
   box-shadow:
-    0 30px 90px rgba(0, 0, 0, 0.3),
-    0 0 65px rgba(255, 204, 224, 0.15);
+    0 5px 0 #ead0c9,
+    0 10px 0 rgba(226, 193, 187, 0.65),
+    0 22px 44px rgba(14, 6, 20, 0.36),
+    inset 0 0 0 1px rgba(215, 167, 169, 0.25);
 
   h3 {
     margin: 16px 0;
     font-family: "Cormorant Garamond", serif;
     font-size: clamp(35px, 6vw, 48px);
     font-weight: 500;
+    text-shadow: 0 2px 6px rgba(160, 102, 114, 0.12);
   }
 
   p {
@@ -808,19 +857,62 @@
   }
 }
 
+.letterSheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.48) 46%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  animation: letterSheenSweep 1.5s ease-out 0.35s forwards;
+  pointer-events: none;
+}
+
+@keyframes letterSheenSweep {
+  to {
+    transform: translateX(130%);
+  }
+}
+
 .letterTape {
   position: absolute;
   top: -2px;
   left: 50%;
 
-  width: 95px;
-  height: 25px;
+  width: 98px;
+  height: 26px;
 
-  background: rgba(210, 174, 159, 0.65);
+  border-radius: 2px;
+  background: linear-gradient(180deg, rgba(235, 196, 182, 0.78), rgba(210, 168, 155, 0.65));
+  box-shadow: 0 4px 10px rgba(120, 75, 85, 0.16);
   transform: translateX(-50%) rotate(-3deg);
 }
 
+.letterWaxSeal {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 30%, #f59bb6, #c95d7e 72%, #9e3e5d 100%);
+  color: #fff2f6;
+  font-size: 16px;
+  box-shadow:
+    0 4px 0 #8a3450,
+    0 8px 18px rgba(158, 62, 93, 0.35),
+    inset 0 2px 4px rgba(255, 255, 255, 0.45);
+  transform: rotate(10deg);
+  pointer-events: none;
+}
+
 .letterIcon {
+  display: inline-block;
   font-size: 65px;
 }
 
@@ -846,29 +938,55 @@
   padding: 12px 28px;
 
   border: 1px solid #d7a7a9;
-  border-radius: 4px;
+  border-radius: 8px;
 
-  background: #ffe5e7;
+  background: linear-gradient(180deg, #fff0f2, #ffdce0);
   color: #765156;
 
   font-family: "Cormorant Garamond", serif;
   font-size: 22px;
   font-style: italic;
 
+  box-shadow:
+    0 4px 0 #dcb0b3,
+    0 8px 18px rgba(145, 92, 102, 0.18);
+
   cursor: pointer;
 
   transition:
     background 0.2s,
-    transform 0.2s;
+    transform 0.16s,
+    box-shadow 0.16s;
 
   &:hover {
-    background: #f7d5da;
+    background: linear-gradient(180deg, #ffe7ea, #f9cfd5);
     transform: translateY(-2px);
+    box-shadow:
+      0 6px 0 #dcb0b3,
+      0 12px 24px rgba(145, 92, 102, 0.24);
+  }
+
+  &:active {
+    transform: translateY(2px);
+    box-shadow:
+      0 2px 0 #dcb0b3,
+      0 4px 10px rgba(145, 92, 102, 0.15);
   }
 
   &:focus-visible {
     outline: 2px solid #b87e8b;
     outline-offset: 4px;
+  }
+}
+
+@media (max-width: 900px) {
+  .letterStage {
+    width: min(100%, 460px);
+  }
+
+  .letterBackSheet {
+    inset: 6px -4px -6px 4px;
+    transform: translateZ(-14px) rotate(-2deg);
   }
 }
 
@@ -884,16 +1002,70 @@
     font-size: 22px;
   }
 
+  .letterStage {
+    width: min(100%, calc(100vw - 28px));
+  }
+
+  .letterBackSheet {
+    inset: 5px -3px -5px 3px;
+    transform: translateZ(-10px) rotate(-1.5deg);
+  }
+
   .letterScene {
-    padding: 45px 25px 30px;
+    max-height: calc(82dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    padding: 46px 20px 28px;
+
+    h3 {
+      margin: 12px 0;
+      font-size: clamp(28px, 7.5vw, 36px);
+    }
 
     p {
-      font-size: 21px;
+      font-size: 20px;
+      line-height: 1.6;
     }
+  }
+
+  .letterWaxSeal {
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .letterIcon {
+    font-size: 52px;
+  }
+
+  .letterSignature {
+    margin-top: 18px;
+    font-size: 20px;
+  }
+
+  .letterClose {
+    width: 100%;
+    min-height: 46px;
+    margin-top: 22px;
+    font-size: 20px;
   }
 
   .particle {
     font-size: 20px;
+  }
+}
+
+@media (max-height: 680px) {
+  .letterScene {
+    padding: 38px 20px 24px;
+  }
+
+  .letterIcon {
+    font-size: 44px;
+  }
+
+  .letterClose {
+    margin-top: 16px;
   }
 }
 

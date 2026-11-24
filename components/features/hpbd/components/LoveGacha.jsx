@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import GachaManager from "./GachaManager";
 import GachaJackpot from "./GachaJackpot";
 import styles from "../styles/LoveGacha.module.scss";
@@ -179,6 +186,29 @@ export default function LoveGacha() {
   }, [loadPrizes, loadProgress]);
 
   const timerRef = useRef(null);
+  const reduceMotion = useReducedMotion();
+  const pointerX = useMotionValue(0);
+  const pointerY = useMotionValue(0);
+  const tiltY = useSpring(useTransform(pointerX, [-0.5, 0.5], [-7, 7]), {
+    stiffness: 180,
+    damping: 22,
+  });
+  const tiltX = useSpring(useTransform(pointerY, [-0.5, 0.5], [7, -7]), {
+    stiffness: 180,
+    damping: 22,
+  });
+
+  const handleLetterPointerMove = (event) => {
+    if (reduceMotion || event.pointerType !== "mouse") return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    pointerX.set((event.clientX - rect.left) / rect.width - 0.5);
+    pointerY.set((event.clientY - rect.top) / rect.height - 0.5);
+  };
+
+  const resetLetterTilt = () => {
+    pointerX.set(0);
+    pointerY.set(0);
+  };
 
   useEffect(() => {
     return () => clearTimeout(timerRef.current);
@@ -214,6 +244,7 @@ export default function LoveGacha() {
       setRollCount(data.roll_count);
       setSpecialUnlocked(data.special_unlocked);
 
+      clearTimeout(timerRef.current);
       timerRef.current = setTimeout(() => {
         setPhase("floating");
       }, 1600);
@@ -227,6 +258,7 @@ export default function LoveGacha() {
   function openCapsule() {
     if (phase !== "floating") return;
 
+    clearTimeout(timerRef.current);
     setPhase("bursting");
 
     timerRef.current = setTimeout(() => {
@@ -247,6 +279,7 @@ export default function LoveGacha() {
   function closeLetter() {
     if (phase !== "letter") return;
 
+    resetLetterTilt();
     setPhase("idle");
     setCurrentPrize(null);
   }
@@ -527,6 +560,7 @@ export default function LoveGacha() {
         {isOverlayOpen && (
           <motion.div
             className={styles.overlay}
+            data-phase={phase}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -636,60 +670,88 @@ export default function LoveGacha() {
               )}
 
               {phase === "letter" && currentPrize && (
-                <motion.div
-                  key="letter"
-                  className={styles.letterScene}
-                  initial={{
-                    opacity: 0,
-                    y: 90,
-                    scale: 0.65,
-                    rotate: -8,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    rotate: 0,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    y: 50,
-                    scale: 0.9,
-                  }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 150,
-                    damping: 17,
-                  }}
-                >
-                  <div className={styles.letterTape} />
-
-                  <div className={styles.letterIcon}>{currentPrize.emoji}</div>
-
-                  {(currentPrize.rare || currentPrize.is_special) && (
-                    <span className={styles.rare}>✨ SPECIAL GIFT ✨</span>
-                  )}
-
-                  <span className={styles.letterEyebrow}>
-                    A LITTLE LETTER FOR YOU
-                  </span>
-
-                  <h3>{currentPrize.title}</h3>
-
-                  <p>{currentPrize.message}</p>
-
-                  <div className={styles.letterSignature}>
-                    With all my love ♡
-                  </div>
-
-                  <button
-                    type="button"
-                    className={styles.letterClose}
-                    onClick={closeLetter}
+                <div className={styles.letterStage}>
+                  <motion.div
+                    key="letter"
+                    className={styles.letterCard3D}
+                    onPointerMove={handleLetterPointerMove}
+                    onPointerLeave={resetLetterTilt}
+                    style={
+                      reduceMotion
+                        ? undefined
+                        : {
+                            rotateX: tiltX,
+                            rotateY: tiltY,
+                          }
+                    }
+                    initial={
+                      reduceMotion
+                        ? { opacity: 0 }
+                        : {
+                            opacity: 0,
+                            y: 90,
+                            scale: 0.72,
+                            rotateX: 26,
+                            rotateZ: -7,
+                          }
+                    }
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                      scale: 1,
+                      rotateX: 0,
+                      rotateZ: 0,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      y: 45,
+                      scale: 0.9,
+                      rotateX: -12,
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 145,
+                      damping: 18,
+                    }}
                   >
-                    Cất lá thư vào tim 💗
-                  </button>
-                </motion.div>
+                    <div className={styles.letterBackSheet} aria-hidden="true" />
+                    <div className={styles.letterScene}>
+                      <div className={styles.letterSheen} aria-hidden="true" />
+                      <div className={styles.letterTape} />
+                      <div className={styles.letterWaxSeal} aria-hidden="true">
+                        ♥
+                      </div>
+
+                      <div className={styles.letterIcon}>
+                        {currentPrize.emoji}
+                      </div>
+
+                      {(currentPrize.rare || currentPrize.is_special) && (
+                        <span className={styles.rare}>✨ SPECIAL GIFT ✨</span>
+                      )}
+
+                      <span className={styles.letterEyebrow}>
+                        A LITTLE LETTER FOR YOU
+                      </span>
+
+                      <h3>{currentPrize.title}</h3>
+
+                      <p>{currentPrize.message}</p>
+
+                      <div className={styles.letterSignature}>
+                        With all my love ♡
+                      </div>
+
+                      <button
+                        type="button"
+                        className={styles.letterClose}
+                        onClick={closeLetter}
+                      >
+                        Cất lá thư vào tim 💗
+                      </button>
+                    </div>
+                  </motion.div>
+                </div>
               )}
             </AnimatePresence>
           </motion.div>
