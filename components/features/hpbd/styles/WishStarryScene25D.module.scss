@@ -1,0 +1,265 @@
+.stage {
+  position: relative;
+  width: min(100%, 660px);
+  margin: 0 auto;
+  perspective: 1100px;
+}
+
+.card3d {
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.backLayer {
+  position: absolute;
+  inset: 8px -6px -8px 6px;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 204, 228, 0.16);
+  background: linear-gradient(155deg, #1b2242, #10152b);
+  box-shadow: 0 18px 36px rgba(4, 6, 18, 0.55);
+  transform: translateZ(-20px) rotate(-1.2deg);
+  pointer-events: none;
+}
+
+.scene {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  border: 1px solid rgba(255, 212, 232, 0.24);
+  border-radius: 26px;
+  background:
+    radial-gradient(ellipse at 50% 24%, rgba(212, 134, 198, 0.2), transparent 58%),
+    radial-gradient(ellipse at 82% 18%, rgba(255, 224, 166, 0.14), transparent 36%),
+    linear-gradient(180deg, #0b1024 0%, #171f3e 56%, #242144 100%);
+  box-shadow:
+    0 5px 0 #1b2242,
+    0 22px 46px rgba(4, 6, 18, 0.52);
+  padding: 28px 24px 26px;
+  text-align: center;
+}
+
+.skyCanvas {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  border-radius: 18px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 85%, rgba(255, 174, 210, 0.15), transparent 62%),
+    linear-gradient(180deg, rgba(10, 14, 34, 0.72), rgba(26, 26, 56, 0.5));
+  border: 1px solid rgba(255, 216, 235, 0.12);
+}
+
+.tinyStar {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff2dc;
+  opacity: 0.65;
+  pointer-events: none;
+  animation: starTwinkle var(--dur, 4s) ease-in-out var(--delay, 0s) infinite;
+}
+
+@keyframes starTwinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.25);
+  }
+}
+
+.constellationLine {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.wishStarBtn {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #ffe4a6;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: transform 0.25s ease;
+
+  &:hover {
+    transform: translate(-50%, -50%) scale(1.18);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #ffd4e5;
+    outline-offset: 2px;
+  }
+}
+
+.wishStarCore {
+  position: relative;
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  line-height: 1;
+  text-shadow:
+    0 0 12px rgba(255, 224, 152, 0.92),
+    0 0 26px rgba(255, 174, 214, 0.55);
+  animation: wishStarPulse 2.8s ease-in-out infinite;
+  animation-delay: var(--star-delay, 0s);
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 232, 175, 0.36), transparent 70%);
+    pointer-events: none;
+  }
+}
+
+@keyframes wishStarPulse {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.16) rotate(8deg);
+  }
+}
+
+.coupleHill {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.coupleSvg {
+  display: block;
+  width: 100%;
+  height: 132px;
+}
+
+.messageArea {
+  position: relative;
+  z-index: 5;
+  margin-top: 20px;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: #f3b5cd;
+  font-size: 10px;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+}
+
+.messageText {
+  margin: 0 auto;
+  max-width: 520px;
+  color: #ffeaf2;
+  font-size: clamp(22px, 3.6vw, 30px);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.45;
+
+  strong {
+    display: block;
+    margin-top: 4px;
+    color: #ffc8df;
+    font-weight: 600;
+  }
+}
+
+.replayBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  margin-top: 18px;
+  padding: 10px 22px;
+  border: 1px solid rgba(255, 204, 226, 0.42);
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(240, 152, 192, 0.22), rgba(146, 94, 176, 0.24));
+  color: #ffe9f2;
+  font-size: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, rgba(240, 152, 192, 0.34), rgba(146, 94, 176, 0.34));
+  }
+
+  &:focus-visible {
+    outline: 2px solid #ffd4e5;
+    outline-offset: 3px;
+  }
+}
+
+@media (max-width: 900px) {
+  .stage {
+    width: min(100%, 580px);
+  }
+}
+
+@media (max-width: 600px) {
+  .scene {
+    padding: 18px 14px 20px;
+    border-radius: 22px;
+  }
+
+  .backLayer {
+    inset: 5px -3px -5px 3px;
+    border-radius: 22px;
+    transform: translateZ(-12px) rotate(-1deg);
+  }
+
+  .skyCanvas {
+    height: 210px;
+    border-radius: 14px;
+  }
+
+  .coupleSvg {
+    height: 110px;
+  }
+
+  .wishStarCore {
+    font-size: 24px;
+  }
+
+  .messageText {
+    font-size: clamp(20px, 5.4vw, 25px);
+  }
+
+  .replayBtn {
+    width: 100%;
+    max-width: 260px;
+    min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tinyStar,
+  .wishStarCore {
+    animation: none;
+  }
+}

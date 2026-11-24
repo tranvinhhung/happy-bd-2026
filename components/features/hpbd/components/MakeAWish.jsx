@@ -7,6 +7,7 @@ import {
     useReducedMotion,
     useInView,
 } from "framer-motion";
+import WishStarryScene25D from "./WishStarryScene25D";
 import useSceneDepth from "../hooks/useSceneDepth";
 
 const MAX_WISH_LENGTH = 200;
@@ -77,6 +78,7 @@ export default function MakeAWish() {
     const [reloadKey, setReloadKey] = useState(0);
     const [deleting, setDeleting] = useState(false);
     const [adminSecret, setAdminSecret] = useState("");
+    const [justCompleted, setJustCompleted] = useState(false);
 
     const isShowDeleteButton =
         process.env.NODE_ENV === "development" ||
@@ -140,7 +142,11 @@ export default function MakeAWish() {
                 return current;
             }
 
-            return [...current, wish].slice(-MAX_VISIBLE_WISHES);
+            const next = [...current, wish].slice(-MAX_VISIBLE_WISHES);
+            if (next.length >= MAX_WISHES) {
+                setJustCompleted(true);
+            }
+            return next;
         });
 
         setFlyingWish(null);
@@ -466,32 +472,16 @@ export default function MakeAWish() {
                     {isWishLimitReached ? (
                         <motion.div
                             key="wish-completed"
-                            className="make-wish__card make-wish__completed"
-                            initial={{ opacity: 0, y: 20, scale: 0.96 }}
-                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                            viewport={{ once: true, amount: 0.2 }}
-                            exit={{ opacity: 0, y: -15 }}
-                            transition={{ duration: 0.5 }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.35 }}
                         >
-                            <motion.span
-                                className="make-wish__completed-icon"
-                                animate={reduceMotion ? {} : { rotate: [0, -8, 8, 0] }}
-                                transition={{ duration: 1.2 }}
-                            >
-                                ♡
-                            </motion.span>
-
-                            <h3>Đủ 3 điều ước rồi nè!</h3>
-
-                            <p>
-                                Ước 3 điều thôi em
-                                <br />
-                                đừng tham lam quá nha ♡
-                            </p>
-
-                            <span className="make-wish__completed-note">
-                                Ba điều ước nhỏ đã được gửi lên những vì sao ✦
-                            </span>
+                            <WishStarryScene25D
+                                wishes={wishes}
+                                onSelectWish={setSelectedWish}
+                                autoScroll={justCompleted}
+                            />
                         </motion.div>
                     ) : (
                         <motion.div
