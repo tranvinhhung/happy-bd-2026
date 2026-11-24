@@ -1,6 +1,6 @@
 "use client";
 
-import { Component, useState } from "react";
+import { Component, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import {
   AnimatePresence,
@@ -8,9 +8,9 @@ import {
   useInView,
   useReducedMotion,
 } from "framer-motion";
-import { useRef } from "react";
 import styles from "../styles/BirthdayWish.module.scss";
 import SectionTitle from "./SectionTitle";
+import WishFlower3D from "./WishFlower3D";
 import useAmbientMotion from "../hooks/useAmbientMotion";
 import useSceneDepth from "../hooks/useSceneDepth";
 
@@ -306,10 +306,19 @@ export default function BirthdayWish({ data = [] }) {
 
   const [activeIndex, setActiveIndex] = useState(null);
   const [opened, setOpened] = useState([]);
+  const [flowerOpen, setFlowerOpen] = useState(false);
+  const hasPlayedFlowerRef = useRef(false);
 
   const wishes = data.wishes || WISH_MESSAGES;
 
   const allOpened = wishes.length > 0 && opened.length === wishes.length;
+
+  useEffect(() => {
+    if (allOpened && !hasPlayedFlowerRef.current) {
+      hasPlayedFlowerRef.current = true;
+      setFlowerOpen(true);
+    }
+  }, [allOpened]);
 
   const handleCardClick = (index) => {
     setActiveIndex((current) => (current === index ? null : index));
@@ -424,10 +433,34 @@ export default function BirthdayWish({ data = [] }) {
               role="status"
             >
               <span className={styles.stoneLead}>♡ Và trong tất cả những lời chúc ấy,</span>
-              <strong> anh mong tình yêu tụi mình ngày càng bền chặt, và tụi mình luôn có nhau.</strong>
+              <strong> anh mong tình yêu tụi mình ngày càng bền chặt, và trong tim tụi mình luôn có nhau.</strong>
+              <div style={{ marginTop: 14 }}>
+                <button
+                  type="button"
+                  onClick={() => setFlowerOpen(true)}
+                  aria-label="Xem lại hiệu ứng trao hoa 3D"
+                  style={{
+                    minHeight: 36,
+                    padding: "7px 14px",
+                    borderRadius: 999,
+                    border: "1px solid rgba(208, 122, 152, 0.35)",
+                    background: "rgba(255, 224, 236, 0.7)",
+                    color: "#9d4e6b",
+                    fontSize: 12,
+                    cursor: "pointer",
+                  }}
+                >
+                  🌸 Xem lại
+                </button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
+
+        <WishFlower3D
+          open={flowerOpen}
+          onClose={() => setFlowerOpen(false)}
+        />
       </div>
     </section>
   );

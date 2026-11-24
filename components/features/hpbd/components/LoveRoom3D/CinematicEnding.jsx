@@ -110,7 +110,7 @@ export default function CinematicEnding({
                   <br />
                   Mong rằng mỗi sinh nhật sau này,
                   <br />
-                  chúng mình vẫn luôn có nhau. ♡
+                  chúng mình vẫn luôn bên cạnh nhau như lúc này. ♡
                 </p>
 
                 <div
